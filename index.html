@@ -1,0 +1,186 @@
+<html>
+<head>
+
+<title>Backbone.js Model Editor View</title>
+
+<!-- Backbone.js Dependencies -->
+<script src="lib/jquery.min.js"></script>
+	<!-- add jQuery UI if you want a date selector -->
+<script src="lib/underscore.min.js"></script>
+<script src="lib/underscore.string.min.js"></script>
+<script src="lib/backbone.min.js"></script>
+<script type="text/javascript">
+	
+	// mixin underscore.string
+	_.mixin(_.str.exports());
+	
+	_.mixin({
+		cleanWebkitStyles: function(val){
+			return val.replace(/ style="font-size: initial; line-height: initial;"/g, '') // remove inline styles
+						.replace(/<span>|<\/span>/g, '') // and empty spans
+		}
+	})
+</script>
+
+<!-- Bootstrap 3 - http://getbootstrap.com -->
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+
+<!-- Model Editor script -->
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="src/ModelEditor-final.js"></script>
+
+</head>
+<body>
+
+<div class="navbar">
+  <div class="container">
+
+    <a class="navbar-brand" href="#">Backbone.js UI Components</a>
+
+    <ul class="nav navbar-nav">
+	  <li class=""><a href="http://kevinjantzer.com/code/backbonejs-panel-view/">Panel View</a></li>
+	  <li class=""><a href="http://kevinjantzer.com/code/backbonejs-dropdown-view/">Dropdown View</a></li>
+	  <li class="active"><a href="http://kevinjantzer.com/code/backbonejs-model-editor-view/">Model Editor</a></li>
+	</ul>
+    
+  </div><!-- /.container -->
+</div><!-- /.navbar -->
+
+<a href="https://github.com/kjantzer/backbonejs-model-editor-view"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+<div class="container">
+	<div class="col-lg-7 col-lg-offset-3">
+	
+	<h1>Backbone.js Model Editor View</h1>
+	<p>Easily edit your backbone models with inputs, textareas, and more.</p>
+	<br>
+	
+	
+	<div id="editors" class="clearfix panel"></div>
+
+	<br>
+	<h4>Unsaved Editor Model</h4>
+	<pre id="output"></pre>
+	
+	<h4>Real Model Data</h4>
+	<pre id="output2"></pre>
+	
+	<hr>
+	
+	<small>Built by Kevin Jantzer, Blackstone Audio Inc.</small>
+	
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+
+window.App = Backbone.View.extend({
+	
+	el: '#editors',
+	
+	events: {
+		'click .save': 'save',
+		'click .reset': 'reset'
+	},
+	
+	initialize: function(){
+		
+		this.model = new Backbone.Model({
+			name:null,
+			gender: null,
+			phone:null, 
+			email:null,
+			notes: null
+		});
+		
+/*
+	THIS IS WHERE THE MAGIC HAPPENS
+*/
+		this.editor = new ModelEditor({
+			model: this.model,
+			el: this.el,
+			autoSave: false,
+			saveToDB: false,
+			defaultOpts: {			// set the default options for all editors (these can be overridden at anytime
+				labelInline: 100
+			}
+		})
+		
+		// show the model values everytime there is a change in the editor
+		this.editor.editmodel.on('change', this.showOutput, this);
+		this.editor.editmodel.on('reset', this.render, this);
+		
+		this.anotherView = new anotherView();
+		
+		this.$output = $('#output');
+		this.$output2 = $('#output2');
+		
+		this.render();
+	},
+	
+	render: function(){
+		
+		this.$el.html('');
+		
+/*
+	THIS IS WHERE THE MAGIC HAPPENS
+	
+	editors can be created with one liners
+*/
+		this.editor.insert('input', 'name');
+		this.editor.insert('select', 'gender', {values: [{label:'-', val:null}, 'Male', 'Female']});
+		this.editor.insert('input', 'phone');
+		this.editor.insert('email', 'email');
+		this.editor.insert('textarea', 'notes', {w: 300, h: 100});
+		this.editor.insert('checkbox', 'newsletter');
+		
+		this.editor.insert('empty', 'custom', {view: this.anotherView});
+		
+		this.$el.append('<div class="clear clearfix"><a class="btn btn-primary save">Save</a> <a class="btn btn-default reset">Reset</a></div>')
+		
+		this.delegateEvents();
+	},
+	
+	save: function(){
+	
+		this.editor.save(); // this saves the data from the editor
+		
+		var str = JSON.stringify(this.model.toJSON());
+		
+		this.$output2.html( JSON.stringify(this.model.toJSON()) );
+	},
+	
+	reset: function(){
+		this.editor.reset();
+		this.showOutput();
+		this.render();
+	},
+	
+	showOutput: function(){
+		this.$output.html( JSON.stringify(this.editor.editmodel.toJSON()) );
+	},
+	
+})
+
+var anotherView = Backbone.View.extend({
+	
+	initialize: function(){
+		this.$el.width('300px');
+	},
+	
+	render: function(){
+		this.$el.html('This is another backbone view. It can be responsible for rendering the controls/ui for this section')
+		return this;
+	}
+})
+
+// start the new app
+window.app = new App();
+	
+
+});
+</script>
+
+</body>
+</html>

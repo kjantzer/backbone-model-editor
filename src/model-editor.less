@@ -1,0 +1,520 @@
+/*
+	.field has a .backbone class because we dont' want to override existing .field classnames
+*/
+
+textarea {
+	margin: 0;
+	resize: none;
+}
+
+select {
+	max-width: 100%; // responsive support
+	position: relative;
+	font-size: .85em;
+	padding: 5px 27px 5px 9px;
+	margin: 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	//.gradient(#f9f9f9, #eee, #f9f9f9);
+	.box-shadow(inset 0px 1px 0px #fff);
+	.rounded(3px);
+	border: solid 1px #ccc;
+	color: #555;
+	text-shadow: #fff 0 1px 0;
+	background: url('/common/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
+	background: url('/common/img/select_down.png'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
+	background: url('/common/img/select_down.png'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+	background-position: right center;
+	background-repeat: no-repeat;
+	.transition(120ms);
+	
+	&:hover:not(:disabled),
+	&:focus:not(:disabled) {
+		.box-shadow(#ccc 0 0 7px);
+	}
+	
+	&:disabled {
+		cursor: default;
+		color: #aaa;
+	}
+}
+
+@-moz-document url-prefix() {
+	select{
+		text-overflow: '';  //this and text-indent are fix for firefox default select 
+		text-indent: 1px; 
+		-moz-appearance: none;
+		padding-right: 0px !important;  
+	}
+}
+
+.model-editor {
+	display: inline-block;
+	max-width: 100%; // responsive support
+	margin-bottom: 1em;
+	//font-size: 14px;
+	
+	> label {
+		min-height: 5px;
+		max-width: 100%;
+	}
+
+	.inner {
+		display: inline-block;
+		position: relative;
+		max-width: 100%; // responsive support
+		line-height: 1.2em;
+		
+		
+		.proofing-light {
+			position: absolute;
+			top: 0;
+			right: -12px;
+		}
+		
+		
+		> input,
+		> textarea {
+			margin: 0;
+			resize: none;
+		}
+		
+		
+		> input[type="text"]:not(.search),
+		> input[type="email"],
+		> input[type="date"],
+		> input[type="number"],
+		> input[type="password"],
+		> textarea,
+		> .redactor_box .redactor_editor {
+			max-width: 100%; // responsive support
+			background: #F9F9F9;
+			border: 1px solid #CCC;
+			.box-shadow(inset 1px 1px 1px rgba(0,0,0,0.1));
+			.rounded(3px);
+			font-family: 'Lucida Grande';
+		
+			/* .transition(200ms); */
+			
+			&.invalid {
+				border-color: @red;
+				.box-shadow(@red 0 0 7px);
+			}
+			
+			&:focus {
+				border-color: #aaa !important;
+				.box-shadow(#ccc 0 0 7px);
+			}
+			
+		}
+		
+		select {
+			max-width: 100%; // responsive support
+			position: relative;
+			font-size: 1em;
+			padding: 5px 27px 5px 9px;
+			margin: 0;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			text-overflow: ''; 
+			//.gradient(#f9f9f9, #eee, #f9f9f9);
+			.box-shadow(inset 0px 1px 0px #fff);
+			.rounded(3px);
+			border: solid 1px #ccc;
+			color: #555;
+			text-shadow: #fff 0 1px 0;
+			background: url('/common/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
+			background: url('/common/img/select_down.png'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
+			background: url('/common/img/select_down.png'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+			background-position: right center;
+			background-repeat: no-repeat;
+			.transition(120ms);
+			
+			&:hover:not(:disabled),
+			&:focus:not(:disabled) {
+				.box-shadow(#ccc 0 0 7px);
+			}
+			
+			&:disabled {
+				cursor: default;
+				color: #aaa;
+			}
+		}
+		
+	} // .inner
+
+
+	&.disabled {
+			
+		input[type="text"]:not(.search),
+		input[type="email"],
+		input[type="date"],
+		input[type="number"],
+		input[type="password"],
+		textarea,
+		.redactor_box,
+		.checkbox {
+			pointer-events: none;
+			opacity: .6;
+		}			
+		
+	}
+		
+
+	&.inline-label > label {
+		display: inline-block;
+		margin-right: 1em;
+		font-size: .9em;
+		vertical-align: top;
+		font-weight: 300;
+	}
+	
+	&.label-style-large > label {
+		font-size: 22px;
+		line-height: 28px;
+		vertical-align: top;
+		margin-top: 0;
+	}
+	
+	&.label-style-medium > label {
+		font-size: 18px;
+		//line-height: 22px;
+		line-height: 28px;
+		vertical-align: top;
+		margin-top: 0;
+	}
+	
+	&.label-style-medium-large > label {
+		font-size: 20px;
+		//line-height: 22px;
+		line-height: 28px;
+		vertical-align: top;
+		margin-top: 0;
+	}
+
+
+	&.float-left {
+		float: left;
+	}
+	
+	&.float-right {
+		float: right;
+	}
+	
+
+	// when model editor follows another, add margin
+	+ .model-editor:not(.clear) {
+		margin-left: 15px;
+	}
+	
+	&.clear {
+		clear: left;
+	}
+	
+	&.float-left + .clear {
+		clear: left;
+	}
+	
+	&.float-right + .clear {
+		clear: right;
+	}
+	
+	
+	&.has-btns {
+		
+		input, textarea, .redactor_editor {
+			padding-right: 18px;
+		}
+		
+		.btns {
+			position: absolute;
+			top: 0;
+			right: 0;
+			.border-radius(3px, 3px, 0, 0);
+			width: 20px;
+			height: 100%;
+			visibility: hidden;
+		}
+		
+		.button.save,
+		.button.cancel {
+			padding: 1px 2px;
+			margin: 0px;
+			font-size: .8em;
+			position: absolute;
+			top: 1px;
+			right: 1px;
+			opacity: 0;
+			visibility: hidden;
+			.transition(120ms);
+			//height: calc(50% - 1px);
+			height: 49%;
+			.box-sizing();
+		}
+		
+		.button.save {
+			.border-radius(3px, 0, 0, 0);
+		}
+		
+		.button.cancel {
+			.border-radius(0, 3px, 0, 0);
+			border-bottom: none;
+			top: auto;
+			bottom: 1px;
+		}
+		
+		&.editing {
+			.btns,
+			.button.save,
+			.button.cancel {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+		
+	} // .has-btns
+	
+	
+	&.textarea.rte {
+		
+		.redactor_toolbar {
+			opacity: 0;
+			visibility: hidden;
+			.transition(120ms);
+		}
+		
+		&:not(.editing) .redactor_toolbar {
+			.transition-delay(10ms);
+		}
+		
+		&.editing .redactor_toolbar {
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		.redactor_box {
+			height: auto;
+			.box-shadow(none);
+			border: none;
+		}
+		
+		textarea {
+			font-size: .9em;
+			font-family: Consolas, "Liberation Mono", Courier, monospace;
+		}
+		
+	}
+	
+	&.checkbox {
+		label { vertical-align: initial; cursor: default; }
+		
+	}
+	
+	&.inline-checkbox {
+		label {
+			float: right;
+			margin: 7px 0 0 .5em;
+			font-size: 1.15em;
+		}
+	}
+	
+	&.empty {
+		.inner > p:first-child {
+			margin-top: .5em;
+		}
+	}
+	
+	
+	&.theme-text {
+		
+		input[type="text"],
+		input[type="email"],
+		input[type="date"],
+		input[type="number"],
+		input[type="password"],
+		textarea,
+		.redactor_box .redactor_editor {
+			background: none !important;
+			border-color: transparent !important;
+			.box-shadow(none) !important;
+			padding-left: 0;
+		}
+		
+		
+		&:not(.editing):not(.disabled):hover{
+		
+			input[type="text"],
+			input[type="email"],
+			input[type="date"],
+			input[type="number"],
+			input[type="password"],
+			textarea,
+			.redactor_box .redactor_editor {
+				background: #feffee !important;
+			}
+			
+		}
+		
+		&.editing{
+		
+			input[type="text"],
+			input[type="email"],
+			input[type="date"],
+			input[type="number"],
+			input[type="password"],
+			textarea,
+			.redactor_box .redactor_editor {
+				background: none !important;
+				border-color: transparent !important;
+				.box-shadow(none);
+				border-top: dashed 1px #ccc !important;
+				border-bottom: dashed 1px #ccc !important;
+			}
+			
+		}
+		
+	}
+	
+	&.theme-thin {
+		
+		select {
+			padding-top: 1px;
+			padding-bottom: 1px;
+		}
+		
+		&.checkbox {
+		
+			label {
+				margin-top: 2px;
+			}
+		
+			.checkbox {
+				width: 18px;
+				height: 18px;
+				
+				&:before {
+					font-size: 1em;
+				}
+			}
+			
+			
+		}
+		
+	}
+	
+	&.theme-quote {
+		
+		input[type="text"],
+		input[type="email"],
+		input[type="date"],
+		input[type="number"],
+		input[type="password"],
+		textarea,
+		.redactor_box .redactor_editor {
+			overflow: visible;
+		
+			&:before {
+				.arrow-down(#ddd, 8px, 8px);
+				left: 5px;
+				bottom: -9px;
+			}
+		
+		}
+		
+	}
+	
+	&.theme-checkonly {
+		span.checkbox[type="checkbox"].off:before {
+			display: none;
+		}
+	}
+	
+	
+	// an "icon only" button following a "model editor"
+	& + .button[class^="icon-"].icon-only,
+	& + .button[class*=" icon-"].icon-only,
+	& + .button {
+		padding: 7px 8px 6px 8px;
+		margin: 22px 0 0 15px;
+	}
+	
+	
+	.model-editor.float-left + p.left,
+	.model-editor.float-right + p.right {
+		line-height: 2.4em;
+		margin-left: .5em;
+		margin-right: .5em;
+	}
+	
+	
+	// defined by
+	.defined-by {
+		top: -10px;
+		right: -16px;
+	}
+	
+	
+	
+	/*
+		Tribox / Checkbox
+	*/
+	span.checkbox[type="checkbox"] {
+	  position: relative;
+	  display: inline-block;
+	  width: 27px;
+	  height: 27px;
+	  cursor: pointer;
+	  //.gradient(#eee, #ddd, #eee);
+	  border: solid 1px #ccc;
+	  text-shadow: #fff 0 1px 0;
+	  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
+	  background: -ms-linear-gradient(bottom, #EEE, #F9F9F9);
+	  background: -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+	  .rounded(3px);
+	  //border: solid 1px #bbb;
+	  //border-bottom-color: #aaa;
+	  vertical-align: middle;
+	  //margin-top: -3px;
+	  
+	  //.transition(120ms);
+	}
+	
+	span.checkbox[type="checkbox"].disabled { cursor: default; opacity: .5; }
+	
+	span.checkbox[type="checkbox"]:not(.disabled):hover {
+	 .box-shadow(#ccc 0 0 7px);
+	}
+	
+		span.checkbox[type="checkbox"]:before {
+		  //content: '\f096'; // empty check
+		  font-family: 'kjc-icon-font';
+		  font-style: normal;
+		  font-weight: normal;
+		  speak: none;
+		  display: inline-block;
+		  text-decoration: inherit;
+		  width: 1.1em;
+		  text-align: center;
+		  vertical-align: top;
+		  text-decoration: none;
+		  opacity: 0.8;
+		  line-height: 1.2em;
+		  font-size: 1.5em;
+		  color: #999;
+		  position: absolute;
+		  left: 0;
+		}
+		
+		span.checkbox[type="checkbox"].on:before {
+		  content: '\2713'; /* checkmark */
+		  color: inherit;
+		}
+		
+		span.checkbox[type="checkbox"].off:before {
+		  //content: '\02E3'; /* block */
+		  content: '\2715'; /* x */
+		}
+	
+}
