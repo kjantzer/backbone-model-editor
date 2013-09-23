@@ -154,8 +154,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.$el.addClass('has-btns');
 		
 		this.$inner.append('<div class="btns">\
-							<a class="button white save icon-only icon-ok"></a>\
-							<a class="button white cancel icon-only icon-cancel"></a>\
+							<a class="button flat hover-green save icon-only icon-ok"></a>\
+							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\
 						</div>');
 	},
 	

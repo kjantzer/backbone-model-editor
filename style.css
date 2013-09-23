@@ -388,9 +388,9 @@ select:disabled {
 .model-editor .inner > textarea:focus,
 .model-editor .inner > .redactor_box .redactor_editor:focus {
   border-color: #aaa !important;
-  -webkit-box-shadow: #cccccc 0 0 7px;
-  -moz-box-shadow: #cccccc 0 0 7px;
-  box-shadow: #cccccc 0 0 7px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 .model-editor .inner select {
   max-width: 100%;
@@ -521,17 +521,21 @@ select:disabled {
   margin: 0px;
   font-size: .8em;
   position: absolute;
-  top: 1px;
-  right: 1px;
+  top: 0px;
+  right: 0px;
   opacity: 0;
   visibility: hidden;
-  -webkit-transition: all 120ms ease-out;
-  -moz-transition: all 120ms ease-out;
-  transition: all 120ms ease-out;
-  height: 49%;
+  -webkit-transition: all 75ms ease-out;
+  -moz-transition: all 75ms ease-out;
+  transition: all 75ms ease-out;
+  height: 50%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+.model-editor.has-btns .button.save:not(:hover),
+.model-editor.has-btns .button.cancel:not(:hover) {
+  border-color: #aaa;
 }
 .model-editor.has-btns .button.save {
   -webkit-border-top-right-radius: 3px;

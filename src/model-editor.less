@@ -32,6 +32,7 @@ select {
 	&:hover:not(:disabled),
 	&:focus:not(:disabled) {
 		.box-shadow(#ccc 0 0 7px);
+		//.box-shadow(none);
 	}
 	
 	&:disabled {
@@ -104,7 +105,8 @@ select {
 			
 			&:focus {
 				border-color: #aaa !important;
-				.box-shadow(#ccc 0 0 7px);
+				//.box-shadow(#ccc 0 0 7px);
+				.box-shadow(none);
 			}
 			
 		}
@@ -244,14 +246,18 @@ select {
 			margin: 0px;
 			font-size: .8em;
 			position: absolute;
-			top: 1px;
-			right: 1px;
+			top: 0px;
+			right: 0px;
 			opacity: 0;
 			visibility: hidden;
-			.transition(120ms);
+			.transition(75ms);
 			//height: calc(50% - 1px);
-			height: 49%;
+			height: 50%;
 			.box-sizing();
+			
+			&:not(:hover) {
+				border-color: #aaa;
+			}
 		}
 		
 		.button.save {
