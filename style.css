@@ -631,7 +631,7 @@ select:disabled {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
-  padding-left: 0;
+  margin-left: -5px;
 }
 .model-editor.theme-text:not(.editing):not(.disabled):hover input[type="text"],
 .model-editor.theme-text:not(.editing):not(.disabled):hover input[type="email"],
@@ -640,7 +640,7 @@ select:disabled {
 .model-editor.theme-text:not(.editing):not(.disabled):hover input[type="password"],
 .model-editor.theme-text:not(.editing):not(.disabled):hover textarea,
 .model-editor.theme-text:not(.editing):not(.disabled):hover .redactor_box .redactor_editor {
-  background: #feffee !important;
+  border: solid 1px #ddd !important;
 }
 .model-editor.theme-text.editing input[type="text"],
 .model-editor.theme-text.editing input[type="email"],
@@ -654,8 +654,7 @@ select:disabled {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-  border-top: dashed 1px #ccc !important;
-  border-bottom: dashed 1px #ccc !important;
+  border: solid 1px #aaa !important;
 }
 .model-editor.theme-thin select {
   padding-top: 1px;

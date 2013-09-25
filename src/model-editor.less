@@ -345,7 +345,8 @@ select {
 			background: none !important;
 			border-color: transparent !important;
 			.box-shadow(none) !important;
-			padding-left: 0;
+			//padding-left: 0;
+			margin-left: -5px; // this makes the text aligned when no border is preset
 		}
 		
 		
@@ -358,7 +359,8 @@ select {
 			input[type="password"],
 			textarea,
 			.redactor_box .redactor_editor {
-				background: #feffee !important;
+				//background: #feffee !important;
+				border: solid 1px #ddd !important;
 			}
 			
 		}
@@ -375,8 +377,9 @@ select {
 				background: none !important;
 				border-color: transparent !important;
 				.box-shadow(none);
-				border-top: dashed 1px #ccc !important;
-				border-bottom: dashed 1px #ccc !important;
+				//border-top: dashed 1px #ccc !important;
+				//border-bottom: dashed 1px #ccc !important;
+				border: solid 1px #aaa !important;
 			}
 			
 		}
