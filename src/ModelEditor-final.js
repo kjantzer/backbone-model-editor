@@ -1297,3 +1297,11 @@ ModelEditors.contractContactTags = ModelEditors.select.extend({
 ModelEditors.selectBookCategory = ModelEditors.select.extend({
 	values: function(){return lookup.selects.bookCategory.asSelect()}
 })
+
+ModelEditors.selectRoyaltyCalculationSystem = ModelEditors.select.extend({
+	values: [
+		{label: '-', val: null},
+		{label: 'Acumen', val: 'Acumen'},
+		{label: 'Magento', val: 'Magento'}
+	]
+})
