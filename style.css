@@ -107,7 +107,6 @@ p.divider {
   position: relative;
   color: #999;
   /* create the dashed line */
-
 }
 h1.divider > span,
 h2.divider > span,
@@ -323,7 +322,6 @@ select:disabled {
   /*
 		Tribox / Checkbox
 	*/
-
 }
 .model-editor > label {
   min-height: 5px;
@@ -364,9 +362,10 @@ select:disabled {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  font-family: 'Lucida Grande';
+  font-family: Calibri, 'Lucida Grande';
+  font-size: 16px;
+  color: #222;
   /* .transition(200ms); */
-
 }
 .model-editor .inner > input[type="text"]:not(.search).invalid,
 .model-editor .inner > input[type="email"].invalid,
@@ -391,6 +390,7 @@ select:disabled {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
+  color: #000;
 }
 .model-editor .inner select {
   max-width: 100%;
@@ -632,6 +632,7 @@ select:disabled {
   -moz-box-shadow: none !important;
   box-shadow: none !important;
   margin-left: -5px;
+  line-height: 1em;
 }
 .model-editor.theme-text:not(.editing):not(.disabled):hover input[type="text"],
 .model-editor.theme-text:not(.editing):not(.disabled):hover input[type="email"],
@@ -766,11 +767,9 @@ select:disabled {
 .model-editor span.checkbox[type="checkbox"].on:before {
   content: '\2713';
   /* checkmark */
-
   color: inherit;
 }
 .model-editor span.checkbox[type="checkbox"].off:before {
   content: '\2715';
   /* x */
-
 }
