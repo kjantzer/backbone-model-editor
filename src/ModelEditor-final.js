@@ -281,6 +281,8 @@ ModelEditors.Base = Backbone.View.extend({
 	
 	disable: function(){ return this._disable(); },
 	enable: function(){ return this._enable(); },
+	hide: function(){ this.$el.hide(); },
+	show: function(){ this.$el.show(); },
 	
 	// convenience methods: get value and new value
 	_val: function(){ return this.model.get(this.options.key) },
