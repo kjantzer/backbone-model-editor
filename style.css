@@ -487,6 +487,9 @@ select:disabled {
 .model-editor.float-right + .clear {
   clear: right;
 }
+.model-editor.float-right + .float-left + .clear {
+  clear: both;
+}
 .model-editor.has-btns input,
 .model-editor.has-btns textarea,
 .model-editor.has-btns .redactor_editor {
