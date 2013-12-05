@@ -54,6 +54,7 @@ var ModelEditor = Backbone.View.extend({
 		
 		this.model.on('change', this.cleanReset, this);
 		this.model.on('reset', this.cleanup, this);
+		this.model.on('sync', this.onSync, this);
 		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
@@ -130,6 +131,9 @@ var ModelEditor = Backbone.View.extend({
 			this.model.set(this.data(), opts||{});
 	},
 	
+	onSync: function(model){
+		this.editmodel.trigger('changed');
+	},
 	
 	insert: function(type, key, opts){
 		
@@ -216,7 +220,9 @@ ModelEditors.Base = Backbone.View.extend({
 			renderTo: null, // defaults is ModelEditor.el
 			pl: null, // proofing light key - accepts "auto" as value, but plPrefix must be defined
 			ph: null, // proofing history
+			watchChanges: false,
 			plPrefix: null,
+			plFieldVal:null,
 			css: null, // passes to jquery .css(), added at $el level
 		},this.options)
 		
@@ -251,8 +257,8 @@ ModelEditors.Base = Backbone.View.extend({
 				key = this.options.plPrefix+'::'+this.options.key;
 		
 			if( key !== 'auto' ){
-				var plv = ProofingLight(key);
-				this.$inner.append( plv.el );
+				this.plv = ProofingLight(key, {fieldVal:this.plFieldVal.bind(this)});
+				this.$inner.append( this.plv.el );
 			}
 		}
 		
@@ -265,6 +271,30 @@ ModelEditors.Base = Backbone.View.extend({
 			this.$el.css(this.options.css); 
 		}
 		
+		this.model.on('all', this.testForCleanup, this);
+		this.model.on('changed', this.onChanged, this);
+		
+	},
+	
+	plFieldVal: function(){
+		return this.options.plFieldVal ? this.options.plFieldVal() : this.val();
+	},
+	
+	testForCleanup: function(){
+		if( !this.el.parentElement )
+			this.model.off(null, null, this);
+	},
+	
+	onChanged: function(changedAttrs){
+		
+		var changedVal = this.model.changed[this.options.key];
+		
+		if( changedVal === undefined || this.options.watchChanges !== true ) return;
+		
+		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes, you need to specifiy a key for proofing the proofing light');
+		
+		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
+			this.plv.reset();
 	},
 	
 	_disable: function(){

@@ -54,6 +54,7 @@ var ModelEditor = Backbone.View.extend({
 		
 		this.model.on('change', this.cleanReset, this);
 		this.model.on('reset', this.cleanup, this);
+		this.model.on('sync', this.onSync, this);
 		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
@@ -130,6 +131,9 @@ var ModelEditor = Backbone.View.extend({
 			this.model.set(this.data(), opts||{});
 	},
 	
+	onSync: function(model){
+		this.editmodel.trigger('changed');
+	},
 	
 	insert: function(type, key, opts){
 		

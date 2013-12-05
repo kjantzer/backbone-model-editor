@@ -556,6 +556,7 @@ select:disabled {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
+  border-bottom: none;
 }
 .model-editor.has-btns .button.cancel {
   -webkit-border-top-right-radius: 0;
@@ -573,9 +574,8 @@ select:disabled {
   -moz-background-clip: padding;
   -webkit-background-clip: padding-box;
   background-clip: padding-box;
-  border-bottom: none;
   top: auto;
-  bottom: 1px;
+  bottom: 0px;
 }
 .model-editor.has-btns.editing .btns,
 .model-editor.has-btns.editing .button.save,
