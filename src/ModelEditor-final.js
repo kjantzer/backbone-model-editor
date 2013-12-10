@@ -514,7 +514,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		var fn = this.keyEvents[e.which];
 		
 		if( fn && this[fn] )
-			this[fn].apply(this);
+			this[fn].call(this, e);
 		
 		this.doAutoResize();
 		
@@ -541,10 +541,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.$input.blur();
 	},
 	
-	cancelBtnAction: function(){
+	cancelBtnAction: function(e){
 		this.$input.val( this.origVal );
 		this.edit(false);
 		this.$input.blur();
+		
+		if( e )
+			e.stopPropagation()
 	},
 	
 	setWidth: function(){
