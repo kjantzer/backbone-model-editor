@@ -189,15 +189,24 @@ ModelEditors.selectBookChannel = ModelEditors.select.extend({
 	}
 })
 
-ModelEditors.selectBookProduct = ModelEditors.select.extend({
+ModelEditors.selectBookAllProduct = ModelEditors.select.extend({
 	values: function(){
 		return lookup.collections.products.map(function(model){
 			return {val: model.id, label: model.get('label')}
-			//return model.get('label');
 		})
 	}
 })
 
+ModelEditors.selectBookArchivedProduct = ModelEditors.select.extend({
+	values: function(){
+		return _.map(lookup.collections.products.archived(), function(model){ return {val: model.id, label: model.get('label')} });	}
+})
+
+ModelEditors.selectBookActiveProduct = ModelEditors.select.extend({
+	values: function(){
+		return _.map(lookup.collections.products.active(), function(model){ return {val: model.id, label: model.get('label')} }); 
+	}
+})
 
 ModelEditors.selectTargetAudience = ModelEditors.select.extend({
 	values: ['Adult', 'Young Adult (12-17)', 'Children (10-12)', 'Children (6-9)']
