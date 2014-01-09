@@ -480,7 +480,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		
 		this.render();
 		
-		this.doAutoResize();
+		_.defer(this.doAutoResize.bind(this));
 		
 		this.delegateEvents();
 	},
@@ -527,6 +527,18 @@ ModelEditors.input = ModelEditors.Base.extend({
 			return true;
 		}
 	},
+	
+	/*autoResize: function(){
+	
+		var el = this.$input[0];
+	
+		el.style.width = '0';
+		
+		var newW = this.$input.outerWidth() + el.scrollWidth+'px';
+        el.style.width = newW;
+        this.$inner.width( newW )
+        //el.style.overflow = 'hidden';
+	},*/
 	
 	setVal: function(){
 		var val = this.val();
