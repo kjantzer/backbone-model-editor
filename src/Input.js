@@ -47,6 +47,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.origVal = this.val();
 			
 		this.setPlaceholder();
+		this.setVal();
 		this.setWidth();
 		this.setHeight();
 		this.setupBtns();
@@ -102,7 +103,10 @@ ModelEditors.input = ModelEditors.Base.extend({
 	},
 	
 	setVal: function(){
-		this.$input[0].setAttribute('value', this.val()) // set the value attribute for CSS styling
+		var val = this.val();
+		this.$input[0].setAttribute('value', val) // set the value attribute for CSS styling
+		
+		val ? this.$el.addClass('has-value') : this.$el.removeClass('has-value');
 	},
 	
 	saveBtnAction: function(){
