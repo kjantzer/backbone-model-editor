@@ -126,7 +126,7 @@ ModelEditors.Base = Backbone.View.extend({
 	show: function(){ this.$el.show(); },
 	
 	// convenience methods: get value and new value
-	_val: function(){ return this.model.get(this.options.key) },
+	_val: function(){ return this.model.get(this.options.key)||null },
 	_newVal: function(){ return _.cleanWebkitStyles(this.$input.val()) || this.options.emptyVal; },
 	
 	// override these to add special rules

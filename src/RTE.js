@@ -29,6 +29,7 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 		var buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'fullscreen'];
 		var allowedTags = ["a", "p", "blockquote", "b", "i", 'strong', 'em', 'h1', 'h2', 'ul', 'ol', 'li'];
 		var formattingTags = ['p', 'blockquote'];
+		var linebreaks = false;
 		
 		if( opts.allowBR === true )
 			allowedTags.push('br');
@@ -45,6 +46,13 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 				plugins = false;
 				buttons = ['specialCharacters', 'bold', 'italic'];
 				allowedTags = ["p", "b", "i", 'strong', 'em'];
+				break;
+				
+			case 'micro-br':
+				plugins = false;
+				buttons = ['specialCharacters', 'bold', 'italic'];
+				allowedTags = ["p", "b", "i", 'strong', 'em', 'br'];
+				linebreaks = true;
 				break;
 			
 			case 'regular':
@@ -66,15 +74,23 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 		if(opts.autoresize === undefined && opts.h === 'auto')
 			opts.autoresize = true;
 		
-		function insertSpecialCharacter(obj, e, key){
-			obj.setBuffer();
-			obj.insertHtml(key);
-			obj.syncCode();
+		var self = this;
+		
+		//function insertSpecialCharacter(obj, e, key){
+		function insertSpecialCharacter(buttonName, buttonDOM, buttonObj){
+			self.redactor.bufferSet();
+			self.redactor.insertHtml(buttonName);
+			self.redactor.sync();
 		}
 		
 		
 		this.$input.redactor({
 			plugins: plugins
+			, paragraphy: false
+			, boldTag: 'b'
+			, italicTag: 'i'
+			//, tidyHtml: false
+			, linebreaks: linebreaks
 			, buttons: buttons
 			, allowedTags: allowedTags
 			, formattingTags: formattingTags
@@ -93,28 +109,9 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	                }
 	            }
 	        }
-			, keyupCallback: function(obj, evt){
-			
-				//if(opts.autoresize)
-					//$elem.height(obj.$editor.outerHeight(true)-22);
-				
-			}
-			, callback: function(obj){
-				
-				/*
-				setTimeout(function(){ // we use an empty timeout cause for some reason it fixes a bug where the text moves up on focus
-					obj.$editor.focus();
-					
-					if(opts.autoresize){
-						$elem.height(obj.$editor.outerHeight(true)-22);
-						obj.$frame.height(obj.$editor.outerHeight(true)-18);
-					}
-					
-				});
-				*/
-				
-			}
 		});
+		
+		this.redactor = this.$input.redactor('getObject');
 		
 	},
 	
@@ -124,7 +121,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 		
 		this.origVal = this.newVal(); // update orig value to the new val
 		this.$input.val( this.origVal ); // update input so we get the "cleaned" version
-		this.$input.setCode(this.origVal)
+		//this.$input.setCode(this.origVal)
+		this.redactor.set(this.origVal||'')
 		
 		this.edit(false);
 		
@@ -133,7 +131,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	
 	cancelBtnAction: function(){
 		this.$input.val( this.origVal );
-		this.$input.setCode(this.origVal)
+		//this.$input.setCode(this.origVal)
+		this.redactor.set(this.origVal||'')
 		this.edit(false);
 		
 		this.$el.find('.redactor_editor').blur();
