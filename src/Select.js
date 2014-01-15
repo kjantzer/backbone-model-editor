@@ -336,3 +336,7 @@ ModelEditors.selectRoyaltyCalculationSystem = ModelEditors.select.extend({
 		{label: 'Magento', val: 'Magento'}
 	]
 })
+
+ModelEditors.selectImprintPartner = ModelEditors.select.extend({
+	values: function(){ return Partners.toSelectImprints() }
+})
