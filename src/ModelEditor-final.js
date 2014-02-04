@@ -293,7 +293,7 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes, you need to specifiy a key for proofing the proofing light');
 		
-		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
+		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 || this.plv.model.get('status') == -1 ) // is green/yellow/red, well its not green anymore then!
 			this.plv.reset();
 	},
 	
