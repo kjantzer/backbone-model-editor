@@ -293,7 +293,7 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes, you need to specifiy a key for proofing the proofing light');
 		
-		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 || this.plv.model.get('status') == -1 ) // is green/yellow/red, well its not green anymore then!
+		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
 			this.plv.reset();
 	},
 	
@@ -1367,4 +1367,18 @@ ModelEditors.selectRoyaltyCalculationSystem = ModelEditors.select.extend({
 
 ModelEditors.selectImprintPartner = ModelEditors.select.extend({
 	values: function(){ return Partners.toSelectImprints() }
+})
+
+ModelEditors.selectImageType = ModelEditors.select.extend({
+	values: [
+		{label: 'JPEG', val: 'jpeg'},
+		{label: 'PNG', val: 'png'}
+	]
+})
+
+ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
+	values: [
+		{label: 'ISBN', val: 'isbn_13'},
+		{label:'Book ID', val: 'book_id'}
+	]
 })
