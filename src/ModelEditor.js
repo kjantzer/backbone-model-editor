@@ -56,6 +56,8 @@ var ModelEditor = Backbone.View.extend({
 		this.model.on('reset', this.cleanup, this);
 		this.model.on('sync', this.onSync, this);
 		
+		this.editmodel.on('edited', this.rememberChanges, this);
+		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
 			this.options.autoSave = true;
@@ -87,6 +89,18 @@ var ModelEditor = Backbone.View.extend({
 		
 	},
 	
+	rememberChanges: function(key, val, isChanged){
+		
+		var unsavedChanges = this.model._unsavedChanges || {};
+		
+		if( isChanged )
+			unsavedChanges[key] = val;
+		else
+			delete unsavedChanges[key];
+			
+		this.model._unsavedChanges = _.size(unsavedChanges) > 0 ? unsavedChanges : null;
+	},
+	
 	render: function(){
 		this.trigger('render');
 	},
@@ -98,6 +112,7 @@ var ModelEditor = Backbone.View.extend({
 	reset: function(resetData){
 		this.editmodel.clear({silent:true})
 		this.editmodel.set(resetData||this.model.toJSON(), {silent:true});
+		this.editmodel.unsavedChanges = this.model._unsavedChanges || {};
 	},
 	
 	cleanup: function(){

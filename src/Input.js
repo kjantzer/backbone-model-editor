@@ -51,12 +51,28 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.setWidth();
 		this.setHeight();
 		this.setupBtns();
+		this.setupUnsavedVal();
 		
 		this.render();
 		
 		_.defer(this.doAutoResize.bind(this));
 		
 		this.delegateEvents();
+	},
+	
+	hasUnsavedVal: function(){
+		return this.model.unsavedChanges.hasOwnProperty(this.options.key)
+	},
+	
+	unsavedVal: function(){
+		return this.model.unsavedChanges[this.options.key]
+	},
+	
+	setupUnsavedVal: function(){
+		if( this.hasUnsavedVal() ){
+			this.$input.val( this.unsavedVal() );
+			this.edit(true);
+		}
 	},
 	
 	focus: function(){
@@ -79,6 +95,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		}else{
 			if( !this.valChanged() )
 				this.edit(false);
+				
+			this.model.trigger('edited', this.options.key, this.newVal(), this.valChanged())
 		}
 	},
 	

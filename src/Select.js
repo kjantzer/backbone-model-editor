@@ -117,6 +117,10 @@ ModelEditors.select = ModelEditors.Base.extend({
 	enable: function(){
 		this._enable();
 		this.$input.attr('disabled', false);
+	},
+	
+	focus: function(){
+		this.$input.focus();
 	}
 
 });

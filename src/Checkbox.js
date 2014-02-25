@@ -2,6 +2,8 @@
 	Tribox - checkbox with 3 states: unset, off, on
 	
 	pass "allowEmptyState:false" to make it a normal 2 state checkbox
+	
+	set "valType: 'timestamp'" to use current timestamp as "selected" value.
 */
 
 ModelEditors.checkbox = ModelEditors.Base.extend({
@@ -20,12 +22,13 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	
 		this.options = _.extend({
 			inline: false,
+			valType: 'bool', // bool or timestamp
 			allowEmptyState: this.allowEmptyState,	// can a user make it the null/empty state
 		},opts);
 		
 		this.init(); // init base
 		
-		this.value = this.val() === null ? 'null' : this.val();
+		this.value = this.val();
 		
 		this.$input = $('<'+this.editorTagName+' class="checkbox"></'+this.editorTagName+'>')
 			.attr('type', 'checkbox')
@@ -59,11 +62,18 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	
 	val: function(){ 
 		var val = this._val()
-		return  val === null ? 'null' : val;
+		
+		if( this.options.valType === 'timestamp' )
+			return val && val.length > 1 ? '1' : '0';
+		else
+			return  val === null ? 'null' : val;
 	},
 	
 	newVal: function(){
-		return this.value;
+		if( this.options.valType === 'timestamp' )
+			return this.value == '1' ? _.timestamp() : null;
+		else
+			return this.value;
 	},
 	
 	nextVal: function(){

@@ -56,6 +56,8 @@ var ModelEditor = Backbone.View.extend({
 		this.model.on('reset', this.cleanup, this);
 		this.model.on('sync', this.onSync, this);
 		
+		this.editmodel.on('edited', this.rememberChanges, this);
+		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
 			this.options.autoSave = true;
@@ -87,6 +89,18 @@ var ModelEditor = Backbone.View.extend({
 		
 	},
 	
+	rememberChanges: function(key, val, isChanged){
+		
+		var unsavedChanges = this.model._unsavedChanges || {};
+		
+		if( isChanged )
+			unsavedChanges[key] = val;
+		else
+			delete unsavedChanges[key];
+			
+		this.model._unsavedChanges = _.size(unsavedChanges) > 0 ? unsavedChanges : null;
+	},
+	
 	render: function(){
 		this.trigger('render');
 	},
@@ -98,6 +112,7 @@ var ModelEditor = Backbone.View.extend({
 	reset: function(resetData){
 		this.editmodel.clear({silent:true})
 		this.editmodel.set(resetData||this.model.toJSON(), {silent:true});
+		this.editmodel.unsavedChanges = this.model._unsavedChanges || {};
 	},
 	
 	cleanup: function(){
@@ -477,12 +492,28 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.setWidth();
 		this.setHeight();
 		this.setupBtns();
+		this.setupUnsavedVal();
 		
 		this.render();
 		
 		_.defer(this.doAutoResize.bind(this));
 		
 		this.delegateEvents();
+	},
+	
+	hasUnsavedVal: function(){
+		return this.model.unsavedChanges.hasOwnProperty(this.options.key)
+	},
+	
+	unsavedVal: function(){
+		return this.model.unsavedChanges[this.options.key]
+	},
+	
+	setupUnsavedVal: function(){
+		if( this.hasUnsavedVal() ){
+			this.$input.val( this.unsavedVal() );
+			this.edit(true);
+		}
 	},
 	
 	focus: function(){
@@ -505,6 +536,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		}else{
 			if( !this.valChanged() )
 				this.edit(false);
+				
+			this.model.trigger('edited', this.options.key, this.newVal(), this.valChanged())
 		}
 	},
 	
@@ -914,6 +947,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	Tribox - checkbox with 3 states: unset, off, on
 	
 	pass "allowEmptyState:false" to make it a normal 2 state checkbox
+	
+	set "valType: 'timestamp'" to use current timestamp as "selected" value.
 */
 
 ModelEditors.checkbox = ModelEditors.Base.extend({
@@ -932,12 +967,13 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	
 		this.options = _.extend({
 			inline: false,
+			valType: 'bool', // bool or timestamp
 			allowEmptyState: this.allowEmptyState,	// can a user make it the null/empty state
 		},opts);
 		
 		this.init(); // init base
 		
-		this.value = this.val() === null ? 'null' : this.val();
+		this.value = this.val();
 		
 		this.$input = $('<'+this.editorTagName+' class="checkbox"></'+this.editorTagName+'>')
 			.attr('type', 'checkbox')
@@ -971,11 +1007,18 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	
 	val: function(){ 
 		var val = this._val()
-		return  val === null ? 'null' : val;
+		
+		if( this.options.valType === 'timestamp' )
+			return val && val.length > 1 ? '1' : '0';
+		else
+			return  val === null ? 'null' : val;
 	},
 	
 	newVal: function(){
-		return this.value;
+		if( this.options.valType === 'timestamp' )
+			return this.value == '1' ? _.timestamp() : null;
+		else
+			return this.value;
 	},
 	
 	nextVal: function(){
@@ -1145,6 +1188,10 @@ ModelEditors.select = ModelEditors.Base.extend({
 	enable: function(){
 		this._enable();
 		this.$input.attr('disabled', false);
+	},
+	
+	focus: function(){
+		this.$input.focus();
 	}
 
 });
