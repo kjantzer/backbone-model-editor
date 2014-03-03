@@ -358,3 +358,29 @@ ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
 		{label:'Book ID', val: 'book_id'}
 	]
 })
+
+ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
+	values: [
+		{label: 'Not auto renewed', val: 0},
+		{label: 'Auto renewed with guarantee', val: 1},
+		{label: 'Auto renewed with no guarantee', val: 2},
+		{label: 'First option to renew', val: 3}
+	]
+});
+
+ModelEditors.selectAutoRenewalYearIncrement = ModelEditors.select.extend({
+	values: [
+		{label: '-', val: null},
+		{label: '1 Year', val: '1'},
+		{label: '2 Years', val: '2'}
+	]
+});
+
+ModelEditors.selectRenewalFirstOptionIncrement = ModelEditors.select.extend({
+	values: [
+		{label: '-', val: null},
+		{label: '30 days', val: '30'},
+		{label: '60 days', val: '60'}, 
+		{label: '90 days', val: '90'}
+	]
+});
