@@ -40,46 +40,73 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 <script src="src/ModelEditor-final.js"></script>
 
+<style>
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.model-editor label { font-weight: bold !important;}
+</style>
+
 </head>
 <body>
 
 <div class="navbar">
   <div class="container">
 
-    <a class="navbar-brand" href="#">Backbone.js UI Components</a>
+    <a class="navbar-brand" href="#">Blackstone UI Components</a>
 
     <ul class="nav navbar-nav">
-	  <li class=""><a href="http://kjantzer.github.io/backbonejs-panel-view/">Panel View</a></li>
-	  <li class=""><a href="http://kjantzer.github.io/backbonejs-dropdown-view/">Dropdown View</a></li>
-	  <li class=""><a href="http://kjantzer.github.io/backbonejs-modal-view/">Modal View</a></li>
+	  <li class=""><a href="http://kjantzer.github.io/backbonejs-list-controller-view/">List Controller</a></li>
+	  <li class=""><a href="http://kjantzer.github.io/backbonejs-panel-view/">Panel</a></li>
+	  <li class=""><a href="http://kjantzer.github.io/backbonejs-dropdown-view/">Dropdown</a></li>
+	  <li class=""><a href="http://kjantzer.github.io/backbonejs-modal-view/">Modal</a></li>
 	  <li class="active"><a href="http://kjantzer.github.io/backbonejs-model-editor-view/">Model Editor</a></li>
+	  <li class=""><a href="http://kjantzer.github.io/basic-buttons/">Basic Buttons</a></li>
 	</ul>
+
     
   </div><!-- /.container -->
 </div><!-- /.navbar -->
 
-<a href="https://github.com/kjantzer/backbonejs-model-editor-view"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<a href="https://github.com/kjantzer/backbonejs-model-editor-view"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:10;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
+
+<div class="masthead" style="position: relative; margin-top: -20px; padding-top: 20px;">
+	<div style="background: #2c3033; height: 80%; position: absolute; top: 0; width: 100%;"></div>
+	
+	<div class="container">
+		<div class="col-lg-6 col-lg-offset-3">
+		
+		<div style="color: white;">
+		<h1>Model Editor View</h1>
+		<p style="font-weight: 300; line-height: 1.3em; font-size: 1.5em;">Easily edit your backbone models with inputs, textareas, date pickers, and more.</p>
+		<br>
+		</div>
+		
+		<div id="editors" class="clearfix panel" style="padding: 30px;"></div>
+	
+		</div>
+	</div>
+</div>
 
 <div class="container">
 	<div class="col-lg-6 col-lg-offset-3">
 	
-	<h1>Backbone.js Model Editor View</h1>
-	<p>Easily edit your backbone models with inputs, textareas, and more.</p>
-	<br>
-	
-	
-	<div id="editors" class="clearfix panel"></div>
-
-	<br>
-	<h4>Unsaved Editor Model</h4>
-	<pre id="output"></pre>
-	
-	<h4>Real Model Data</h4>
-	<pre id="output2"></pre>
-	
-	<hr>
-	
-	<small>Built by Kevin Jantzer, Blackstone Audio Inc.</small>
+		<br>
+		<h4>Unsaved Editor Model</h4>
+		<pre id="output"></pre>
+		
+		<h4>Real Model Data</h4>
+		<pre id="output2"></pre>
+		
+		<hr>
+		
+		<small>Built by Kevin Jantzer, Blackstone Audio Inc.</small>
+		<br><br>
 	
 	</div>
 </div>
