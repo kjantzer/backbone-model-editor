@@ -1432,14 +1432,14 @@ ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
 
 ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
 	values: [
-		{label: 'Not auto renewed', val: 0},
+		{label: 'No auto renewal', val: 0},
+		{label: 'No auto renewal, but have first option to renew', val: 3},
 		{label: 'Auto renewed with guarantee', val: 1},
-		{label: 'Auto renewed with no guarantee', val: 2},
-		{label: 'First option to renew', val: 3}
+		{label: 'Auto renewed with no guarantee', val: 2}
 	]
 });
 
-ModelEditors.selectAutoRenewalYearIncrement = ModelEditors.select.extend({
+ModelEditors.selectAutoRenewalIncrement = ModelEditors.select.extend({
 	values: [
 		{label: '-', val: null},
 		{label: '1 Year', val: '1'},
