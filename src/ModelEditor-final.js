@@ -1439,11 +1439,12 @@ ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
 	]
 });
 
-ModelEditors.selectAutoRenewalIncrement = ModelEditors.select.extend({
+ModelEditors.selectAutoRenewIncrement = ModelEditors.select.extend({
 	values: [
 		{label: '-', val: null},
-		{label: '1 Year', val: '1'},
-		{label: '2 Years', val: '2'}
+		{label: '6 months', val: '6 months'},
+		{label: '1 year', val: '1 year'},
+		{label: '2 years', val: '2 years'}
 	]
 });
 
@@ -1453,5 +1454,13 @@ ModelEditors.selectRenewalFirstOptionIncrement = ModelEditors.select.extend({
 		{label: '30 days', val: '30'},
 		{label: '60 days', val: '60'}, 
 		{label: '90 days', val: '90'}
+	]
+});
+
+ModelEditors.selectContractAssignability = ModelEditors.select.extend({
+	values: [
+		{label: 'All cases require approval', val: 0},
+		{label: 'OK on sale/merge otherwise requires approval', val: 1},
+		{label: 'OK in all cases', val: 2} 
 	]
 });
