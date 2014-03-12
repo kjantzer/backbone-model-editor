@@ -362,9 +362,9 @@ ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
 ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
 	values: [
 		{label: 'No auto renewal', val: 0},
-		{label: 'No auto renewal, but have first option to renew', val: 3},
-		{label: 'Auto renewed with guarantee', val: 1},
-		{label: 'Auto renewed with no guarantee', val: 2}
+		{label: 'No auto renewal, BSA has first option to renew', val: 3},
+		{label: 'Auto renew with term guarantee', val: 1},
+		{label: 'Auto renew with no term guarantee', val: 2}
 	]
 });
 
@@ -389,8 +389,8 @@ ModelEditors.selectRenewalFirstOptionIncrement = ModelEditors.select.extend({
 ModelEditors.selectContractAssignability = ModelEditors.select.extend({
 	values: [
 		{label: 'Approval not required', val: null}, 
-		{label: '​Approval Not Required except anything out of the ordinary course of business', val:1},
+		{label: '​Approval not required unless exceptions exist', val:1},
 		{label: 'Approval required, sales/mergers allowed', val: 2},
-		{label: 'Approval required', val: 3}
+		{label: 'Approval required, sales/mergers not allowed', val: 3}
 	]
 });
