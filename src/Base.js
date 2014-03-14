@@ -97,10 +97,13 @@ ModelEditors.Base = Backbone.View.extend({
 	},
 	
 	onChanged: function(changedAttrs){
-		
+	
 		var changedVal = this.model.changed[this.options.key];
 		
 		if( changedVal === undefined || this.options.watchChanges !== true ) return;
+		
+		// remove this "changed" value (fix for #742)
+		delete this.model.changed[this.options.key];
 		
 		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes, you need to specifiy a key for proofing the proofing light');
 		
