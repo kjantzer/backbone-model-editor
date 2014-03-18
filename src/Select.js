@@ -396,3 +396,10 @@ ModelEditors.selectContractAssignability = ModelEditors.select.extend({
 		{label: 'Approval Required', val: 5}
 	]
 });
+
+ModelEditors.selectProductionPaymentType = ModelEditors.select.extend({
+	values: [
+		{label: 'Contact (company)', val: 1}, 
+		{label: '​Person', val:2},
+	]
+});
