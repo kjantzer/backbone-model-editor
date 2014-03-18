@@ -1462,10 +1462,11 @@ ModelEditors.selectRenewalFirstOptionIncrement = ModelEditors.select.extend({
 
 ModelEditors.selectContractAssignability = ModelEditors.select.extend({
 	values: [
-		{label: 'Approval Not Required', val: null}, 
-		{label: '​Approval Not Required for Ordinary Course of Business', val:1}, 
-		{label: 'Approval Not Required for Ordinary Course of Business (Sales/Mergers allowed)', val: 2},
-		{label: 'Approval Required (Sales/Mergers allowed)', val: 3},
-		{label: 'Approval Required', val: 4}
+		{label: '-', val: null},
+		{label: 'Approval Not Required', val: 1}, 
+		{label: '​Approval Not Required for Ordinary Course of Business', val:2}, 
+		{label: 'Approval Not Required for Ordinary Course of Business (Sales/Mergers allowed)', val: 3},
+		{label: 'Approval Required (Sales/Mergers allowed)', val: 4},
+		{label: 'Approval Required', val: 5}
 	]
 });
