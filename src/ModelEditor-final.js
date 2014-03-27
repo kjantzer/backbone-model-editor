@@ -1477,3 +1477,23 @@ ModelEditors.selectProductionPaymentType = ModelEditors.select.extend({
 		{label: '​Person', val:2},
 	]
 });
+
+ModelEditors.selectContractRemainderDuration = ModelEditors.select.extend({
+	values: [
+		{label: '-', val: null},
+		{label: '6 months', val: '6 months'}, 
+		{label: '​12 months', val:'12 months'},
+		{label: '​18 months', val:'18 months'},
+		{label: '​Not specified', val:'Not specified'},
+
+	]
+});
+
+ModelEditors.selectContractRemainderFinancialObligation = ModelEditors.select.extend({
+	values: [
+		{label: '-', val: null}, 
+		{label: '10% of all money recieved after cost', val:'10% of all money recieved after cost'},
+		{label: '10% of all money recieved', val:'10% of all money recieved'},
+		{label: 'Other', val:'Other'},
+	]
+});
