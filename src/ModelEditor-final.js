@@ -1485,6 +1485,7 @@ ModelEditors.selectContractRemainderDuration = ModelEditors.select.extend({
 		{label: '​12 months', val:'12 months'},
 		{label: '​18 months', val:'18 months'},
 		{label: '​Not specified', val:'Not specified'},
+		{label: 'Termination', val:'Termination'},
 
 	]
 });
