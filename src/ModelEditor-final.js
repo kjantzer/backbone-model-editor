@@ -1287,7 +1287,7 @@ ModelEditors.selectBookActiveProduct = ModelEditors.select.extend({
 })
 
 ModelEditors.selectTargetAudience = ModelEditors.select.extend({
-	values: ['Adult', 'Young Adult (12-17)', 'Children (10-12)', 'Children (6-9)']
+	values: ['Adult', 'Young Adult (12-17)', 'Children (10-12)', 'Children (6-9)', 'Children (3-5)']
 })
 
 ModelEditors.selectMovieTieIn = ModelEditors.select.extend({
