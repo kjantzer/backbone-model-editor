@@ -1486,6 +1486,13 @@ ModelEditors.selectProductionPaymentType = ModelEditors.select.extend({
 	]
 });
 
+ModelEditors.selectProductionPaymentAssortedCostFee = ModelEditors.select.extend({
+	values: [
+		{label: 'Manuscript Fees', val: -1}, 
+		{label: '​Studio Costs', val: -2},
+	]
+});
+
 ModelEditors.selectContractRemainderDuration = ModelEditors.select.extend({
 	values: [
 		{label: '-', val: null},
