@@ -184,14 +184,6 @@ ModelEditors.selectProductReleaseType = ModelEditors.select.extend({
 	}
 })
 
-ModelEditors.selectMultiPart = ModelEditors.select.extend({
-	values: [
-		'-',
-		'1',
-		'2',
-		'3'
-	]
-})
 
 ModelEditors.selectBookChannel = ModelEditors.select.extend({
 	values: function(){
