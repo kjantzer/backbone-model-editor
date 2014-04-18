@@ -590,13 +590,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.updateVal();
 		this.origVal = this.newVal(); // update orig value to the new val
 		this.edit(false);
-		this.$input.blur();
+		this.onBlur();
 	},
 	
 	cancelBtnAction: function(e){
 		this.$input.val( this.origVal );
 		this.edit(false);
-		this.$input.blur();
+		this.onBlur();
 		
 		if( e )
 			e.stopPropagation()
@@ -676,6 +676,15 @@ ModelEditors.date = ModelEditors.input.extend({
 	
 	val: function(){
 		var val = this._val();
+		
+		if(val && val !== '-')
+			val = (new XDate(val)).toString('MM/dd/yyyy');
+			
+		return val;
+	},
+	
+	newVal: function(){
+		var val = this._newVal();
 		
 		if(val && val !== '-')
 			val = (new XDate(val)).toString('MM/dd/yyyy');
@@ -1480,8 +1489,8 @@ ModelEditors.selectProductionPaymentType = ModelEditors.select.extend({
 
 ModelEditors.selectProductionPaymentAssortedCostFee = ModelEditors.select.extend({
 	values: [
-		{label: 'Manuscript Fees', val: -1}, 
-		{label: '​Studio Costs', val: -2},
+		{label: 'Manuscript Fees', val: 'Manuscript Fees'}, 
+		{label: '​Studio Costs', val: '​Studio Costs'},
 	]
 });
 
