@@ -288,9 +288,9 @@ select {
   border: solid 1px #ccc;
   color: #555;
   text-shadow: #fff 0 1px 0;
-  background: url('/common/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(1, #f9f9f9));
-  background: url('/common/img/select_down.png'), -ms-linear-gradient(bottom, #eeeeee, #f9f9f9);
-  background: url('/common/img/select_down.png'), -moz-linear-gradient(center bottom, #eeeeee 0%, #f9f9f9 100%);
+  background: url('/common/resources/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(1, #f9f9f9));
+  background: url('/common/resources/img/select_down.png'), -ms-linear-gradient(bottom, #eeeeee, #f9f9f9);
+  background: url('/common/resources/img/select_down.png'), -moz-linear-gradient(center bottom, #eeeeee 0%, #f9f9f9 100%);
   background-position: right center;
   background-repeat: no-repeat;
   -webkit-transition: all 120ms ease-out;
@@ -418,9 +418,9 @@ select:disabled {
   border: solid 1px #ccc;
   color: #555;
   text-shadow: #fff 0 1px 0;
-  background: url('/common/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(1, #f9f9f9));
-  background: url('/common/img/select_down.png'), -ms-linear-gradient(bottom, #eeeeee, #f9f9f9);
-  background: url('/common/img/select_down.png'), -moz-linear-gradient(center bottom, #eeeeee 0%, #f9f9f9 100%);
+  background: url('/common/resources/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(1, #f9f9f9));
+  background: url('/common/resources/img/select_down.png'), -ms-linear-gradient(bottom, #eeeeee, #f9f9f9);
+  background: url('/common/resources/img/select_down.png'), -moz-linear-gradient(center bottom, #eeeeee 0%, #f9f9f9 100%);
   background-position: right center;
   background-repeat: no-repeat;
   -webkit-transition: all 120ms ease-out;
