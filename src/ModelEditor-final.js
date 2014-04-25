@@ -1514,3 +1514,11 @@ ModelEditors.selectContractRemainderFinancialObligation = ModelEditors.select.ex
 		{label: 'Other', val:'Other'},
 	]
 });
+
+ModelEditors.selectRecordingProducer = ModelEditors.select.extend({
+	values: [
+		{label:'-', val:null}, 
+		{label:'BSA', val:'BSA'}, 
+		{label:'RI', val:'RI'}
+	]
+});
