@@ -349,7 +349,8 @@ select:disabled {
 .model-editor .inner > input[type="number"],
 .model-editor .inner > input[type="password"],
 .model-editor .inner > textarea,
-.model-editor .inner > .redactor_box .redactor_editor {
+.model-editor .inner > .redactor_box .redactor_editor,
+.model-editor .inner > div.multiselect {
   max-width: 100%;
   background: #F9F9F9;
   border: 1px solid #CCC;
@@ -377,7 +378,8 @@ select:disabled {
 .model-editor .inner > input[type="number"].invalid,
 .model-editor .inner > input[type="password"].invalid,
 .model-editor .inner > textarea.invalid,
-.model-editor .inner > .redactor_box .redactor_editor.invalid {
+.model-editor .inner > .redactor_box .redactor_editor.invalid,
+.model-editor .inner > div.multiselect.invalid {
   border-color: #ff0000;
   -webkit-box-shadow: #ff0000 0 0 7px;
   -moz-box-shadow: #ff0000 0 0 7px;
@@ -389,7 +391,8 @@ select:disabled {
 .model-editor .inner > input[type="number"]:focus,
 .model-editor .inner > input[type="password"]:focus,
 .model-editor .inner > textarea:focus,
-.model-editor .inner > .redactor_box .redactor_editor:focus {
+.model-editor .inner > .redactor_box .redactor_editor:focus,
+.model-editor .inner > div.multiselect:focus {
   border-color: #aaa !important;
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
@@ -437,6 +440,90 @@ select:disabled {
   cursor: default;
   color: #aaa;
 }
+.model-editor .inner .multiselect .bar {
+  position: relative;
+  z-index: 1;
+  background: #f1f1f1;
+  padding: .25em .5em;
+  -webkit-box-shadow: #cccccc 0 1px 3px -1px;
+  -moz-box-shadow: #cccccc 0 1px 3px -1px;
+  box-shadow: #cccccc 0 1px 3px -1px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 0px;
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 0px;
+  -moz-border-radius-bottomleft: 0;
+  -moz-border-radius-topleft: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border-bottom: solid 1px #ccc;
+  font-size: .9em;
+}
+.model-editor .inner .multiselect .bar a {
+  float: right;
+  margin-left: .5em;
+  cursor: pointer;
+}
+.model-editor .inner .multiselect ul.multiselect {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.model-editor .inner .multiselect ul.multiselect > li {
+  position: relative;
+  padding: .25em .5em;
+}
+.model-editor .inner .multiselect ul.multiselect > li:not(.selected) {
+  color: #999;
+}
+.model-editor .inner .multiselect ul.multiselect > li:not(.selected):hover {
+  color: inherit;
+  background: #f1f1f1;
+}
+.model-editor .inner .multiselect ul.multiselect > li.selected {
+  background: #f1f1f1;
+  font-weight: bold;
+}
+.model-editor .inner .multiselect ul.multiselect > li.selected:after {
+  content: '\2713';
+  font-family: "kjc-icon-font";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  text-align: center;
+  opacity: .5;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1em;
+  position: absolute;
+  right: .5em;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  transform: translateY(-50%);
+  padding-left: 1px;
+  z-index: 10;
+  opacity: 1;
+}
 .model-editor.disabled input[type="text"]:not(.search),
 .model-editor.disabled input[type="email"],
 .model-editor.disabled input[type="date"],
@@ -444,7 +531,8 @@ select:disabled {
 .model-editor.disabled input[type="password"],
 .model-editor.disabled textarea,
 .model-editor.disabled .redactor_box,
-.model-editor.disabled .checkbox {
+.model-editor.disabled .checkbox,
+.model-editor.disabled ul.multiselect {
   pointer-events: none;
   opacity: .6;
 }
@@ -625,6 +713,9 @@ select:disabled {
 }
 .model-editor.empty .inner > p:first-child {
   margin-top: .25em;
+}
+.model-editor.empty .model-editor {
+  margin-bottom: 0;
 }
 .model-editor.theme-text input[type="text"],
 .model-editor.theme-text input[type="email"],

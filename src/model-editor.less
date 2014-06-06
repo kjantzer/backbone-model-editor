@@ -88,7 +88,8 @@ select {
 		> input[type="number"],
 		> input[type="password"],
 		> textarea,
-		> .redactor_box .redactor_editor {
+		> .redactor_box .redactor_editor,
+		> div.multiselect {
 			max-width: 100%; // responsive support
 			background: #F9F9F9;
 			border: 1px solid #CCC;
@@ -151,6 +152,82 @@ select {
 				color: #aaa;
 			}
 		}
+
+		
+		.multiselect {
+
+			.bar {
+				position: relative;
+				z-index: 1;
+				background: #f1f1f1;
+				padding: .25em .5em;
+				.box-shadow(#ccc 0 1px 3px -1px);
+				.border-radius(3px, 0px, 0, 3px);
+				border-bottom: solid 1px #ccc;
+				font-size: .9em;
+
+				a {
+					float: right;
+					margin-left: .5em;
+					cursor: pointer;
+				}
+			}
+
+			ul.multiselect {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				max-height: 300px;
+				overflow-y: auto;
+				.no-user-select();
+
+				> li {
+					position: relative;
+					padding: .25em .5em;
+
+					&:not(.selected) {
+						color: #999;
+					}
+
+					&:not(.selected):hover {
+						color: inherit;
+						background: #f1f1f1;
+					}
+
+					&.selected {
+						//background: #ddd;
+						background: #f1f1f1;
+						font-weight: bold;
+
+						&:after {
+							content: '\2713';
+							font-family: "kjc-icon-font";
+							font-style: normal;
+							font-weight: normal;
+							speak: none;
+							display: inline-block;
+							text-decoration: inherit;
+							width: 1em;
+							text-align: center;
+							opacity: .5;
+							font-variant: normal;
+							text-transform: none;
+							line-height: 1em;
+							position: absolute;
+							right: .5em;
+							top: 50%;
+							-webkit-transform: translateY(-50%);
+							-moz-transform: translateY(-50%);
+							transform: translateY(-50%);
+							padding-left: 1px;
+							z-index: 10;
+							opacity: 1;
+						}
+					}
+				}
+			}
+		}
 		
 	} // .inner
 
@@ -164,7 +241,8 @@ select {
 		input[type="password"],
 		textarea,
 		.redactor_box,
-		.checkbox {
+		.checkbox,
+		ul.multiselect {
 			pointer-events: none;
 			opacity: .6;
 		}			
@@ -342,6 +420,8 @@ select {
 		.inner > p:first-child {
 			margin-top: .25em;
 		}
+
+		.model-editor { margin-bottom: 0;} // might be bad, but lets try it until I see an issue
 	}
 	
 	

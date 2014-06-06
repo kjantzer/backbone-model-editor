@@ -107,6 +107,7 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 		// add new state class
 		this.$el.add(this.$input).addClass( this.state() );
 		
+		this.$el.attr('data-val', this.saveVal());
 		
 		// delay the save function by 500ms to see if the user clicks the input again
 		this.saveTimeout = setTimeout(_.bind(this.updateVal,this),300);

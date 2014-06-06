@@ -50,11 +50,7 @@ var ModelEditor = Backbone.View.extend({
 		this.defaultOpts('reset');
 		
 		// reset the ModelEditor
-		this.reset();
-		
-		this.model.on('change', this.cleanReset, this);
-		this.model.on('reset', this.cleanup, this);
-		this.model.on('sync', this.onSync, this);
+		this.setModel(this.model);
 		
 		this.editmodel.on('edited', this.rememberChanges, this);
 		
@@ -65,6 +61,15 @@ var ModelEditor = Backbone.View.extend({
 		// if auto save is activated, then save the model whenever the temporary "editmodel" changes
 		this.autoSave( this.options.autoSave )
 		
+	},
+
+	setModel: function(model){
+		this.model.off(null, null, this);
+		this.model = model;
+		this.model.on('change', this.cleanReset, this);
+		this.model.on('reset', this.cleanup, this);
+		this.model.on('sync', this.onSync, this);
+		this.reset();
 	},
 	
 	createEditModel: function(){
@@ -144,6 +149,9 @@ var ModelEditor = Backbone.View.extend({
 			this.model.save(this.data(), opts||{});
 		else
 			this.model.set(this.data(), opts||{});
+
+		if( this.options.onSave )
+			this.options.onSave(this.model);
 	},
 	
 	onSync: function(model){
@@ -219,6 +227,10 @@ ModelEditors.Base = Backbone.View.extend({
 	append: function(el){
 		this.$inner.append(el);
 	},
+
+	html: function(el){
+		this.$inner.html(el);
+	},
 	
 	init: function(){
 		
@@ -229,8 +241,10 @@ ModelEditors.Base = Backbone.View.extend({
 			clear: true,
 			label: 'auto',
 			labelInline: false,
-			labelStyle: '',
+			labelStyle: '',	// large, medium, medium-large
+			labelIcon: false,
 			key: null,	// key/field to use in the model
+			valueType: 'string', // string, array, csv, json
 			emptyVal: null,
 			renderTo: null, // defaults is ModelEditor.el
 			pl: null, // proofing light key - accepts "auto" as value, but plPrefix must be defined
@@ -249,6 +263,7 @@ ModelEditors.Base = Backbone.View.extend({
 			.addClass(this.editorClassName)
 			.addClass('theme-'+this.options.theme)
 			.addClass('key-'+this.options.key)
+			.attr('data-val', this.val());
 		
 		this.setupLabel();
 		
@@ -332,17 +347,44 @@ ModelEditors.Base = Backbone.View.extend({
 	hide: function(){ this.$el.hide(); },
 	show: function(){ this.$el.show(); },
 	
+	parseVal: function(val){
+		switch(this.options.valueType){
+			case 'string': return val; break;
+			case 'array': return val||[]; break;
+			case 'csv': return _.splitAndTrim(val); break;
+		}
+	},
+
+	parseSaveVal: function(val){
+		switch(this.options.valueType){
+			case 'string': return this.cleanSaveVal(val); break;
+			case 'array': return val; break;
+			case 'csv': return (val||[]).join(','); break;
+		}
+	},
+
+	cleanSaveVal: function(val){
+		return _.cleanWebkitStyles(val);
+	},
+
 	// convenience methods: get value and new value
-	_val: function(){ return this.model.get(this.options.key)||null },
-	_newVal: function(){ return _.cleanWebkitStyles(this.$input.val()) || this.options.emptyVal; },
+	_val: function(){ return this.parseVal(this.model.get(this.options.key)||null); },
+	_newVal: function(){ return this.$input.val() || this.options.emptyVal; },
 	
 	// override these to add special rules
 	val: function(){ return this._val(); },
 	newVal: function(){ return this._newVal(); },
-	saveVal: function(){ return this.newVal(); },
+	saveVal: function(){ return this.parseSaveVal(this.newVal()); },
 	
 	valChanged: function(){
-		return this.val() !== this.newVal();
+
+		var val = this.val();
+		var newVal = this.newVal();
+
+		if( this.options.valueType == 'csv' || this.options.valueType == 'array' )
+			return _.difference(val, newVal).length > 0 || val.length != newVal.length
+		else
+			return val !== newVal;
 	},
 	
 	// updates the value in the model
@@ -353,6 +395,8 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( this.options.onSave )
 			this.options.onSave(this.options.key, this.saveVal())
+
+		this.$el.attr('data-val', this.saveVal());
 	},
 	
 	setWidth: function(){
@@ -375,6 +419,9 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( this.options.labelStyle )
 			this.$el.addClass('label-style-'+this.options.labelStyle);
+
+		if( this.options.labelIcon )
+			this.$label.addClass('icon-'+this.options.labelIcon);
 	
 		// set optional inline
 		if( this.options.labelInline ){
@@ -1064,6 +1111,7 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 		// add new state class
 		this.$el.add(this.$input).addClass( this.state() );
 		
+		this.$el.attr('data-val', this.saveVal());
 		
 		// delay the save function by 500ms to see if the user clicks the input again
 		this.saveTimeout = setTimeout(_.bind(this.updateVal,this),300);
@@ -1096,16 +1144,17 @@ ModelEditors.select = ModelEditors.Base.extend({
 	events: {
 		'change select' : 'updateVal'
 	},
+
+	defaultOpts: {
+		w: 200,
+		values: null
+	},
 	
 	use: 'value', // index, value, lowercase, uppercase
 	
 	initialize: function(opts){
 	
-		
-		this.options = _.extend({
-			w: 200,
-			values: null
-		},opts);
+		this.options = _.extend({}, this.defaultOpts, opts);
 		
 		if( this.options.values )
 			this.values = this.options.values;
@@ -1114,19 +1163,23 @@ ModelEditors.select = ModelEditors.Base.extend({
 		
 		this.value = this.val() === null ? 'null' : this.val();
 		
-		
-		this.$input = $('<select></select>')
-			.appendTo( this.$inner )
-			.attr(this.editorAttributes)
+		this.$input = this.createInput();
 			
 		this.addOptions();
 		
 		this.setWidth();
+		this.setHeight();
 		
 		this.onUpdateVal();
 		this.model.on('change:state', this.onUpdateVal, this)
 		
 		this.render();
+	},
+
+	createInput: function(){
+		return $('<select></select>')
+			.appendTo( this.$inner )
+			.attr(this.editorAttributes)
 	},
 	
 	addOptions: function(){
@@ -1191,6 +1244,8 @@ ModelEditors.select = ModelEditors.Base.extend({
 		this.$inner.width(this.options.w);
 		this.$input.width(this.options.w);
 	},
+
+	setHeight: function(){},
 	
 	disable: function(){
 		this._disable();
@@ -1207,6 +1262,232 @@ ModelEditors.select = ModelEditors.Base.extend({
 	}
 
 });
+
+
+/*
+	Multi Select
+*/
+ModelEditors.multiselect = ModelEditors.select.extend({
+
+	editorClassName: 'multiselect',
+
+	editorAttributes: {
+		'class': 'multiselect'
+	},
+
+	events: {
+		'click li' : 'onOptionSelect',
+		'mouseleave' : 'onMouseLeave',
+		'a.select-all': 'selectAll',
+		'a.select-none': 'deselectAll'
+	},
+
+	defaultOpts: {
+		w: 200,
+		values: null,
+		valueType: 'csv', // or array
+		saveDelay: 2000,
+		infoBar: true,
+		dynamicHeight: true
+	},
+
+	createInput: function(){
+
+		var $wrap = $('<div class="multiselect wrap"></div>')
+			.appendTo( this.$inner );
+
+		if( this.options.infoBar === true ){
+			$wrap.append('<div class="bar">\
+							<span class="info"></span>\
+							<a class="select-none">None</a>\
+							<a class="select-all">All</a>\
+						</div>')
+
+			this.$('.bar a.select-all').click(this.onSelectAll.bind(this));
+			this.$('.bar a.select-none').click(this.onDeselectAll.bind(this));
+		}
+
+		var $ul = $('<ul></ul>')
+			.appendTo( $wrap )
+			.attr(this.editorAttributes)
+
+		return $ul;
+	},
+
+	newVal: function(){
+		return this.selectedVals;
+	},
+
+	setInfoLabel: function(){
+		var msg = this.selectedVals.length +' Selected';
+
+		this.$('.bar .info').html(msg);
+	},
+
+	addOptions: function(){
+		
+		if( !this.values ){
+			console.error('ModelEditor: you need to add a “values“ attribute');
+			return;
+		}
+
+		this.selectedVals = [];
+		
+		var values = _.isFunction( this.values ) ? this.values() : this.values;
+		
+		_.each(values, _.bind(this.addOption, this));
+		
+		this.setInfoLabel();
+	},
+
+	addOption: function(option, indx){
+		
+		var $option = $('<li></li>');
+		
+		if( _.isObject(option) ){
+			
+			if( option.val === '-' || option.val === '' || option.val === '0')
+				return;
+
+			$option
+				.attr('data-val', option.val)
+				.html(option.label)
+			
+		}else{
+			
+			$option
+				.attr('data-val', this.use==='index' ? indx : this.optionVal(option) )
+				.html(option)
+		}
+
+		if( _.contains(this.val(), $option.attr('data-val')) ){
+			$option.addClass('selected');
+
+			this.selectedVals = this.selectedVals || [];
+			this.selectedVals.push($option.attr('data-val'))
+		}
+		
+		$option.appendTo(this.$input);
+	},
+
+	onOptionSelect: function(e){
+		
+		clearTimeout(this.saveTimeout);
+		this.saveTimeout = null;
+
+		var el = e.currentTarget;
+		var val = el.dataset.val;
+		var selectedIndx = _.indexOf(this.selectedVals, val)
+
+		// ALREADY SELECTED
+		if( selectedIndx > -1 ){
+
+			// holding ctrl OR this is only one selected
+			if( _.metaKey() || this.selectedVals.length == 1){
+				this.deselect(val)
+			}else if( this.selectedVals.length > 1 ){
+				this.deselectAll();
+				this.select(val)
+			}
+
+		// NOT SELECTED
+		}else{
+
+			/*if( e.shiftKey ){
+
+			}else*/ if( _.metaKey() ){
+
+				this.select(val)
+
+			}else{
+				this.deselectAll();
+				this.select(val)
+			}
+		}
+
+		this.setInfoLabel();
+
+		this.saveTimeout = setTimeout(this.doSave.bind(this), this.options.saveDelay);
+
+	},
+
+	onSelectAll: function(){
+		this.selectAll();
+		this.setInfoLabel();
+		this.saveTimeout = setTimeout(this.doSave.bind(this), this.options.saveDelay);
+	},
+
+	onDeselectAll: function(){
+		this.deselectAll();
+		this.setInfoLabel();
+		this.saveTimeout = setTimeout(this.doSave.bind(this), this.options.saveDelay);
+	},
+
+	onMouseLeave: function(){
+		if( this.saveTimeout )
+			this.doSave();
+	},
+
+	doSave: function(){
+		clearTimeout(this.saveTimeout);
+		this.saveTimeout = null;
+		this.updateVal();
+		this.setInfoLabel();
+	},
+
+	select: function(val){
+		this._select( null, this.$input.find('[data-val="'+val+'"]')[0] )
+	},
+
+	deselect: function(val){
+		this._deselect( null, this.$input.find('[data-val="'+val+'"]')[0] )
+	},
+
+	selectAll: function(){
+		this.$input.find('li').each(this._select.bind(this))
+	},
+
+	deselectAll: function(){
+		this.$input.find('li').each(this._deselect.bind(this))
+	},
+
+	/*forRange: function(first, second, callback){
+		var start = first < second ? first : second;
+		var last = first > second ? first : second;
+
+		this.$input.find('li').each(function(indx, el){
+			console.log(el);
+		})
+	},*/
+
+	_select: function(indx, el){
+		el.classList.add('selected')
+		if(_.indexOf(this.selectedVals, el.dataset.val) == -1 ) this.selectedVals.push(el.dataset.val);
+	},
+
+	_deselect: function(indx, el){
+		el.classList.remove('selected')
+		this.selectedVals.splice( _.indexOf(this.selectedVals, el.dataset.val) );
+	},
+
+	setWidth: function(){
+		if(!this.options.w) return;
+		
+		this.$inner.width(this.options.w);
+		//this.$input.width(this.options.w);
+	},
+
+	setHeight: function(){
+		if( this.options.h )
+
+		this.$input.css(this.options.dynamicHeight?'maxHeight':'height', this.options.h);
+	}
+
+}) // multiselect
+
+
+
+
 
 ModelEditors.selectMonth = ModelEditors.select.extend({
 	values: function(){return lookup.selects.monthsOfYear.asSelect()}
@@ -1229,6 +1510,12 @@ ModelEditors.selectPartner = ModelEditors.select.extend({
 	}
 })
 
+ModelEditors.selectPartnerDeal = ModelEditors.select.extend({
+	values: function(){
+		return [{label: '-', val: null}].concat(Deals.toSelectID(function(m){ return m.label() }))
+	}
+})
+
 ModelEditors.selectGender = ModelEditors.select.extend({	
 	
 	values: [
@@ -1237,6 +1524,14 @@ ModelEditors.selectGender = ModelEditors.select.extend({
 		{label: 'Female', val: 'F'}
 	]
 	
+})
+
+ModelEditors.selectYesNo = ModelEditors.select.extend({	
+	values: [
+		{label: '-', val: ''},
+		{label: 'Yes', val: '1'},
+		{label: 'No', val: '0'}
+	]
 })
 
 ModelEditors.selectBookEdition = ModelEditors.select.extend({
@@ -1522,3 +1817,14 @@ ModelEditors.selectRecordingProducer = ModelEditors.select.extend({
 		{label:'RI', val:'RI'}
 	]
 });
+
+
+
+ModelEditors.selectDealTerritoryChoice = ModelEditors.select.extend({
+	use: 'lowercase',
+	values: [
+		'-',
+		'Inherit',
+		'Assign',
+	]
+})

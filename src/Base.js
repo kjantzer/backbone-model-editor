@@ -15,6 +15,10 @@ ModelEditors.Base = Backbone.View.extend({
 	append: function(el){
 		this.$inner.append(el);
 	},
+
+	html: function(el){
+		this.$inner.html(el);
+	},
 	
 	init: function(){
 		
@@ -25,8 +29,10 @@ ModelEditors.Base = Backbone.View.extend({
 			clear: true,
 			label: 'auto',
 			labelInline: false,
-			labelStyle: '',
+			labelStyle: '',	// large, medium, medium-large
+			labelIcon: false,
 			key: null,	// key/field to use in the model
+			valueType: 'string', // string, array, csv, json
 			emptyVal: null,
 			renderTo: null, // defaults is ModelEditor.el
 			pl: null, // proofing light key - accepts "auto" as value, but plPrefix must be defined
@@ -45,6 +51,7 @@ ModelEditors.Base = Backbone.View.extend({
 			.addClass(this.editorClassName)
 			.addClass('theme-'+this.options.theme)
 			.addClass('key-'+this.options.key)
+			.attr('data-val', this.val());
 		
 		this.setupLabel();
 		
@@ -128,17 +135,44 @@ ModelEditors.Base = Backbone.View.extend({
 	hide: function(){ this.$el.hide(); },
 	show: function(){ this.$el.show(); },
 	
+	parseVal: function(val){
+		switch(this.options.valueType){
+			case 'string': return val; break;
+			case 'array': return val||[]; break;
+			case 'csv': return _.splitAndTrim(val); break;
+		}
+	},
+
+	parseSaveVal: function(val){
+		switch(this.options.valueType){
+			case 'string': return this.cleanSaveVal(val); break;
+			case 'array': return val; break;
+			case 'csv': return (val||[]).join(','); break;
+		}
+	},
+
+	cleanSaveVal: function(val){
+		return _.cleanWebkitStyles(val);
+	},
+
 	// convenience methods: get value and new value
-	_val: function(){ return this.model.get(this.options.key)||null },
-	_newVal: function(){ return _.cleanWebkitStyles(this.$input.val()) || this.options.emptyVal; },
+	_val: function(){ return this.parseVal(this.model.get(this.options.key)||null); },
+	_newVal: function(){ return this.$input.val() || this.options.emptyVal; },
 	
 	// override these to add special rules
 	val: function(){ return this._val(); },
 	newVal: function(){ return this._newVal(); },
-	saveVal: function(){ return this.newVal(); },
+	saveVal: function(){ return this.parseSaveVal(this.newVal()); },
 	
 	valChanged: function(){
-		return this.val() !== this.newVal();
+
+		var val = this.val();
+		var newVal = this.newVal();
+
+		if( this.options.valueType == 'csv' || this.options.valueType == 'array' )
+			return _.difference(val, newVal).length > 0 || val.length != newVal.length
+		else
+			return val !== newVal;
 	},
 	
 	// updates the value in the model
@@ -149,6 +183,8 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( this.options.onSave )
 			this.options.onSave(this.options.key, this.saveVal())
+
+		this.$el.attr('data-val', this.saveVal());
 	},
 	
 	setWidth: function(){
@@ -171,6 +207,9 @@ ModelEditors.Base = Backbone.View.extend({
 		
 		if( this.options.labelStyle )
 			this.$el.addClass('label-style-'+this.options.labelStyle);
+
+		if( this.options.labelIcon )
+			this.$label.addClass('icon-'+this.options.labelIcon);
 	
 		// set optional inline
 		if( this.options.labelInline ){

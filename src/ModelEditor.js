@@ -50,11 +50,7 @@ var ModelEditor = Backbone.View.extend({
 		this.defaultOpts('reset');
 		
 		// reset the ModelEditor
-		this.reset();
-		
-		this.model.on('change', this.cleanReset, this);
-		this.model.on('reset', this.cleanup, this);
-		this.model.on('sync', this.onSync, this);
+		this.setModel(this.model);
 		
 		this.editmodel.on('edited', this.rememberChanges, this);
 		
@@ -65,6 +61,15 @@ var ModelEditor = Backbone.View.extend({
 		// if auto save is activated, then save the model whenever the temporary "editmodel" changes
 		this.autoSave( this.options.autoSave )
 		
+	},
+
+	setModel: function(model){
+		this.model.off(null, null, this);
+		this.model = model;
+		this.model.on('change', this.cleanReset, this);
+		this.model.on('reset', this.cleanup, this);
+		this.model.on('sync', this.onSync, this);
+		this.reset();
 	},
 	
 	createEditModel: function(){
@@ -144,6 +149,9 @@ var ModelEditor = Backbone.View.extend({
 			this.model.save(this.data(), opts||{});
 		else
 			this.model.set(this.data(), opts||{});
+
+		if( this.options.onSave )
+			this.options.onSave(this.model);
 	},
 	
 	onSync: function(model){

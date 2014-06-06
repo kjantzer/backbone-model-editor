@@ -20,6 +20,7 @@
 <script src="lib/underscore.min.js"></script>
 <script src="lib/underscore.string.min.js"></script>
 <script src="lib/backbone.min.js"></script>
+<script src="lib/util.js"></script>
 <script type="text/javascript">
 	
 	// mixin underscore.string
@@ -130,6 +131,7 @@ window.App = Backbone.View.extend({
 			gender: null,
 			phone:null, 
 			email:null,
+			color: null,
 			notes: null
 		});
 		
@@ -171,6 +173,7 @@ window.App = Backbone.View.extend({
 		this.editor.insert('select', 'gender', {values: [{label:'-', val:null}, 'Male', 'Female']});
 		this.editor.insert('input', 'phone');
 		this.editor.insert('email', 'email');
+		this.editor.insert('multiselect', 'color', {values: ['Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple'], label: 'Favorite Color(s)'});
 		this.editor.insert('textarea', 'notes', {w: 300, h: 100});
 		this.editor.insert('checkbox', 'newsletter');
 		
