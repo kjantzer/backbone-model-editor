@@ -6,9 +6,10 @@
 		• Input
 		• Date Input (input with date picker; requires jQuery UI)
 		• Textarea
-		• RTE (textarea with rich text editor)
+		• RTE (textarea with rich text editor - requries Redactor.js)
 		• Checkbox
 		• Select
+		• Multi Select
 		
 	
 	Example use:
@@ -39,7 +40,8 @@ var ModelEditor = Backbone.View.extend({
 		this.options = _.extend({
 			modelType: 'Backbone.Model', 	// use "auto" to make "editmodel" the same type as the given model
 			autoSave: false,				// auto save real model when editor model changes?
-			saveToDB: !this.model.isNew(),			// SAVE to db, or just SET data
+			saveToDB: !this.model.isNew(),	// SAVE to db, or just SET data
+			patchSave: false,				// save with "PATCH" rather than PUT
 			defaultOpts: {}					// default ops for each editor // see base
 		},opts)
 		
@@ -137,18 +139,24 @@ var ModelEditor = Backbone.View.extend({
 	Data - return queued up edit model data
 */
 	data: function(){
-		return this.editmodel.toJSON();
+		//return this.options.patchSave ? this.editmodel.changedAttributes() : this.editmodel.toJSON();
+		return this.editmodel.changedAttributes(); // I guess we should always just return the changed data, not the whole thing
 	},
 	
 /*
 	Save - saves the real model
 */
 	save: function(doSave, opts){
+
+		opts = opts || {};
+
+		if( this.options.patchSave )
+			opts.patch = true;
 		
 		if(this.options.saveToDB || doSave===true)
-			this.model.save(this.data(), opts||{});
+			this.model.save(this.data(), opts);
 		else
-			this.model.set(this.data(), opts||{});
+			this.model.set(this.data(), opts);
 
 		if( this.options.onSave )
 			this.options.onSave(this.model);
