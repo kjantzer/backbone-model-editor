@@ -777,13 +777,20 @@ ModelEditors.date = ModelEditors.input.extend({
 				this.onBlur();
 			},this)
 		});
-		
+
 		// stop propagation when clicking on the datepicker (so we can use it inside a "dropdown")
-		this.$input.data('datepicker').dpDiv.click(function(e){
-			e.stopPropagation();
-		})
+		var el = this.$input.data('datepicker').dpDiv[0];
+		el.removeEventListener('click', this.stopPropagation);
+		el.addEventListener('click', this.stopPropagation, false);
 		
+	},
+
+	stopPropagation: function(e){
+		e.stopPropagation();
+		e.cancelBubble = true; // setting this will make dropdown close cancel
+		return false;
 	}
+	
 })
 
 
