@@ -140,7 +140,7 @@ var ModelEditor = Backbone.View.extend({
 */
 	data: function(){
 		return this.options.patchSave ? this.editmodel.changedAttributes() : this.editmodel.toJSON();
-		//return this.editmodel.changedAttributes(); // I guess we should always just return the changed data, not the whole thing
+		//return this.editmodel.changedAttributes(); // I guess we should always just return the changed data, not the whole thing; affected creating bug issue
 	},
 	
 /*
