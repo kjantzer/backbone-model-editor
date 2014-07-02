@@ -96,7 +96,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 			if( !this.valChanged() )
 				this.edit(false);
 				
-			this.model.trigger('edited', this.options.key, this.newVal(), this.valChanged())
+			// using saveVal rather than newVal to fix #1062
+			this.model.trigger('edited', this.options.key, this.saveVal(), this.valChanged())
 		}
 	},
 	
