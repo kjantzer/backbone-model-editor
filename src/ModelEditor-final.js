@@ -1115,9 +1115,9 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	onClick: function(){
 	
 		if( this.isDisabled ) return
-
-		if( this.options.validate && this.options.validate(this.state()) !== true )
-			return;
+		
+//		if( this.options.validate && this.options.validate(this.state()) !== true )
+//			return;
 		
 		clearTimeout(this.saveTimeout);
 		
