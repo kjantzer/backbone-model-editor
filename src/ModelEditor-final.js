@@ -372,7 +372,9 @@ ModelEditors.Base = Backbone.View.extend({
 	},
 
 	cleanSaveVal: function(val){
-		return _.cleanWebkitStyles(val);
+		val = _.cleanWebkitStyles(val);
+		val = _.smartQuotes(val);
+		return val;
 	},
 
 	// convenience methods: get value and new value
@@ -405,6 +407,7 @@ ModelEditors.Base = Backbone.View.extend({
 			this.options.onSave(this.options.key, this.saveVal())
 
 		this.$el.attr('data-val', this.saveVal());
+		this.$input.val(this.saveVal())
 	},
 	
 	setWidth: function(){
@@ -972,13 +975,17 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	                    "…": {title: '… Ellipsis', callback: insertSpecialCharacter}
 	                }
 	            }
-	        }
+	        },
+	        pasteBeforeCallback: this.onPaste.bind(this)
 		});
 		
 		this.redactor = this.$input.redactor('getObject');
 		
 	},
 	
+	onPaste: function(html){
+		return _.smartQuotes(html);
+	},
 	
 	saveBtnAction: function(){
 		this.updateVal();

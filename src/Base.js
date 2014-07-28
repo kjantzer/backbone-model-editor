@@ -152,7 +152,9 @@ ModelEditors.Base = Backbone.View.extend({
 	},
 
 	cleanSaveVal: function(val){
-		return _.cleanWebkitStyles(val);
+		val = _.cleanWebkitStyles(val);
+		val = _.smartQuotes(val);
+		return val;
 	},
 
 	// convenience methods: get value and new value
@@ -185,6 +187,7 @@ ModelEditors.Base = Backbone.View.extend({
 			this.options.onSave(this.options.key, this.saveVal())
 
 		this.$el.attr('data-val', this.saveVal());
+		this.$input.val(this.saveVal())
 	},
 	
 	setWidth: function(){

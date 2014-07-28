@@ -108,13 +108,17 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	                    "…": {title: '… Ellipsis', callback: insertSpecialCharacter}
 	                }
 	            }
-	        }
+	        },
+	        pasteBeforeCallback: this.onPaste.bind(this)
 		});
 		
 		this.redactor = this.$input.redactor('getObject');
 		
 	},
 	
+	onPaste: function(html){
+		return _.smartQuotes(html);
+	},
 	
 	saveBtnAction: function(){
 		this.updateVal();
