@@ -407,6 +407,13 @@ ModelEditors.selectBookEdition = ModelEditors.select.extend({
 	values: function(){return lookup.selects.bookBookEdition.asSelect()}
 })
 
+ModelEditors.selectBookLanguage = ModelEditors.select.extend({
+	values: [
+		'English',
+		'Spanish'
+	]
+})
+
 ModelEditors.bookState = ModelEditors.select.extend({
 	values: [
 		'-',

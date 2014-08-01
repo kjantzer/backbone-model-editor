@@ -54,7 +54,8 @@ var ModelEditor = Backbone.View.extend({
 		// reset the ModelEditor
 		this.setModel(this.model);
 		
-		this.editmodel.on('edited', this.rememberChanges, this);
+		// disabling for now, this causes issues with the RTE; it was only added as a cool feature, but not required
+		//this.editmodel.on('edited', this.rememberChanges, this);
 		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
