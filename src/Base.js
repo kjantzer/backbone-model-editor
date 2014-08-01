@@ -187,7 +187,9 @@ ModelEditors.Base = Backbone.View.extend({
 			this.options.onSave(this.options.key, this.saveVal())
 
 		this.$el.attr('data-val', this.saveVal());
-		this.$input.val(this.saveVal())
+
+		if( this.editorTagName && this.editorTagName == 'textarea' )
+			this.$input.val(this.saveVal())
 	},
 	
 	setWidth: function(){
