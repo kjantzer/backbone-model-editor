@@ -410,6 +410,10 @@ ModelEditors.selectBookEdition = ModelEditors.select.extend({
 ModelEditors.selectBookLanguage = ModelEditors.select.extend({
 	values: [
 		'English',
+		'French',
+		'German',
+		'Jamaican',
+		'Marathi',
 		'Spanish'
 	]
 })
