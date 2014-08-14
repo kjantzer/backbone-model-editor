@@ -35,6 +35,7 @@ ModelEditors.Base = Backbone.View.extend({
 			valueType: 'string', // string, array, csv, json
 			emptyVal: null,
 			renderTo: null, // defaults is ModelEditor.el
+			selectOnClick: false, // only works for "empty" editor
 			pl: null, // proofing light key - accepts "auto" as value, but plPrefix must be defined
 			ph: null, // proofing history
 			watchChanges: false,
@@ -274,6 +275,26 @@ ModelEditors.empty = ModelEditors.Base.extend({
 	render: function(){
 		if( this.options.view && this.options.view instanceof Backbone.View )
 			this.options.view.render();
-	}
+
+		if( this.options.selectOnClick )
+			this.$inner.on('click', this.selectOnClick.bind(this))
+	},
+
+	// http://stackoverflow.com/a/1173319/484780
+	selectOnClick: function(){
+		
+		var el = this.$inner[0];
+
+		if (document.selection) {
+            var range = document.body.createTextRange();
+            range.moveToElementText(el);
+            range.select();
+        } else if (window.getSelection) {
+            var range = document.createRange();
+            range.selectNode(el);
+            window.getSelection().addRange(range);
+        }
+
+	},
 	
 })
