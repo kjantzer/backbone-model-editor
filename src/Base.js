@@ -113,7 +113,7 @@ ModelEditors.Base = Backbone.View.extend({
 		// remove this "changed" value (fix for #742)
 		delete this.model.changed[this.options.key];
 		
-		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes, you need to specifiy a key for proofing the proofing light');
+		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes ('+this.options.key+'), you need to specifiy a key for proofing the proofing light');
 		
 		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
 			this.plv.reset();
@@ -209,7 +209,13 @@ ModelEditors.Base = Backbone.View.extend({
 		if( label === 'auto' ) label = this.keyToText();
 		
 		// create label EL
-		this.$label = $('<label>'+label+'</label>').appendTo(this.$el);
+		this.$label = $('<label><div><span>'+label+'</span></div></label>').appendTo(this.$el);
+
+		if( this.options.labelDivider )
+			this.$label.find('> div:first-child').addClass('divider dark');
+
+		if( this.options.helpText )
+			this.$label.append('<p class="help-text">'+this.options.helpText+'</p>')
 		
 		if( this.options.labelStyle )
 			this.$el.addClass('label-style-'+this.options.labelStyle);
