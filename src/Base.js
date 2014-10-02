@@ -221,7 +221,7 @@ ModelEditors.Base = Backbone.View.extend({
 			this.$el.addClass('label-style-'+this.options.labelStyle);
 
 		if( this.options.labelIcon )
-			this.$label.addClass('icon-'+this.options.labelIcon);
+			this.$label.find('> div:first-child').addClass('icon-'+this.options.labelIcon);
 	
 		// set optional inline
 		if( this.options.labelInline ){
