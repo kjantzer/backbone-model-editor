@@ -119,10 +119,10 @@ ModelEditors.Base = Backbone.View.extend({
 		// remove this "changed" value (fix for #742)
 		delete this.model.changed[this.options.key];
 		
-		if( !this.options.pl && !this.plv ) return console.warn('!! To watch changes ('+this.options.key+'), you need to specifiy a key for proofing the proofing light');
+		if( !this.options.pl && !this.subview('plv') ) return console.warn('!! To watch changes ('+this.options.key+'), you need to specifiy a key for proofing the proofing light');
 		
-		if( this.plv.model.get('status') == 1 || this.plv.model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
-			this.plv.reset();
+		if( this.subview('plv').model.get('status') == 1 || this.subview('plv').model.get('status') == -2 ) // is green/yellow, well its not green anymore then!
+			this.subview('plv').reset();
 	},
 	
 	_disable: function(){
