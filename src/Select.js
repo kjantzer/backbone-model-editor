@@ -655,6 +655,8 @@ ModelEditors.selectContractAssignability = ModelEditors.select.extend({
 	]
 });
 
+
+
 ModelEditors.selectProductionPaymentType = ModelEditors.select.extend({
 	values: [
 		{label: 'Contact (company)', val: 1}, 
