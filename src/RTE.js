@@ -22,7 +22,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 
 	render: function(){
 	
-		this.model.on('reset', this.cleanup, this);
+		//this.model.on('reset', this.cleanup, this);
+		//this.listenTo(this.model, 'reset', this.cleanup); // do I really want this?
 	
 		var opts = this.options;
 		var plugins = ['fullscreen'];
@@ -143,12 +144,14 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	},
 	
 	destroyEditor: function(){
-		this.$input.destroyEditor();
+		if( this.$input && this.$input.destroyEditor )
+			this.$input.destroyEditor();
 	},
 	
 	cleanup: function(){
 		this.destroyEditor();
-		this.model.off(null, null, this);
+		this.cleanupSubviews();
+		this.stopListening();
 	}
 
 });

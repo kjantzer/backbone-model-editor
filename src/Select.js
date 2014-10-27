@@ -40,7 +40,7 @@ ModelEditors.select = ModelEditors.Base.extend({
 		this.setHeight();
 		
 		this.onUpdateVal();
-		this.model.on('change:state', this.onUpdateVal, this)
+		this.listenTo(this.model, 'change:state', this.onUpdateVal);
 		
 		this.render();
 	},

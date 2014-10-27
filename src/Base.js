@@ -76,22 +76,23 @@ ModelEditors.Base = Backbone.View.extend({
 				key = this.options.plPrefix+'::'+this.options.key;
 		
 			if( key !== 'auto' ){
-				this.plv = ProofingLight(key, {fieldVal:this.plFieldVal.bind(this)});
-				this.$inner.append( this.plv.el );
+				this.subview('plv', ProofingLight(key, {fieldVal:this.plFieldVal.bind(this)}) );
+				this.$inner.append( this.subview('plv').el );
 			}
 		}
 		
 		if( this.options.ph ){
-			var phv = ProofingHistory(this.options.ph);
-			this.$inner.append( phv.el );
+			this.subview('phv', ProofingHistory(this.options.ph) );
+			this.$inner.append( this.subview('phv').el );
 		}
 		
 		if( this.options.css ) {
 			this.$el.css(this.options.css); 
 		}
 		
-		this.model.on('all', this.testForCleanup, this);
-		this.model.on('changed', this.onChanged, this);
+		//this.model.on('all', this.testForCleanup, this);
+		//this.model.on('changed', this.onChanged, this);
+		this.listenTo(this.model, 'changed', this.onChanged);
 		
 	},
 	
@@ -101,7 +102,12 @@ ModelEditors.Base = Backbone.View.extend({
 	
 	testForCleanup: function(){
 		if( !this.el.parentElement )
-			this.model.off(null, null, this);
+			this.cleanup();
+	},
+
+	cleanup: function(){
+		Backbone.View.prototype.cleanup.apply(this, arguments);
+		this.stopListening()
 	},
 	
 	onChanged: function(changedAttrs){

@@ -124,7 +124,8 @@ var ModelEditor = Backbone.View.extend({
 	},
 	
 	cleanup: function(){
-		this.editmodel.trigger('reset')
+		Backbone.View.prototype.cleanup.apply(this, arguments);
+		this.clearSubviews();
 	},
 	
 	defaultOpts: function(opts){
@@ -174,12 +175,17 @@ var ModelEditor = Backbone.View.extend({
 			return;
 		}
 		
-		return new ModelEditors[type](_.extend({
+		var view = new ModelEditors[type](_.extend({
 			key:key,
 			model: this.editmodel,
 			renderTo: this.$el
 		}, this._defaultOpts, opts));
 		
+		if( this.subview(key) ) console.warn('Editor for “'+key+'” already exists.');
+
+		this.subview(key, view);
+
+		return view;
 	}
 	
 });
