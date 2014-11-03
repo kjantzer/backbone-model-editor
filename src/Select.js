@@ -252,19 +252,20 @@ ModelEditors.multiselect = ModelEditors.select.extend({
 		if( selectedIndx > -1 ){
 
 			// holding ctrl OR this is only one selected
-			if( _.metaKey() || this.selectedVals.length == 1){
-				this.deselect(val)
-			}else if( this.selectedVals.length > 1 ){
+			// if( this.selectedVals.length == 1){
+			// 	this.deselect(val)
+			if( _.metaKey() && this.selectedVals.length > 1 ){
 				this.deselectAll();
 				this.select(val)
-			}
+			}else
+				this.deselect(val)
 
 		// NOT SELECTED
 		}else{
 
 			/*if( e.shiftKey ){
 
-			}else*/ if( _.metaKey() ){
+			}else*/ if( !_.metaKey() ){
 
 				this.select(val)
 
@@ -334,9 +335,9 @@ ModelEditors.multiselect = ModelEditors.select.extend({
 		if(_.indexOf(this.selectedVals, el.dataset.val) == -1 ) this.selectedVals.push(el.dataset.val);
 	},
 
-	_deselect: function(indx, el){
+	_deselect: function(indx, el){	
 		el.classList.remove('selected')
-		this.selectedVals.splice( _.indexOf(this.selectedVals, el.dataset.val) );
+		this.selectedVals.splice( _.indexOf(this.selectedVals, el.dataset.val), 1);
 	},
 
 	setWidth: function(){
