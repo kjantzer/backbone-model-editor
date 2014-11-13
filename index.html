@@ -20,6 +20,7 @@
 <script src="lib/underscore.min.js"></script>
 <script src="lib/underscore.string.min.js"></script>
 <script src="lib/backbone.min.js"></script>
+<script src="lib/backbone.subviews.js"></script>
 <script src="lib/util.js"></script>
 <script type="text/javascript">
 	
@@ -30,6 +31,17 @@
 		cleanWebkitStyles: function(val){
 			return val.replace(/ style="font-size: initial; line-height: initial;"/g, '') // remove inline styles
 						.replace(/<span>|<\/span>/g, '') // and empty spans
+		},
+		// https://gist.github.com/kjantzer/503e46328ff692bfe38b
+		// note: this could be improved to NOT change quotes inside HTML tags, but for now we don't need it
+		smartQuotes: function(str){
+			return str = (str||'').replace(/\b'\b/g, "\u2019")  // apostrophes
+					.replace(/'(?=[^>]*<)\b/g, "\u2018")     				// Opening singles
+					.replace(/\b([\.\?\!,]*)(?=[^>]*<)'/g, "$1\u2019")     // Closing singles
+					.replace(/"(?=[^>]*<)\b/g, "\u201c")     				// Opening doubles
+					.replace(/\b([\.\?\!,]*)(?=[^>]*<)"/g, "$1\u201d")     // Closing doubles
+					.replace(/\.\.\./g,  "\u2026")     			// ellipsis
+					.replace(/--/g,  "\u2014")     				// em-dashes
 		}
 	})
 </script>
@@ -163,6 +175,8 @@ window.App = Backbone.View.extend({
 	render: function(){
 		
 		this.$el.html('');
+
+		this.editor.cleanup();
 		
 /*
 	THIS IS WHERE THE MAGIC HAPPENS
