@@ -13,7 +13,7 @@
 		
 	
 	Example use:
-		this.editor = new ModelEditor({model:this.model, el:this.el}); // inputs are automtically appended to "el"
+		this.editor = new ModelEditor({model:this.model, el:this.el}); // inputs are automatically appended to "el"
 		this.editor.input('Input title', 'mode_key');
 		
 	then when you want to save the changes, call:
@@ -171,7 +171,7 @@ var ModelEditor = Backbone.View.extend({
 	insert: function(type, key, opts){
 		
 		if( !ModelEditors[type] ){
-			console.error('ModelEditor: there is no editor called “'+type+'”.', ModelEditors);
+			console.error('ModelEditor: there is no editor called “'+type+'”. Available editors:', ModelEditors);
 			return;
 		}
 		
