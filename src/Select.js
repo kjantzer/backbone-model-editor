@@ -415,7 +415,18 @@ ModelEditors.selectBookLanguage = ModelEditors.select.extend({
 		'German',
 		'Jamaican',
 		'Marathi',
-		'Spanish'
+		'Spanish',
+		'Italian',
+		'Arabic',
+		'Chinese',
+		'Japanese',
+		'Russian',
+		'Greek',
+		'Portuguese',
+		'Dutch',
+		'Turkish',
+		'Polish',
+		'Cantonese'
 	]
 })
 
