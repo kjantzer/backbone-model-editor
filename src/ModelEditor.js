@@ -67,11 +67,11 @@ var ModelEditor = Backbone.View.extend({
 	},
 
 	setModel: function(model){
-		this.model.off(null, null, this);
+		this.stopListening(this.model);
 		this.model = model;
-		this.model.on('change', this.cleanReset, this);
-		this.model.on('reset', this.cleanup, this);
-		this.model.on('sync', this.onSync, this);
+		this.listenTo(this.model, 'change', this.cleanReset);
+		this.listenTo(this.model, 'reset', this.cleanup);
+		this.listenTo(this.model, 'sync', this.onSync);
 		this.reset();
 	},
 	
