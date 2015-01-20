@@ -111,7 +111,6 @@ ModelEditors.Base = Backbone.View.extend({
 	},
 	
 	onChanged: function(changedAttrs){
-	
 		var changedVal = this.model.changed[this.options.key];
 		
 		if( changedVal === undefined || this.options.watchChanges !== true ) return;
@@ -144,17 +143,17 @@ ModelEditors.Base = Backbone.View.extend({
 	
 	parseVal: function(val){
 		switch(this.options.valueType){
-			case 'string': return val; break;
-			case 'array': return val||[]; break;
-			case 'csv': return _.splitAndTrim(val); break;
+			case 'string': return val; 
+			case 'array': return val||[];
+			case 'csv': return _.splitAndTrim(val);
 		}
 	},
 
 	parseSaveVal: function(val){
 		switch(this.options.valueType){
-			case 'string': return this.cleanSaveVal(val); break;
-			case 'array': return val; break;
-			case 'csv': return (val||[]).join(','); break;
+			case 'string': return this.cleanSaveVal(val); 
+			case 'array': return val; 
+			case 'csv': return (val||[]).join(',');
 		}
 	},
 
@@ -166,7 +165,7 @@ ModelEditors.Base = Backbone.View.extend({
 
 	// convenience methods: get value and new value
 	_val: function(){ return this.parseVal(this.model.get(this.options.key)||null); },
-	_newVal: function(){ return this.$input.val() || this.options.emptyVal; },
+	_newVal: function(){ return this.$el.find('.redactor_editor').html() || this.options.emptyVal; },
 	
 	// override these to add special rules
 	val: function(){ return this._val(); },
@@ -174,7 +173,6 @@ ModelEditors.Base = Backbone.View.extend({
 	saveVal: function(){ return this.parseSaveVal(this.newVal()); },
 	
 	valChanged: function(){
-
 		var val = this.val();
 		var newVal = this.newVal();
 
@@ -182,6 +180,7 @@ ModelEditors.Base = Backbone.View.extend({
 			return _.difference(val, newVal).length > 0 || val.length != newVal.length
 		else
 			return val !== newVal;
+		// return true;
 	},
 	
 	// updates the value in the model
