@@ -165,7 +165,7 @@ ModelEditors.Base = Backbone.View.extend({
 
 	// convenience methods: get value and new value
 	_val: function(){ return this.parseVal(this.model.get(this.options.key)||null); },
-	_newVal: function(){ return this.$el.find('.redactor_editor').html() || this.options.emptyVal; },
+	_newVal: function(){ return this.$input.val() || this.options.emptyVal; },
 	
 	// override these to add special rules
 	val: function(){ return this._val(); },
