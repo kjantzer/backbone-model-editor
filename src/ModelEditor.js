@@ -150,7 +150,15 @@ var ModelEditor = Backbone.View.extend({
 */
 	save: function(doSave, opts){
 
+		var retry = this.save.bind(this, doSave, opts);
+
 		opts = opts || {};
+
+		var errorFn = opts.error;
+		opts.error = function(model, xhr){
+			if( errorFn ) errorFn()
+			this._onError.call(this, model, xhr, retry)
+		}.bind(this);
 
 		if( this.options.patchSave )
 			opts.patch = true;
@@ -162,6 +170,10 @@ var ModelEditor = Backbone.View.extend({
 
 		if( this.options.onSave )
 			this.options.onSave(this.model);
+	},
+
+	_onError: function(model, xhr, retry){
+		xhr.retry = {title: 'Retry Save?', fn: retry};
 	},
 	
 	onSync: function(model){
