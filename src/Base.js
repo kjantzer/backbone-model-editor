@@ -180,7 +180,6 @@ ModelEditors.Base = Backbone.View.extend({
 			return _.difference(val, newVal).length > 0 || val.length != newVal.length
 		else
 			return val !== newVal;
-		// return true;
 	},
 	
 	// updates the value in the model
