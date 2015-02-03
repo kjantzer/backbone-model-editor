@@ -61,7 +61,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 	},
 	
 	hasUnsavedVal: function(){
-		return this.model.unsavedChanges.hasOwnProperty(this.options.key)
+		return false;
+		//return this.model.unsavedChanges.hasOwnProperty(this.options.key)
 	},
 	
 	unsavedVal: function(){
@@ -97,7 +98,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 				this.edit(false);
 				
 			// using saveVal rather than newVal to fix #1062
-			this.model.trigger('edited', this.options.key, this.saveVal(), this.valChanged())
+			//this.model.trigger('edited', this.options.key, this.saveVal(), this.valChanged())
 		}
 	},
 	

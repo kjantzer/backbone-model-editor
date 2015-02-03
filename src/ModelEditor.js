@@ -47,6 +47,7 @@ var ModelEditor = Backbone.View.extend({
 		
 		// create a clone of the model as "edit model" - this is where we store our pending changes
 		this.editmodel = this.createEditModel();
+		this.reset();
 		
 		// set default opts
 		this.defaultOpts('reset');
@@ -55,7 +56,7 @@ var ModelEditor = Backbone.View.extend({
 		this.setModel(this.model);
 		
 		// disabling for now, this causes issues with the RTE; it was only added as a cool feature, but not required
-		//this.editmodel.on('edited', this.rememberChanges, this);
+		this.editmodel.on('edited', this.rememberChanges, this);
 		
 		// if btns, set auto save to true since model won't save unless save btn is clicked
 		if(this.options.defaultOpts.btns)
@@ -103,10 +104,15 @@ var ModelEditor = Backbone.View.extend({
 		
 		if( isChanged )
 			unsavedChanges[key] = val;
-		else
+		
+		else if( this.options.autoSave )
 			delete unsavedChanges[key];
 			
 		this.model._unsavedChanges = _.size(unsavedChanges) > 0 ? unsavedChanges : null;
+	},
+
+	hasUnsavedChanges: function(){
+		return _.size( this.data() ) > 0
 	},
 	
 	render: function(){
@@ -141,7 +147,11 @@ var ModelEditor = Backbone.View.extend({
 	Data - return queued up edit model data
 */
 	data: function(){
-		return this.options.patchSave ? this.editmodel.changedAttributes() : this.editmodel.toJSON();
+		//return this.options.patchSave ? this.editmodel.changedAttributes() : this.editmodel.toJSON();
+		return this.options.patchSave
+				? this.model.changedAttributes(this.model._unsavedChanges)
+				: this.editmodel.toJSON();
+		//return this.editmodel.toJSON();
 		//return this.editmodel.changedAttributes(); // I guess we should always just return the changed data, not the whole thing; affected creating bug issue
 	},
 	
@@ -162,11 +172,14 @@ var ModelEditor = Backbone.View.extend({
 
 		if( this.options.patchSave )
 			opts.patch = true;
-		
-		if(this.options.saveToDB || doSave===true)
+
+		if(this.options.saveToDB || doSave===true){
 			this.model.save(this.data(), opts);
-		else
+			this.model._unsavedChanges = null;
+		
+		}else{
 			this.model.set(this.data(), opts);
+		}
 
 		if( this.options.onSave )
 			this.options.onSave(this.model);

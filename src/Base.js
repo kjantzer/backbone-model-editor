@@ -184,6 +184,10 @@ ModelEditors.Base = Backbone.View.extend({
 	
 	// updates the value in the model
 	updateVal: function(){
+
+		// using saveVal rather than newVal to fix #1062
+		this.model.trigger('edited', this.options.key, this.saveVal(), this.valChanged())
+
 		if( this.isDisabled || !this.valChanged()) return;
 		
 		this.model.set(this.options.key, this.saveVal());
