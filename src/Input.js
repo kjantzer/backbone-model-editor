@@ -34,7 +34,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 			placeholder: 'auto',
 			w: 200,
 			h: 'auto',
-			btns: false
+			btns: false,
+			mention: false,		// preset string or mention plugin data
 		}, this.options, opts)
 		
 		this.init(); // init base
@@ -51,6 +52,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.setWidth();
 		this.setHeight();
 		this.setupBtns();
+		this.setupMention();
 		this.setupUnsavedVal();
 		
 		this.render();
@@ -196,6 +198,23 @@ ModelEditors.input = ModelEditors.Base.extend({
 							<a class="button flat hover-green save icon-only icon-ok"></a>\
 							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\
 						</div>');
+	},
+
+	setupMention: function(){
+
+		if( !this.options.mention ) return;
+
+		if( !$.fn.mention ){
+			console.error("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js")
+			return;
+		}
+
+		if( !$.fn.typeahead ){
+			console.error("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js")
+			return;
+		}
+
+		this.$input.mention(this.options.mention)
 	},
 	
 	edit: function(doEdit){
