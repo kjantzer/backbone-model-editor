@@ -22,7 +22,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		'keydown input': 'onKeyDown',
 		'keypress input': 'onKeyPress',
 		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction'
+		'click .button.cancel': 'cancelBtnAction',
+		'click .markdown-preview-btn': 'toggleMarkdownPreview'
 	},
 	
 	keyEvents: {
@@ -38,7 +39,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 			h: 'auto',
 			btns: false,
 			mention: false,		// preset string or mention plugin data
-			updateAfterDelay: false // update instead of waiting for "blur" event
+			updateAfterDelay: false, // update instead of waiting for "blur" event
+			markdownPreview: false
 		}, this.options, opts)
 		
 		this.init(); // init base
@@ -47,10 +49,11 @@ ModelEditors.input = ModelEditors.Base.extend({
 			.val( this.val() )
 			.attr(this.editorAttributes)
 			.appendTo(this.$inner);
-			
+
 		this.origVal = this.val();
 			
 		this.setPlaceholder();
+		this.setupMarkdownPreview();
 		this.setVal();
 		this.setWidth();
 		this.setHeight();
@@ -198,6 +201,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		
 		//this.$inner.height(this.options.h);
 		this.$input.height(this.options.h);
+		this.$preview && this.$preview.height(this.options.h);
 	},
 	
 	setPlaceholder: function(){
@@ -239,6 +243,17 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		this.$input.mention(this.options.mention)
 	},
+
+	setupMarkdownPreview: function(){
+
+		if( !this.options.markdownPreview || this.editorTagName != 'textarea' ) return;
+
+		this.$preview = $('<div class="markdown-preview standard-text"></div>')
+			.appendTo(this.$inner);
+
+		this.$inner.prepend('<a class="markdown-preview-btn" title="Toggle markdown preview"></a>')
+
+	},
 	
 	edit: function(doEdit){
 	
@@ -258,6 +273,15 @@ ModelEditors.input = ModelEditors.Base.extend({
 	enable: function(){
 		this.$input.attr('disabled', false);
 		return this._enable();
+	},
+
+	toggleMarkdownPreview: function(e){
+
+		var val = this.newVal() || 'Nothing to preview';
+
+		this.$preview.html( marked(val) ); 
+		
+		e.srcElement.classList.toggle('active');
 	}
 	
 })
@@ -269,7 +293,7 @@ ModelEditors.date = ModelEditors.input.extend({
 		'focus input': 'onFocus',
 		'keyup input': 'onKeyUp',
 		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction'
+		'click .button.cancel': 'cancelBtnAction',
 	},
 	
 	editorClassName: 'input date',
@@ -380,7 +404,8 @@ ModelEditors.textarea = ModelEditors.input.extend({
 		'keydown textarea': 'onKeyDown',
 		'keypress textarea': 'onKeyPress',
 		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction'
+		'click .button.cancel': 'cancelBtnAction',
+		'click .markdown-preview-btn': 'toggleMarkdownPreview'
 	},
 	
 	keyEvents: {

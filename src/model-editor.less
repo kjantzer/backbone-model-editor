@@ -89,7 +89,9 @@ select {
 		> input[type="password"],
 		> textarea,
 		> .redactor_box .redactor_editor,
-		> div.multiselect {
+		> div.multiselect,
+		> .markdown-preview {
+			padding: 5px;
 			max-width: 100%; // responsive support
 			background: #F9F9F9;
 			border: 1px solid #CCC;
@@ -227,6 +229,50 @@ select {
 					}
 				}
 			}
+		}
+
+		.markdown-preview-btn {
+			position: absolute;
+			right: .5em;
+			top: .25em;
+			width: 16px;
+			height: 16px;
+			background: url('/common/js/core/components/ModelEditor/src/markdown.png');
+			background-size: 100%;
+			background-repeat: no-repeat;
+			background-position: 0 50%;
+			opacity: .5;
+			.transition(200ms);
+			-webkit-filter: grayscale(100%);
+
+			&:hover,
+			&.active {
+				opacity: 1;
+			}
+
+			&.active {
+				-webkit-filter: grayscale(0%);
+
+				&:hover {
+					-webkit-filter: grayscale(100%);
+				}
+			}
+		}
+
+		.markdown-preview {
+			display: none;
+			overflow: auto; 
+			background: #fff;
+			.box-shadow(none);
+		}
+
+		.markdown-preview-btn.active + input,
+		.markdown-preview-btn.active + textarea {
+			display: none;
+		}
+
+		.markdown-preview-btn.active ~ .markdown-preview {
+			display: block;
 		}
 		
 	} // .inner
