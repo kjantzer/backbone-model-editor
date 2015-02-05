@@ -19,6 +19,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		'focus input': 'onFocus',
 		'blur input': 'onBlur',
 		'keyup input': 'onKeyUp',
+		'keydown input': 'onKeyDown',
+		'keypress input': 'onKeyPress',
 		'click .button.save': 'saveBtnAction',
 		'click .button.cancel': 'cancelBtnAction'
 	},
@@ -36,6 +38,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 			h: 'auto',
 			btns: false,
 			mention: false,		// preset string or mention plugin data
+			updateAfterDelay: false // update instead of waiting for "blur" event
 		}, this.options, opts)
 		
 		this.init(); // init base
@@ -105,7 +108,9 @@ ModelEditors.input = ModelEditors.Base.extend({
 	},
 	
 	onKeyUp: function(e){
-		
+
+		this.updateAfterDelay()
+
 		if( !this.keyEvents ) return;
 		
 		var fn = this.keyEvents[e.which];
@@ -115,6 +120,24 @@ ModelEditors.input = ModelEditors.Base.extend({
 		
 		this.doAutoResize();
 		
+	},
+
+	onKeyDown: function(e){
+		if( e.which == 8 ) // delete key
+			this.updateAfterDelay()
+	},
+
+	onKeyPress: function(e){
+		this.updateAfterDelay()
+	},
+
+	updateAfterDelay: function(){
+
+		if( !this.options.updateAfterDelay ) return;
+
+		clearTimeout(this.__updateAfterDelayTimeout)
+
+		this.__updateAfterDelayTimeout = setTimeout(this.onBlur.bind(this), this.options.updateAfterDelay)
 	},
 	
 	doAutoResize: function(){
@@ -354,7 +377,8 @@ ModelEditors.textarea = ModelEditors.input.extend({
 		'focus textarea': 'onFocus',
 		'blur textarea': 'onBlur',
 		'keyup textarea': 'onKeyUp',
-		'keydown textarea': 'doAutoResize',
+		'keydown textarea': 'onKeyDown',
+		'keypress textarea': 'onKeyPress',
 		'click .button.save': 'saveBtnAction',
 		'click .button.cancel': 'cancelBtnAction'
 	},
@@ -371,6 +395,13 @@ ModelEditors.textarea = ModelEditors.input.extend({
 		el.style.height = '0';
         el.style.height = el.scrollHeight+'px';
         el.style.overflow = 'hidden';
+	},
+
+	onKeyDown: function(e){
+		if( e.which == 8 ) // delete key
+			this.updateAfterDelay()
+
+		this.doAutoResize();
 	},
 	
 	render: function(){
