@@ -92,6 +92,7 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 			, italicTag: 'i'
 			//, tidyHtml: false
 			, linebreaks: linebreaks
+			, cleanSpaces: true
 			, buttons: buttons
 			, allowedTags: allowedTags
 			, formattingTags: formattingTags
