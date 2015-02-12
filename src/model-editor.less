@@ -91,6 +91,7 @@ select {
 		> .redactor_box .redactor_editor,
 		> div.multiselect,
 		> .markdown-preview {
+			position: relative;
 			padding: 5px;
 			max-width: 100%; // responsive support
 			background: #F9F9F9;
@@ -233,6 +234,7 @@ select {
 
 		.markdown-preview-btn {
 			position: absolute;
+			z-index: 10;
 			right: .5em;
 			top: .25em;
 			width: 16px;
@@ -277,6 +279,27 @@ select {
 		
 	} // .inner
 
+
+	&.imgur-upload-allowed > .inner:after {
+		content: 'Drag and drop to attach images';
+		position: absolute;
+		bottom: -1.5em;
+		right: .25em;
+		font-size: .7em;
+		color: #999;
+	}
+	
+	&.drag-over > .inner:before {
+		content: '';
+		position: absolute;
+		top: -3px;
+		left: -3px;
+		width: calc(~"100% + 6px");
+		height: calc(~"100% + 6px");
+		border: solid 2px #2196F3;
+		.rounded(5px);
+		.box-sizing();
+	}
 
 	&.disabled {
 			
