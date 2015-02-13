@@ -38,11 +38,10 @@ ModelEditors.input = ModelEditors.Base.extend({
 			w: 200,
 			h: 'auto',
 			btns: false,
-			mention: false,		// preset string or mention plugin data
-			updateAfterDelay: false, // update instead of waiting for "blur" event
+			mention: false,			// preset string or mention plugin data
+			updateAfterDelay: false,// update instead of waiting for "blur" event
 			markdownPreview: false,
-			imgurUpload: false,
-			imgurClientID: 'eae3f1705c4b525'
+			imgurUpload: false		// allow for drag-and-drop imgur upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
 		}, this.options, opts)
 
 
@@ -276,11 +275,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 	
 	disable: function(){
 		this.$input.attr('disabled', true);
+		this.subview('imgur') && this.subview('imgur').disable();
 		return this._disable();
 	},
 	
 	enable: function(){
 		this.$input.attr('disabled', false);
+		this.subview('imgur') && this.subview('imgur').enable();
 		return this._enable();
 	},
 
@@ -297,81 +298,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		if( !this.options.imgurUpload ) return;
 
-		this.$el.addClass('imgur-upload-allowed');
-
-		this.$input[0].addEventListener('dragover', this.onDragOver.bind(this), false);
-		this.$input[0].addEventListener('dragleave', this.onDragLeave.bind(this), false);
-		this.$input[0].addEventListener('drop', this.onDrop.bind(this), false);
-
+		this.subview('imgur', new Imgur({el: this.el, dropEl: this.$input[0]}))
+		this.listenTo(this.subview('imgur'), 'upload:success', this.imgurUploadSuccess)
 	},
 
-	onDragOver: function(){
-		if( !this.isDisabled )
-			this.$el.addClass('drag-over')
-	},
+	imgurUploadSuccess: function(resp, file, xhttp){
 
-	onDragLeave: function(){
-		this.$el.removeClass('drag-over')
-	},
-
-	// http://www.htmlgoodies.com/html5/javascript/drag-files-into-the-browser-from-the-desktop-HTML5.html
-	onDrop: function(e){
-
-		this.onDragLeave();
-
-		if( this.isDisabled ) return;
-
-		e.preventDefault(); // stops the browser from redirecting off to the image.
-
-		var dt    = e.dataTransfer;
-		var files = dt.files;
-		
-		for (var i=0; i<files.length; i++) {
-
-			var file = files[i];
-			var reader = new FileReader();
-
-			this.imgurUpload(file);
-
-			//reader.readAsDataURL(file);
-		}
-		
-		return false;
-	},
-
-	// TODO: make this into a module that Input utlizes
-	imgurUpload: function(file){
-
-		if( !file.type.match(/image.*/) ){
-			Modal.alert('Invalid Attachment', 'Only images are allowed to be uploaded');
-			return;
-		}
-
-		// from: https://gist.github.com/pinceladasdaweb/9807321
-		var xhttp    = new XMLHttpRequest(),
-			self     = this,
-			fd       = new FormData();
-
-		Modal.spinner();
-
-		fd.append('image', file);
-		xhttp.open('POST', 'https://api.imgur.com/3/image');
-		xhttp.setRequestHeader('Authorization', 'Client-ID '+this.options.imgurClientID); //Get yout Client ID here: http://api.imgur.com/
-		xhttp.onreadystatechange = function () {
-			if (xhttp.status === 200 && xhttp.readyState === 4) {
-				var res = JSON.parse(xhttp.responseText);
-				self.imgurUploadSuccess(file, res);
-
-			}else if( xhttp.readyState === 4 ){
-				this.imgurUploadFailed();
-			}
-		};
-		xhttp.send(fd);
-	},
-
-	imgurUploadSuccess: function(file, res){
-
-		var link = res.data.link;
+		var link = resp.data.link;
 
 		var str = '!['+file.name+']('+link+')';
 
@@ -385,17 +318,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		this.$input.val( val + str);
 
-		Modal.spinner(false);
-
 		this.updateAfterDelay();
 	},
-
-	imgurUploadFailed: function(){
-		Modal.spinner(false);
-		Modal.alert('Upload Unsuccessufl');
-	}
 	
 })
+
+
+
 
 
 ModelEditors.date = ModelEditors.input.extend({
