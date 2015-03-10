@@ -490,10 +490,6 @@ ModelEditors.selectMovieTieIn = ModelEditors.select.extend({
 	values: function(){return lookup.selects.marketingMovieTieIn.asSelect()}
 })
 
-ModelEditors.selectContractStatus = ModelEditors.select.extend({
-	values: function(){return lookup.selects.contractContractStatus.asSelect()}
-})
-
 ModelEditors.selectContractState = ModelEditors.select.extend({
 	values: function(){return lookup.selects.contractContractState.asSelect()}
 })
