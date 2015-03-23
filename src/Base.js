@@ -28,20 +28,21 @@ ModelEditors.Base = Backbone.View.extend({
 			float: 'left',
 			clear: true,
 			label: 'auto',
+			helpText: null,
 			labelInline: false,
-			labelStyle: '',	// large, medium, medium-large
+			labelStyle: '',			// large, medium, medium-large
 			labelIcon: false,
-			key: null,	// key/field to use in the model
-			valueType: 'string', // string, array, csv, json
+			key: null,				// key/field to use in the model
+			valueType: 'string', 	// string, array, csv, json
 			emptyVal: null,
-			renderTo: null, // defaults is ModelEditor.el
-			selectOnClick: false, // only works for "empty" editor
-			pl: null, // proofing light key - accepts "auto" as value, but plPrefix must be defined
-			ph: null, // proofing history
+			renderTo: null, 		// defaults is ModelEditor.el
+			selectOnClick: false,	// only works for "empty" editor
+			pl: null, 				// proofing light key - accepts "auto" as value, but plPrefix must be defined
+			ph: null, 				// proofing history
 			watchChanges: false,
 			plPrefix: null,
 			plFieldVal:null,
-			css: null, // passes to jquery .css(), added at $el level
+			css: null, 				// passes to jquery .css(), added at $el level
 		},this.options)
 		
 		if( this.options.renderTo instanceof ModelEditors.Base)

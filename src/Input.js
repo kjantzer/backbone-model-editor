@@ -35,6 +35,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		
 		this.options = _.extend({
 			placeholder: 'auto',
+			prefix: null, 			// prefix to input (ex: `$`)
 			w: 200,
 			h: 'auto',
 			btns: false,
@@ -60,6 +61,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.origVal = this.val();
 			
 		this.setPlaceholder();
+		this.setupPrefix();
 		this.setupMarkdownPreview();
 		this.setVal();
 		this.setWidth();
@@ -221,6 +223,15 @@ ModelEditors.input = ModelEditors.Base.extend({
 		if( placeholder === 'auto' ) placeholder = this.keyToText();
 		
 		this.$input.attr('placeholder', placeholder);
+	},
+
+	setupPrefix: function(){
+
+		if( !this.options.prefix || this.editorTagName != 'input' ) return;
+
+		this.$inner.addClass('has-prefix');
+		this.$inner.prepend('<span class="prefix">'+this.options.prefix+'</span>');
+
 	},
 	
 	setupBtns: function(){

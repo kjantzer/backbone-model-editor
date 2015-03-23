@@ -275,6 +275,7 @@ ModelEditors.Base = Backbone.View.extend({
     initialize: function(a) {
         this.options = _.extend({
             placeholder: "auto",
+            prefix: null,
             w: 200,
             h: "auto",
             btns: !1,
@@ -284,9 +285,10 @@ ModelEditors.Base = Backbone.View.extend({
             imgurUpload: !1
         }, this.options, a), void 0 == a.imgurUpload && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.imgurUpload = !0), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
-        this.origVal = this.val(), this.setPlaceholder(), this.setupMarkdownPreview(), this.setVal(), 
-        this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), this.setupUnsavedVal(), 
-        this.setupImgurUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), this.delegateEvents();
+        this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupMarkdownPreview(), 
+        this.setVal(), this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), 
+        this.setupUnsavedVal(), this.setupImgurUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
+        this.delegateEvents();
     },
     hasUnsavedVal: function() {
         return !1;
@@ -349,8 +351,12 @@ ModelEditors.Base = Backbone.View.extend({
         var a = this.options.placeholder;
         a && ("auto" === a && (a = this.keyToText()), this.$input.attr("placeholder", a));
     },
+    setupPrefix: function() {
+        this.options.prefix && "input" == this.editorTagName && (this.$inner.addClass("has-prefix"), 
+        this.$inner.prepend('<span class="prefix">' + this.options.prefix + "</span>"));
+    },
     setupBtns: function() {
-        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="button flat hover-green save icon-only icon-ok"></a>							<a class="button flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
+        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
     },
     setupMention: function() {
         return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.error("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.error("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
@@ -693,7 +699,7 @@ ModelEditors.Base = Backbone.View.extend({
     },
     createInput: function() {
         var a = $('<div class="multiselect wrap"></div>').appendTo(this.$inner);
-        this.options.infoBar === !0 && (a.append('<div class="bar">							<span class="info"></span>							<a class="select-none">None</a>							<a class="select-all">All</a>						</div>'), 
+        this.options.infoBar === !0 && (a.append('<div class="bar">\r\n							<span class="info"></span>\r\n							<a class="select-none">None</a>\r\n							<a class="select-all">All</a>\r\n						</div>'), 
         this.$(".bar a.select-all").click(this.onSelectAll.bind(this)), this.$(".bar a.select-none").click(this.onDeselectAll.bind(this)));
         var b = $("<ul></ul>").appendTo(a).attr(this.editorAttributes);
         return b;
@@ -880,10 +886,6 @@ ModelEditors.Base = Backbone.View.extend({
 }), ModelEditors.selectMovieTieIn = ModelEditors.select.extend({
     values: function() {
         return lookup.selects.marketingMovieTieIn.asSelect();
-    }
-}), ModelEditors.selectContractStatus = ModelEditors.select.extend({
-    values: function() {
-        return lookup.selects.contractContractStatus.asSelect();
     }
 }), ModelEditors.selectContractState = ModelEditors.select.extend({
     values: function() {

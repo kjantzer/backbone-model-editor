@@ -90,7 +90,8 @@ select {
 		> textarea,
 		> .redactor_box .redactor_editor,
 		> div.multiselect,
-		> .markdown-preview {
+		> .markdown-preview,
+		> .prefix {
 			position: relative;
 			padding: 5px;
 			max-width: 100%; // responsive support
@@ -230,6 +231,36 @@ select {
 					}
 				}
 			}
+		}
+
+		&.has-prefix {
+			.display-flex();
+		}
+
+		.prefix {
+
+			-webkit-border-top-right-radius: 0;
+			-moz-border-radius-topright: 0;
+			border-top-right-radius: 0;
+			
+			-webkit-border-bottom-right-radius: 0;
+			-moz-border-radius-bottomright: 0;
+			border-bottom-right-radius: 0;
+
+			box-shadow: none;
+			background: #eee;
+			border-right: none;
+			flex-shrink: 0; // let the input shrink
+		}
+
+		.prefix + input {
+			-webkit-border-top-left-radius: 0 !important;
+			-moz-border-radius-topleft: 0 !important;
+			border-top-left-radius: 0 !important;
+			
+			-webkit-border-bottom-left-radius: 0 !important;
+			-moz-border-radius-bottomleft: 0 !important;
+			border-bottom-left-radius: 0 !important;
 		}
 
 		.markdown-preview-btn {
