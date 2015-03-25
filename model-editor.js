@@ -101,6 +101,7 @@ ModelEditors.Base = Backbone.View.extend({
             "float": "left",
             clear: !0,
             label: "auto",
+            helpText: null,
             labelInline: !1,
             labelStyle: "",
             labelIcon: !1,
