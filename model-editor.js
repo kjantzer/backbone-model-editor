@@ -281,12 +281,13 @@ ModelEditors.Base = Backbone.View.extend({
             mention: !1,
             updateAfterDelay: !1,
             markdownPreview: !1,
-            imgurUpload: !1
-        }, this.options, a), void 0 == a.imgurUpload && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.imgurUpload = !0), 
+            attachments: !1
+        }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = !0), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
         this.origVal = this.val(), this.setPlaceholder(), this.setupMarkdownPreview(), this.setVal(), 
         this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), this.setupUnsavedVal(), 
-        this.setupImgurUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), this.delegateEvents();
+        this.setupAttachmentUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
+        this.delegateEvents();
     },
     hasUnsavedVal: function() {
         return !1;
@@ -350,7 +351,7 @@ ModelEditors.Base = Backbone.View.extend({
         a && ("auto" === a && (a = this.keyToText()), this.$input.attr("placeholder", a));
     },
     setupBtns: function() {
-        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="button flat hover-green save icon-only icon-ok"></a>							<a class="button flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
+        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
     },
     setupMention: function() {
         return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.error("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.error("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
@@ -363,26 +364,29 @@ ModelEditors.Base = Backbone.View.extend({
         this.isDisabled || (a === !1 ? this.$el.removeClass("editing") : this.$el.addClass("editing"));
     },
     disable: function() {
-        return this.$input.attr("disabled", !0), this.subview("imgur") && this.subview("imgur").disable(), 
+        return this.$input.attr("disabled", !0), this.subview("attachments") && this.subview("attachments").disable(), 
         this._disable();
     },
     enable: function() {
-        return this.$input.attr("disabled", !1), this.subview("imgur") && this.subview("imgur").enable(), 
+        return this.$input.attr("disabled", !1), this.subview("attachments") && this.subview("attachments").enable(), 
         this._enable();
     },
     toggleMarkdownPreview: function(a) {
         var b = this.newVal() || "Nothing to preview";
         this.$preview.html(marked(b)), a.srcElement.classList.toggle("active");
     },
-    setupImgurUpload: function() {
-        this.options.imgurUpload && (this.subview("imgur", new Imgur({
-            el: this.el,
-            dropEl: this.$input[0]
-        })), this.listenTo(this.subview("imgur"), "upload:success", this.imgurUploadSuccess));
+    setupAttachmentUpload: function() {
+        if ("textarea" == this.editorTagName && this.options.attachments) {
+            var a = _.extend(this.options.attachments, {
+                el: this.el,
+                dropEl: this.$input[0]
+            });
+            this.subview("attachments", new Attachment(a)), this.listenTo(this.subview("attachments"), "upload:success", this.attachmentUploadSuccess);
+        }
     },
-    imgurUploadSuccess: function(a, b) {
-        var c = a.data.link, d = "![" + b.name + "](" + c + ")", e = this.$input.val();
-        e && e.match(/.\n$/) ? e += "\n" : e && !e.match(/\n\n$/) && (e += "\n\n"), this.$input.val(e + d), 
+    attachmentUploadSuccess: function(a) {
+        var b = a.data.markdown, c = this.$input.val();
+        c && c.match(/.\n$/) ? c += "\n" : c && !c.match(/\n\n$/) && (c += "\n\n"), this.$input.val(c + b), 
         this.updateAfterDelay();
     }
 }), ModelEditors.date = ModelEditors.input.extend({
@@ -693,7 +697,7 @@ ModelEditors.Base = Backbone.View.extend({
     },
     createInput: function() {
         var a = $('<div class="multiselect wrap"></div>').appendTo(this.$inner);
-        this.options.infoBar === !0 && (a.append('<div class="bar">							<span class="info"></span>							<a class="select-none">None</a>							<a class="select-all">All</a>						</div>'), 
+        this.options.infoBar === !0 && (a.append('<div class="bar">\r\n							<span class="info"></span>\r\n							<a class="select-none">None</a>\r\n							<a class="select-all">All</a>\r\n						</div>'), 
         this.$(".bar a.select-all").click(this.onSelectAll.bind(this)), this.$(".bar a.select-none").click(this.onDeselectAll.bind(this)));
         var b = $("<ul></ul>").appendTo(a).attr(this.editorAttributes);
         return b;
@@ -880,10 +884,6 @@ ModelEditors.Base = Backbone.View.extend({
 }), ModelEditors.selectMovieTieIn = ModelEditors.select.extend({
     values: function() {
         return lookup.selects.marketingMovieTieIn.asSelect();
-    }
-}), ModelEditors.selectContractStatus = ModelEditors.select.extend({
-    values: function() {
-        return lookup.selects.contractContractStatus.asSelect();
     }
 }), ModelEditors.selectContractState = ModelEditors.select.extend({
     values: function() {

@@ -279,9 +279,12 @@ select {
 		
 	} // .inner
 
+	&.attachment-upload-allowed {
+		position: relative;
+	}
 
-	&.imgur-upload-allowed > .inner:after {
-		content: 'Drag and drop to attach images';
+	&.attachment-upload-allowed:after {
+		content: attr(data-attachment-description);
 		position: absolute;
 		bottom: -1.5em;
 		right: .25em;
