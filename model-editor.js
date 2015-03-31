@@ -482,28 +482,28 @@ ModelEditors.Base = Backbone.View.extend({
         function a(a) {
             h.redactor.bufferSet(), h.redactor.insertHtml(a), h.redactor.sync();
         }
-        var b = this.options, c = [ "fullscreen" ], d = [ "formatting", "specialCharacters", "bold", "italic", "fullscreen" ], e = [ "a", "p", "blockquote", "b", "i", "strong", "em", "h1", "h2", "ul", "ol", "li" ], f = [ "p", "blockquote" ], g = !1;
+        var b = this.options, c = [ "fullscreen" ], d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "fullscreen" ], e = [ "a", "p", "blockquote", "b", "i", "strong", "em", "u", "h1", "h2", "ul", "ol", "li" ], f = [ "p", "blockquote" ], g = !1;
         switch (b.allowBR === !0 && e.push("br"), b.toolbar) {
           case "nano":
-            c = !1, d = [ "bold", "italic" ], e = [ "p", "b", "i", "strong", "em" ];
+            c = !1, d = [ "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u" ];
             break;
 
           case "micro":
-            c = !1, d = [ "specialCharacters", "bold", "italic" ], e = [ "p", "b", "i", "strong", "em" ];
+            c = !1, d = [ "specialCharacters", "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u" ];
             break;
 
           case "micro-br":
-            c = !1, d = [ "specialCharacters", "bold", "italic" ], e = [ "p", "b", "i", "strong", "em", "br" ], 
+            c = !1, d = [ "specialCharacters", "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u", "br" ], 
             g = !0;
             break;
 
           case "regular":
-            d = [ "formatting", "specialCharacters", "bold", "italic", "unorderedlist", "orderedlist", "link", "alignleft", "aligncenter" ];
+            d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "unorderedlist", "orderedlist", "link", "alignleft", "aligncenter" ];
             break;
 
           case "mini":
           default:
-            d = [ "formatting", "specialCharacters", "bold", "italic", "unorderedlist", "orderedlist", "link" ];
+            d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "unorderedlist", "orderedlist", "link" ];
         }
         User.can("view-html-in-rte") && d.push("html"), void 0 === b.autoresize && "auto" === b.h && (b.autoresize = !0);
         var h = this;
