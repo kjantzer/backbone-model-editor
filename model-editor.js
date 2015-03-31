@@ -101,6 +101,7 @@ ModelEditors.Base = Backbone.View.extend({
             "float": "left",
             clear: !0,
             label: "auto",
+            helpText: null,
             labelInline: !1,
             labelStyle: "",
             labelIcon: !1,
@@ -275,6 +276,7 @@ ModelEditors.Base = Backbone.View.extend({
     initialize: function(a) {
         this.options = _.extend({
             placeholder: "auto",
+            prefix: null,
             w: 200,
             h: "auto",
             btns: !1,
@@ -284,9 +286,9 @@ ModelEditors.Base = Backbone.View.extend({
             attachments: !1
         }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = !0), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
-        this.origVal = this.val(), this.setPlaceholder(), this.setupMarkdownPreview(), this.setVal(), 
-        this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), this.setupUnsavedVal(), 
-        this.setupAttachmentUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
+        this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupMarkdownPreview(), 
+        this.setVal(), this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), 
+        this.setupUnsavedVal(), this.setupAttachmentUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
         this.delegateEvents();
     },
     hasUnsavedVal: function() {
@@ -349,6 +351,10 @@ ModelEditors.Base = Backbone.View.extend({
     setPlaceholder: function() {
         var a = this.options.placeholder;
         a && ("auto" === a && (a = this.keyToText()), this.$input.attr("placeholder", a));
+    },
+    setupPrefix: function() {
+        this.options.prefix && "input" == this.editorTagName && (this.$inner.addClass("has-prefix"), 
+        this.$inner.prepend('<span class="prefix">' + this.options.prefix + "</span>"));
     },
     setupBtns: function() {
         this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
