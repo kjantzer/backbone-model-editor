@@ -101,7 +101,6 @@ ModelEditors.Base = Backbone.View.extend({
             "float": "left",
             clear: !0,
             label: "auto",
-            helpText: null,
             labelInline: !1,
             labelStyle: "",
             labelIcon: !1,
@@ -276,19 +275,18 @@ ModelEditors.Base = Backbone.View.extend({
     initialize: function(a) {
         this.options = _.extend({
             placeholder: "auto",
-            prefix: null,
             w: 200,
             h: "auto",
             btns: !1,
             mention: !1,
             updateAfterDelay: !1,
             markdownPreview: !1,
-            imgurUpload: !1
-        }, this.options, a), void 0 == a.imgurUpload && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.imgurUpload = !0), 
+            attachments: !1
+        }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = !0), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
-        this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupMarkdownPreview(), 
-        this.setVal(), this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), 
-        this.setupUnsavedVal(), this.setupImgurUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
+        this.origVal = this.val(), this.setPlaceholder(), this.setupMarkdownPreview(), this.setVal(), 
+        this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), this.setupUnsavedVal(), 
+        this.setupAttachmentUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
         this.delegateEvents();
     },
     hasUnsavedVal: function() {
@@ -352,10 +350,6 @@ ModelEditors.Base = Backbone.View.extend({
         var a = this.options.placeholder;
         a && ("auto" === a && (a = this.keyToText()), this.$input.attr("placeholder", a));
     },
-    setupPrefix: function() {
-        this.options.prefix && "input" == this.editorTagName && (this.$inner.addClass("has-prefix"), 
-        this.$inner.prepend('<span class="prefix">' + this.options.prefix + "</span>"));
-    },
     setupBtns: function() {
         this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
     },
@@ -370,26 +364,29 @@ ModelEditors.Base = Backbone.View.extend({
         this.isDisabled || (a === !1 ? this.$el.removeClass("editing") : this.$el.addClass("editing"));
     },
     disable: function() {
-        return this.$input.attr("disabled", !0), this.subview("imgur") && this.subview("imgur").disable(), 
+        return this.$input.attr("disabled", !0), this.subview("attachments") && this.subview("attachments").disable(), 
         this._disable();
     },
     enable: function() {
-        return this.$input.attr("disabled", !1), this.subview("imgur") && this.subview("imgur").enable(), 
+        return this.$input.attr("disabled", !1), this.subview("attachments") && this.subview("attachments").enable(), 
         this._enable();
     },
     toggleMarkdownPreview: function(a) {
         var b = this.newVal() || "Nothing to preview";
         this.$preview.html(marked(b)), a.srcElement.classList.toggle("active");
     },
-    setupImgurUpload: function() {
-        this.options.imgurUpload && (this.subview("imgur", new Imgur({
-            el: this.el,
-            dropEl: this.$input[0]
-        })), this.listenTo(this.subview("imgur"), "upload:success", this.imgurUploadSuccess));
+    setupAttachmentUpload: function() {
+        if ("textarea" == this.editorTagName && this.options.attachments) {
+            var a = _.extend(this.options.attachments, {
+                el: this.el,
+                dropEl: this.$input[0]
+            });
+            this.subview("attachments", new Attachment(a)), this.listenTo(this.subview("attachments"), "upload:success", this.attachmentUploadSuccess);
+        }
     },
-    imgurUploadSuccess: function(a, b) {
-        var c = a.data.link, d = "![" + b.name + "](" + c + ")", e = this.$input.val();
-        e && e.match(/.\n$/) ? e += "\n" : e && !e.match(/\n\n$/) && (e += "\n\n"), this.$input.val(e + d), 
+    attachmentUploadSuccess: function(a) {
+        var b = a.data.markdown, c = this.$input.val();
+        c && c.match(/.\n$/) ? c += "\n" : c && !c.match(/\n\n$/) && (c += "\n\n"), this.$input.val(c + b), 
         this.updateAfterDelay();
     }
 }), ModelEditors.date = ModelEditors.input.extend({
@@ -485,28 +482,28 @@ ModelEditors.Base = Backbone.View.extend({
         function a(a) {
             h.redactor.bufferSet(), h.redactor.insertHtml(a), h.redactor.sync();
         }
-        var b = this.options, c = [ "fullscreen" ], d = [ "formatting", "specialCharacters", "bold", "italic", "fullscreen" ], e = [ "a", "p", "blockquote", "b", "i", "strong", "em", "h1", "h2", "ul", "ol", "li" ], f = [ "p", "blockquote" ], g = !1;
+        var b = this.options, c = [ "fullscreen" ], d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "fullscreen" ], e = [ "a", "p", "blockquote", "b", "i", "strong", "em", "u", "h1", "h2", "ul", "ol", "li" ], f = [ "p", "blockquote" ], g = !1;
         switch (b.allowBR === !0 && e.push("br"), b.toolbar) {
           case "nano":
-            c = !1, d = [ "bold", "italic" ], e = [ "p", "b", "i", "strong", "em" ];
+            c = !1, d = [ "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u" ];
             break;
 
           case "micro":
-            c = !1, d = [ "specialCharacters", "bold", "italic" ], e = [ "p", "b", "i", "strong", "em" ];
+            c = !1, d = [ "specialCharacters", "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u" ];
             break;
 
           case "micro-br":
-            c = !1, d = [ "specialCharacters", "bold", "italic" ], e = [ "p", "b", "i", "strong", "em", "br" ], 
+            c = !1, d = [ "specialCharacters", "bold", "italic", "underline" ], e = [ "p", "b", "i", "strong", "em", "u", "br" ], 
             g = !0;
             break;
 
           case "regular":
-            d = [ "formatting", "specialCharacters", "bold", "italic", "unorderedlist", "orderedlist", "link", "alignleft", "aligncenter" ];
+            d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "unorderedlist", "orderedlist", "link", "alignleft", "aligncenter" ];
             break;
 
           case "mini":
           default:
-            d = [ "formatting", "specialCharacters", "bold", "italic", "unorderedlist", "orderedlist", "link" ];
+            d = [ "formatting", "specialCharacters", "bold", "italic", "underline", "unorderedlist", "orderedlist", "link" ];
         }
         User.can("view-html-in-rte") && d.push("html"), void 0 === b.autoresize && "auto" === b.h && (b.autoresize = !0);
         var h = this;

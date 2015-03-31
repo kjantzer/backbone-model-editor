@@ -42,13 +42,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 			mention: false,			// preset string or mention plugin data
 			updateAfterDelay: false,// update instead of waiting for "blur" event
 			markdownPreview: false,
-			imgurUpload: false		// allow for drag-and-drop imgur upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
+			attachments: false		// bool/{};  allow for drag-and-drop attachment upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
 		}, this.options, opts)
 
 
-		// if user did not define if imgur is allowed, auto activate it if markdown preview is on
-		if( opts.imgurUpload == undefined && this.options.markdownPreview && this.editorTagName == 'textarea' )
-			this.options.imgurUpload = true;
+		// if user did not define if attachment is allowed, auto activate it if markdown preview is on
+		if( opts.attachments == undefined && this.options.markdownPreview && this.editorTagName == 'textarea' )
+			this.options.attachments = true;
 
 		
 		this.init(); // init base
@@ -69,7 +69,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.setupBtns();
 		this.setupMention();
 		this.setupUnsavedVal();
-		this.setupImgurUpload()
+		this.setupAttachmentUpload()
 		
 		this.render();
 		
@@ -286,13 +286,13 @@ ModelEditors.input = ModelEditors.Base.extend({
 	
 	disable: function(){
 		this.$input.attr('disabled', true);
-		this.subview('imgur') && this.subview('imgur').disable();
+		this.subview('attachments') && this.subview('attachments').disable();
 		return this._disable();
 	},
 	
 	enable: function(){
 		this.$input.attr('disabled', false);
-		this.subview('imgur') && this.subview('imgur').enable();
+		this.subview('attachments') && this.subview('attachments').enable();
 		return this._enable();
 	},
 
@@ -305,19 +305,30 @@ ModelEditors.input = ModelEditors.Base.extend({
 		e.srcElement.classList.toggle('active');
 	},
 
-	setupImgurUpload: function(){
+	setupAttachmentUpload: function(){
 
-		if( !this.options.imgurUpload ) return;
+		// not sure I want this...
+		if( this.editorTagName != 'textarea' ) return;
 
-		this.subview('imgur', new Imgur({el: this.el, dropEl: this.$input[0]}))
-		this.listenTo(this.subview('imgur'), 'upload:success', this.imgurUploadSuccess)
+		if( !this.options.attachments ) return;
+
+		var settings = _.extend(
+			this.options.attachments,	// instance settings
+			{
+				el: this.el,
+				dropEl: this.$input[0]
+			})
+
+		this.subview('attachments', new Attachment(settings))
+		this.listenTo(this.subview('attachments'), 'upload:success', this.attachmentUploadSuccess)
 	},
 
-	imgurUploadSuccess: function(resp, file, xhttp){
+	attachmentUploadSuccess: function(resp, file, xhttp){
 
-		var link = resp.data.link;
+		//var link = resp.data.link;
 
-		var str = '!['+file.name+']('+link+')';
+		//var str = '!['+file.name+']('+link+')';
+		var str = resp.data.markdown;
 
 		var val = this.$input.val();
 
@@ -330,7 +341,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.$input.val( val + str);
 
 		this.updateAfterDelay();
-	},
+	}
 	
 })
 

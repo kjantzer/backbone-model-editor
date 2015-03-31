@@ -27,8 +27,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 	
 		var opts = this.options;
 		var plugins = ['fullscreen'];
-		var buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'fullscreen'];
-		var allowedTags = ["a", "p", "blockquote", "b", "i", 'strong', 'em', 'h1', 'h2', 'ul', 'ol', 'li'];
+		var buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'underline', 'fullscreen'];
+		var allowedTags = ["a", "p", "blockquote", "b", "i", 'strong', 'em', 'u', 'h1', 'h2', 'ul', 'ol', 'li'];
 		var formattingTags = ['p', 'blockquote'];
 		var linebreaks = false;
 		
@@ -39,30 +39,30 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 			
 			case 'nano':
 				plugins = false;
-				buttons = [ 'bold', 'italic'];
-				allowedTags = ["p", "b", "i", 'strong', 'em'];
+				buttons = [ 'bold', 'italic', 'underline'];
+				allowedTags = ["p", "b", "i", 'strong', 'em', 'u'];
 				break;
 			
 			case 'micro':
 				plugins = false;
-				buttons = ['specialCharacters', 'bold', 'italic'];
-				allowedTags = ["p", "b", "i", 'strong', 'em'];
+				buttons = ['specialCharacters', 'bold', 'italic', 'underline'];
+				allowedTags = ["p", "b", "i", 'strong', 'em', 'u'];
 				break;
 				
 			case 'micro-br':
 				plugins = false;
-				buttons = ['specialCharacters', 'bold', 'italic'];
-				allowedTags = ["p", "b", "i", 'strong', 'em', 'br'];
+				buttons = ['specialCharacters', 'bold', 'italic', 'underline'];
+				allowedTags = ["p", "b", "i", 'strong', 'em', 'u', 'br'];
 				linebreaks = true;
 				break;
 			
 			case 'regular':
-				buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'unorderedlist', 'orderedlist', 'link', 'alignleft', 'aligncenter'];
+				buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'underline', 'unorderedlist', 'orderedlist', 'link', 'alignleft', 'aligncenter'];
 				break;
 			
 			case 'mini':
 			default:
-				buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'unorderedlist', 'orderedlist', 'link'];
+				buttons = ['formatting', 'specialCharacters', 'bold', 'italic', 'underline', 'unorderedlist', 'orderedlist', 'link'];
 				break;
 			
 		}
