@@ -611,20 +611,6 @@ ModelEditors.selectImprintPartner = ModelEditors.select.extend({
 	values: function(){ return Partners.toSelectImprints() }
 })
 
-ModelEditors.selectImageType = ModelEditors.select.extend({
-	values: [
-		{label: 'JPEG', val: 'jpeg'},
-		{label: 'PNG', val: 'png'}
-	]
-})
-
-ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
-	values: [
-		{label: 'ISBN', val: 'isbn_13'},
-		{label:'Book ID', val: 'book_id'}
-	]
-})
-
 ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
 	values: [
 		{label: 'No auto renewal', val: 0},
