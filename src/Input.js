@@ -48,7 +48,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		// if user did not define if attachment is allowed, auto activate it if markdown preview is on
 		if( opts.attachments == undefined && this.options.markdownPreview && this.editorTagName == 'textarea' )
-			this.options.attachments = true;
+			this.options.attachments = {};
 
 		
 		this.init(); // init base
