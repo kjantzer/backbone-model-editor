@@ -680,8 +680,8 @@ ModelEditors.selectContractRemainderDuration = ModelEditors.select.extend({
 ModelEditors.selectContractRemainderFinancialObligation = ModelEditors.select.extend({
 	values: [
 		{label: '-', val: null}, 
-		{label: '10% of all money recieved after cost', val:'10% of all money recieved after cost'},
-		{label: '10% of all money recieved', val:'10% of all money recieved'},
+		{label: '10% of all money received after cost', val:'10% of all money received after cost'},
+		{label: '10% of all money received', val:'10% of all money received'},
 		{label: 'Other', val:'Other'},
 	]
 });
