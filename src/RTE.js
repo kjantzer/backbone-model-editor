@@ -92,6 +92,7 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 			, italicTag: 'i'
 			//, tidyHtml: false
 			, linebreaks: linebreaks
+			, tabKey: false 			// http://imperavi.com/redactor/docs/settings/keypress/
 			, cleanSpaces: true
 			, buttons: buttons
 			, allowedTags: allowedTags

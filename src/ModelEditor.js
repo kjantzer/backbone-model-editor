@@ -117,21 +117,25 @@ var ModelEditor = Backbone.View.extend({
 	
 	render: function(){
 		this.trigger('render');
+		return this;
 	},
 	
 	cleanReset: function(){
 		this.reset();
+		return this;
 	},
 	
 	reset: function(resetData){
 		this.editmodel.clear({silent:true})
 		this.editmodel.set(resetData||this.model.toJSON(), {silent:true});
 		this.editmodel.unsavedChanges = this.model._unsavedChanges || {};
+		return this;
 	},
 	
 	cleanup: function(){
 		Backbone.View.prototype.cleanup.apply(this, arguments);
 		this.clearSubviews();
+		return this;
 	},
 	
 	defaultOpts: function(opts){

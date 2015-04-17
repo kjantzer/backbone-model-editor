@@ -30,20 +30,21 @@ var ModelEditor = Backbone.View.extend({
         return _.size(this.data()) > 0;
     },
     render: function() {
-        this.trigger("render");
+        return this.trigger("render"), this;
     },
     cleanReset: function() {
-        this.reset();
+        return this.reset(), this;
     },
     reset: function(a) {
-        this.editmodel.clear({
+        return this.editmodel.clear({
             silent: !0
         }), this.editmodel.set(a || this.model.toJSON(), {
             silent: !0
-        }), this.editmodel.unsavedChanges = this.model._unsavedChanges || {};
+        }), this.editmodel.unsavedChanges = this.model._unsavedChanges || {}, this;
     },
     cleanup: function() {
-        Backbone.View.prototype.cleanup.apply(this, arguments), this.clearSubviews();
+        return Backbone.View.prototype.cleanup.apply(this, arguments), this.clearSubviews(), 
+        this;
     },
     defaultOpts: function(a) {
         return this._defaultOpts = "reset" === a ? _.extend({}, this.options.defaultOpts, {
@@ -277,6 +278,7 @@ ModelEditors.Base = Backbone.View.extend({
         this.options = _.extend({
             placeholder: "auto",
             prefix: null,
+            suffix: null,
             w: 200,
             h: "auto",
             btns: !1,
@@ -284,12 +286,12 @@ ModelEditors.Base = Backbone.View.extend({
             updateAfterDelay: !1,
             markdownPreview: !1,
             attachments: !1
-        }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = !0), 
+        }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = {}), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
-        this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupMarkdownPreview(), 
-        this.setVal(), this.setWidth(), this.setHeight(), this.setupBtns(), this.setupMention(), 
-        this.setupUnsavedVal(), this.setupAttachmentUpload(), this.render(), _.defer(this.doAutoResize.bind(this)), 
-        this.delegateEvents();
+        this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupSuffix(), 
+        this.setupMarkdownPreview(), this.setVal(), this.setWidth(), this.setHeight(), this.setupBtns(), 
+        this.setupMention(), this.setupUnsavedVal(), this.setupAttachmentUpload(), this.render(), 
+        _.defer(this.doAutoResize.bind(this)), this.delegateEvents();
     },
     hasUnsavedVal: function() {
         return !1;
@@ -355,6 +357,10 @@ ModelEditors.Base = Backbone.View.extend({
     setupPrefix: function() {
         this.options.prefix && "input" == this.editorTagName && (this.$inner.addClass("has-prefix"), 
         this.$inner.prepend('<span class="prefix">' + this.options.prefix + "</span>"));
+    },
+    setupSuffix: function() {
+        this.options.suffix && "input" == this.editorTagName && (this.$inner.addClass("has-suffix"), 
+        this.$inner.append('<span class="suffix">' + this.options.suffix + "</span>"));
     },
     setupBtns: function() {
         this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
@@ -519,6 +525,7 @@ ModelEditors.Base = Backbone.View.extend({
             boldTag: "b",
             italicTag: "i",
             linebreaks: g,
+            tabKey: !1,
             cleanSpaces: !0,
             buttons: d,
             allowedTags: e,
@@ -583,7 +590,9 @@ ModelEditors.Base = Backbone.View.extend({
     editorTagName: "span",
     editorClassName: "checkbox",
     events: {
-        "click span.checkbox": "onClick"
+        "click span.checkbox": "onClick",
+        "focus span.checkbox": "onFocus",
+        "blur span.checkbox": "onBlur"
     },
     allowEmptyState: !1,
     initialize: function(a) {
@@ -591,7 +600,7 @@ ModelEditors.Base = Backbone.View.extend({
             inline: !1,
             valType: "bool",
             allowEmptyState: this.allowEmptyState
-        }, a), this.init(), this.value = this.val(), this.$input = $("<" + this.editorTagName + ' class="checkbox"></' + this.editorTagName + ">").attr("type", "checkbox").addClass(this.state()).appendTo(this.$inner), 
+        }, a), this.init(), this.value = this.val(), this.$input = $("<" + this.editorTagName + ' class="checkbox" tabindex="0"></' + this.editorTagName + ">").attr("type", "checkbox").addClass(this.state()).appendTo(this.$inner), 
         this.options.inline && this.$el.addClass("inline-checkbox"), this.$el.addClass(this.state()), 
         this.render();
     },
@@ -612,6 +621,15 @@ ModelEditors.Base = Backbone.View.extend({
           default:
             return "null";
         }
+    },
+    onFocus: function() {
+        this._onSpace = this._onSpace || this.onSpace.bind(this), document.addEventListener("keypress", this._onSpace);
+    },
+    onBlur: function() {
+        document.removeEventListener("keypress", this._onSpace);
+    },
+    onSpace: function(a) {
+        32 == a.which && (a.preventDefault(), this.onClick());
     },
     val: function() {
         var a = this._val();
@@ -1010,22 +1028,6 @@ ModelEditors.Base = Backbone.View.extend({
     values: function() {
         return Partners.toSelectImprints();
     }
-}), ModelEditors.selectImageType = ModelEditors.select.extend({
-    values: [ {
-        label: "JPEG",
-        val: "jpeg"
-    }, {
-        label: "PNG",
-        val: "png"
-    } ]
-}), ModelEditors.selectImageDownloaderDataType = ModelEditors.select.extend({
-    values: [ {
-        label: "ISBN",
-        val: "isbn_13"
-    }, {
-        label: "Book ID",
-        val: "book_id"
-    } ]
 }), ModelEditors.selectAutoRenewOptions = ModelEditors.select.extend({
     values: [ {
         label: "No auto renewal",

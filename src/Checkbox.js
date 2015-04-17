@@ -13,7 +13,9 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 	editorClassName: 'checkbox',
 	
 	events: {
-		'click span.checkbox' : 'onClick'
+		'click span.checkbox' : 'onClick',
+		'focus span.checkbox': 'onFocus',
+		'blur span.checkbox': 'onBlur'
 	},
 	
 	allowEmptyState: false,
@@ -30,7 +32,7 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 		
 		this.value = this.val();
 		
-		this.$input = $('<'+this.editorTagName+' class="checkbox"></'+this.editorTagName+'>')
+		this.$input = $('<'+this.editorTagName+' class="checkbox" tabindex="0"></'+this.editorTagName+'>')
 			.attr('type', 'checkbox')
 			.addClass(this.state())
 			.appendTo(this.$inner)
@@ -57,6 +59,23 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 			case 'null':
 			default:
 				return 'null'; break;
+		}
+	},
+
+	onFocus: function(){
+		this._onSpace = this._onSpace || this.onSpace.bind(this);
+		document.addEventListener('keypress', this._onSpace)
+	},
+
+	onBlur: function(){
+		document.removeEventListener('keypress', this._onSpace);
+	},
+
+	onSpace: function(e){
+
+		if( e.which == 32 ){ // space bar
+			e.preventDefault();
+			this.onClick();
 		}
 	},
 	

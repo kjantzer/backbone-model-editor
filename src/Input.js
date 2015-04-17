@@ -36,6 +36,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.options = _.extend({
 			placeholder: 'auto',
 			prefix: null, 			// prefix to input (ex: `$`)
+			suffix: null, 			// suffix to input (ex: `%`)
 			w: 200,
 			h: 'auto',
 			btns: false,
@@ -62,6 +63,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 			
 		this.setPlaceholder();
 		this.setupPrefix();
+		this.setupSuffix();
 		this.setupMarkdownPreview();
 		this.setVal();
 		this.setWidth();
@@ -231,6 +233,15 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		this.$inner.addClass('has-prefix');
 		this.$inner.prepend('<span class="prefix">'+this.options.prefix+'</span>');
+
+	},
+
+	setupSuffix: function(){
+
+		if( !this.options.suffix || this.editorTagName != 'input' ) return;
+
+		this.$inner.addClass('has-suffix');
+		this.$inner.append('<span class="suffix">'+this.options.suffix+'</span>');
 
 	},
 	
