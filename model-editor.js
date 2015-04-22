@@ -220,12 +220,15 @@ ModelEditors.Base = Backbone.View.extend({
     },
     setupLabel: function() {
         var a = this.options.label;
-        a !== !1 && void 0 !== a && ("auto" === a && (a = this.keyToText()), this.$label = $("<label><div><span>" + a + "</span></div></label>").appendTo(this.$el), 
+        a !== !1 && void 0 !== a && ("auto" === a && (a = this.keyToText()), this.$label = $('<label><div><span class="model-editor-label-inner">' + a + "</span></div></label>").appendTo(this.$el), 
         this.options.labelDivider && this.$label.find("> div:first-child").addClass("divider dark"), 
         this.options.helpText && this.$label.append('<p class="help-text">' + this.options.helpText + "</p>"), 
         this.options.labelStyle && this.$el.addClass("label-style-" + this.options.labelStyle), 
         this.options.labelIcon && this.$label.find("> div:first-child").addClass("icon-" + this.options.labelIcon), 
         this.options.labelInline && (this.$el.addClass("inline-label"), _.isNumber(this.options.labelInline) && this.$label.width(this.options.labelInline)));
+    },
+    setLabel: function(a) {
+        this.$label.find(".model-editor-label-inner").html(a);
     },
     keyToText: function() {
         var a = this.options.key;

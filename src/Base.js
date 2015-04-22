@@ -218,7 +218,7 @@ ModelEditors.Base = Backbone.View.extend({
 		if( label === 'auto' ) label = this.keyToText();
 		
 		// create label EL
-		this.$label = $('<label><div><span>'+label+'</span></div></label>').appendTo(this.$el);
+		this.$label = $('<label><div><span class="model-editor-label-inner">'+label+'</span></div></label>').appendTo(this.$el);
 
 		if( this.options.labelDivider )
 			this.$label.find('> div:first-child').addClass('divider dark');
@@ -243,6 +243,9 @@ ModelEditors.Base = Backbone.View.extend({
 			
 	},
 	
+	setLabel: function(str){
+		this.$label.find('.model-editor-label-inner').html(str)
+	},
 	
 	/*
 		Key to Text - returns the model key as human formatted text
