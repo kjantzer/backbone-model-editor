@@ -71,11 +71,19 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 		document.removeEventListener('keypress', this._onSpace);
 	},
 
+	onClick: function(){
+		this.toggle();
+	},
+
 	onSpace: function(e){
+
+		// if this input is no longer the active element, the onspace event should not be listened to anymore
+		if( document.activeElement !== this.$input[0] )
+			return this.onBlur();
 
 		if( e.which == 32 ){ // space bar
 			e.preventDefault();
-			this.onClick();
+			this.toggle();
 		}
 	},
 	
@@ -111,7 +119,7 @@ ModelEditors.checkbox = ModelEditors.Base.extend({
 		return newVal;
 	},
 	
-	onClick: function(){
+	toggle: function(){
 	
 		if( this.isDisabled ) return
 		

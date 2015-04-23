@@ -631,8 +631,12 @@ ModelEditors.Base = Backbone.View.extend({
     onBlur: function() {
         document.removeEventListener("keypress", this._onSpace);
     },
+    onClick: function() {
+        this.toggle();
+    },
     onSpace: function(a) {
-        32 == a.which && (a.preventDefault(), this.onClick());
+        return document.activeElement !== this.$input[0] ? this.onBlur() : void (32 == a.which && (a.preventDefault(), 
+        this.toggle()));
     },
     val: function() {
         var a = this._val();
@@ -645,7 +649,7 @@ ModelEditors.Base = Backbone.View.extend({
         var a, b = this.value;
         return a = "" === b || "null" === b || b === this.options.emptyVal ? "1" : "1" === b ? "0" : this.options.allowEmptyState ? this.options.emptyVal : "1";
     },
-    onClick: function() {
+    toggle: function() {
         this.isDisabled || (clearTimeout(this.saveTimeout), this.$el.add(this.$input).removeClass(this.state()), 
         this.value = this.nextVal(), this.$el.add(this.$input).addClass(this.state()), this.$el.attr("data-val", this.saveVal()), 
         this.saveTimeout = setTimeout(_.bind(this.updateVal, this), 300));
