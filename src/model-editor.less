@@ -352,17 +352,19 @@ select {
 	// 	color: #999;
 	// }
 	
-	// &.drag-over > .inner:before {
-	// 	content: '';
-	// 	position: absolute;
-	// 	top: -3px;
-	// 	left: -3px;
-	// 	width: calc(~"100% + 6px");
-	// 	height: calc(~"100% + 6px");
-	// 	border: solid 2px #2196F3;
-	// 	.rounded(5px);
-	// 	.box-sizing();
-	// }
+	&.drag-over:before { display: none; }
+	
+	&.drag-over > .inner:before {
+		content: '';
+		position: absolute;
+		top: -3px;
+		left: -3px;
+		width: calc(~"100% + 6px");
+		height: calc(~"100% + 6px");
+		border: solid 2px #2196F3;
+		.rounded(5px);
+		.box-sizing();
+	}
 
 	&.disabled {
 			
