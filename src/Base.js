@@ -69,23 +69,26 @@ ModelEditors.Base = Backbone.View.extend({
 		this.$inner = $('<span class="inner"></span>').appendTo(this.$el);
 		
 		
-		if( this.options.pl ){
+		if( this.options.pl || this.options.ph ){
 		
-			var key = this.options.pl;
-			
+			var key = this.options.pl || this.options.ph;
+
 			if( key === 'auto' && this.options.plPrefix )
 				key = this.options.plPrefix+'::'+this.options.key;
-		
-			if( key !== 'auto' ){
-				this.subview('plv', ProofingLight(key, {fieldVal:this.plFieldVal.bind(this)}) );
-				this.$inner.append( this.subview('plv').el );
-			}
+
+			var PL = require('core/proofing-lights/views/proofing-light');
+
+			this.subview('plv') || this.subview('plv', new PL({
+																key: key,
+																fieldVal:this.plFieldVal.bind(this),
+																history: this.options.ph?true:false }) );
+			this.$inner.append( this.subview('plv').el );
 		}
 		
-		if( this.options.ph ){
-			this.subview('phv', ProofingHistory(this.options.ph) );
-			this.$inner.append( this.subview('phv').el );
-		}
+		// if( this.options.ph ){
+		// 	this.subview('phv', ProofingHistory(this.options.ph) );
+		// 	this.$inner.append( this.subview('phv').el );
+		// }
 		
 		if( this.options.css ) {
 			this.$el.css(this.options.css); 

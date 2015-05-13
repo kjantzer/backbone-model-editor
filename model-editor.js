@@ -121,14 +121,16 @@ ModelEditors.Base = Backbone.View.extend({
         this.$el.appendTo(this.options.renderTo).addClass(this.editorClassName).addClass("theme-" + this.options.theme).addClass("key-" + this.options.key).attr("data-val", this.val()), 
         this.setupLabel(), !this.options["float"] || "left" !== this.options["float"] && "right" !== this.options["float"] || this.$el.addClass("float-" + this.options["float"]), 
         this.options.clear && this.$el.addClass("clear"), this.options.disabled && _.defer(this.disable.bind(this)), 
-        this.$inner = $('<span class="inner"></span>').appendTo(this.$el), this.options.pl) {
-            var a = this.options.pl;
-            "auto" === a && this.options.plPrefix && (a = this.options.plPrefix + "::" + this.options.key), 
-            "auto" !== a && (this.subview("plv", ProofingLight(a, {
-                fieldVal: this.plFieldVal.bind(this)
-            })), this.$inner.append(this.subview("plv").el));
+        this.$inner = $('<span class="inner"></span>').appendTo(this.$el), this.options.pl || this.options.ph) {
+            var a = this.options.pl || this.options.ph;
+            "auto" === a && this.options.plPrefix && (a = this.options.plPrefix + "::" + this.options.key);
+            var b = require("core/proofing-lights/views/proofing-light");
+            this.subview("plv") || this.subview("plv", new b({
+                key: a,
+                fieldVal: this.plFieldVal.bind(this),
+                history: this.options.ph ? !0 : !1
+            })), this.$inner.append(this.subview("plv").el);
         }
-        this.options.ph && (this.subview("phv", ProofingHistory(this.options.ph)), this.$inner.append(this.subview("phv").el)), 
         this.options.css && this.$el.css(this.options.css), this.listenTo(this.model, "changed", this.onChanged);
     },
     plFieldVal: function() {
@@ -488,7 +490,7 @@ ModelEditors.Base = Backbone.View.extend({
     events: {
         "blur .redactor_editor": "onBlur",
         "focus .redactor_editor": "onFocus",
-        "focus textarea": "onFocus",
+        "focus .redactor_box > textarea": "onFocus",
         "keyup .redactor_editor": "onKeyUp",
         "click .button.save": "saveBtnAction",
         "click .button.cancel": "cancelBtnAction"

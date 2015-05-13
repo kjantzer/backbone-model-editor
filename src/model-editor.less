@@ -564,7 +564,7 @@ select {
 			border: none;
 		}
 		
-		textarea {
+		.redactor_box > textarea {
 			font-size: .9em;
 			font-family: Consolas, "Liberation Mono", Courier, monospace;
 		}
@@ -595,13 +595,13 @@ select {
 	
 	&.theme-text {
 		
-		input[type="text"],
-		input[type="email"],
-		input[type="date"],
-		input[type="number"],
-		input[type="password"],
-		textarea,
-		.redactor_box .redactor_editor {
+		> .inner > input[type="text"],
+		> .inner > input[type="email"],
+		> .inner > input[type="date"],
+		> .inner > input[type="number"],
+		> .inner > input[type="password"],
+		> .inner > textarea,
+		> .inner > .redactor_box .redactor_editor {
 			background: none !important;
 			border-color: transparent !important;
 			.box-shadow(none) !important;
@@ -613,13 +613,13 @@ select {
 		
 		&:not(.editing):not(.disabled):hover{
 		
-			input[type="text"],
-			input[type="email"],
-			input[type="date"],
-			input[type="number"],
-			input[type="password"],
-			textarea,
-			.redactor_box .redactor_editor {
+			> .inner > input[type="text"],
+			> .inner > input[type="email"],
+			> .inner > input[type="date"],
+			> .inner > input[type="number"],
+			> .inner > input[type="password"],
+			> .inner > textarea,
+			> .inner > .redactor_box .redactor_editor {
 				//background: #feffee !important;
 				border: solid 1px #ddd !important;
 			}
