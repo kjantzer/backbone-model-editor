@@ -31,7 +31,8 @@ module.exports = function(grunt) {
 				],
 				dest: 'model-editor.js',
 				options: {
-					beautify: true
+					beautify: true,
+					sourceMap: true
 				}
 			},
 			production: {
@@ -46,10 +47,22 @@ module.exports = function(grunt) {
 				dest: 'model-editor.min.js',
 				options: {
 					banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("dd-mm-yyyy, HH:MM:ss") %> */\n',
+					sourceMap: true
+				}
+			}
+		},
+		
+		watch: {
+			js: {
+				files: ['src/**/*.js'],
+				tasks: ['uglify'],
+				options: {
+					nospawn: true
 				}
 			}
 		}
 	});
 
 	grunt.registerTask('default', ['less', 'uglify']);
+	grunt.registerTask('dev', ['watch']);
 };

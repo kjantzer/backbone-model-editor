@@ -40,7 +40,8 @@ var ModelEditor = Backbone.View.extend({
             silent: !0
         }), this.editmodel.set(a || this.model.toJSON(), {
             silent: !0
-        }), this.editmodel.unsavedChanges = this.model._unsavedChanges || {}, this;
+        }), this.editmodel.unsavedChanges = this.model._unsavedChanges || {}, this.editmodel._currentAttributes = _.clone(this.editmodel.attributes), 
+        this;
     },
     cleanup: function() {
         return Backbone.View.prototype.cleanup.apply(this, arguments), this.clearSubviews(), 
@@ -1164,3 +1165,4 @@ ModelEditors.Base = Backbone.View.extend({
     use: "lowercase",
     values: [ "-", "Inherit", "Assign" ]
 });
+//# sourceMappingURL=model-editor.js.map

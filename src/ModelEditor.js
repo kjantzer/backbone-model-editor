@@ -70,6 +70,7 @@ var ModelEditor = Backbone.View.extend({
 	setModel: function(model){
 		this.stopListening(this.model);
 		this.model = model;
+		//this.listenTo(this.model, 'all',function(){console.log(arguments)});
 		this.listenTo(this.model, 'change', this.cleanReset);
 		this.listenTo(this.model, 'reset', this.cleanup);
 		this.listenTo(this.model, 'sync', this.onSync);
@@ -129,6 +130,12 @@ var ModelEditor = Backbone.View.extend({
 		this.editmodel.clear({silent:true})
 		this.editmodel.set(resetData||this.model.toJSON(), {silent:true});
 		this.editmodel.unsavedChanges = this.model._unsavedChanges || {};
+		
+		// reset currentAttributes which usually only happens on model creation
+		// https://cdn.rawgit.com/jashkenas/backbone/0.9.9/docs/backbone.html#section-28
+		// we are doing this so `watchChanges` works properly.
+		this.editmodel._currentAttributes = _.clone(this.editmodel.attributes);
+		
 		return this;
 	},
 	

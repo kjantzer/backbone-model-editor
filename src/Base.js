@@ -115,8 +115,9 @@ ModelEditors.Base = Backbone.View.extend({
 	},
 	
 	onChanged: function(changedAttrs){
-		var changedVal = this.model.changed[this.options.key];
 		
+		var changedVal = this.model.changed[this.options.key];
+				
 		if( changedVal === undefined || this.options.watchChanges !== true ) return;
 		
 		// remove this "changed" value (fix for #742)
