@@ -913,7 +913,7 @@ ModelEditors.Base = Backbone.View.extend({
         });
     }
 }), ModelEditors.selectTargetAudience = ModelEditors.select.extend({
-    values: [ "Adult", "Young Adult (12-17)", "Children (8-12)", "Children (4-7)", "Children (0-3)" ]
+    values: [ "Adult", "New Adult (18-25)", "Young Adult (12-17)", "Children (8-12)", "Children (4-7)", "Children (0-3)" ]
 }), ModelEditors.selectMovieTieIn = ModelEditors.select.extend({
     values: function() {
         return lookup.selects.marketingMovieTieIn.asSelect();
