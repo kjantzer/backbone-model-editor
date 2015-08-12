@@ -187,23 +187,43 @@ ModelEditors.Base = Backbone.View.extend({
 			return val !== newVal;
 	},
 	
+	_validatePatterns: {
+		'date': '^[0-1]*[0-9]\/[0-3]*[0-9]\/[0-9]{4}$',
+		'integer': '^[0-9]*$',
+		'number': '^[0-9]*$',
+		'decimal': '^[0-9]+\.?[0-9]*$',
+		'float': '^[0-9]+\.?[0-9]*$',
+		'double': '^[0-9]+\.?[0-9]*$'
+	},
+	
+	// no validate for the Base class. See Input.js for an implementation
+	_validateSaveVal: function(val){
+		return true;
+	},
+	
 	// updates the value in the model
 	updateVal: function(){
+		
+		var saveVal = this.saveVal();
+		
+		// see if the new value to save is valid
+		if( !this._validateSaveVal(saveVal) )
+			return
 
 		// using saveVal rather than newVal to fix #1062
-		this.model.trigger('edited', this.options.key, this.saveVal(), this.valChanged())
+		this.model.trigger('edited', this.options.key, saveVal, this.valChanged())
 
 		if( this.isDisabled || !this.valChanged()) return;
 		
-		this.model.set(this.options.key, this.saveVal());
+		this.model.set(this.options.key, saveVal);
 		
 		if( this.options.onSave )
-			this.options.onSave(this.options.key, this.saveVal())
+			this.options.onSave(this.options.key, saveVal)
 
-		this.$el.attr('data-val', this.saveVal());
+		this.$el.attr('data-val', saveVal);
 
 		if( this.editorTagName && this.editorTagName == 'textarea' )
-			this.$input.val(this.saveVal())
+			this.$input.val(saveVal)
 	},
 	
 	setWidth: function(){

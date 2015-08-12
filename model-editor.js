@@ -212,11 +212,22 @@ ModelEditors.Base = Backbone.View.extend({
         var a = this.val(), b = this.newVal();
         return "csv" == this.options.valueType || "array" == this.options.valueType ? _.difference(a, b).length > 0 || a.length != b.length : a !== b;
     },
+    _validatePatterns: {
+        date: "^[0-1]*[0-9]/[0-3]*[0-9]/[0-9]{4}$",
+        integer: "^[0-9]*$",
+        number: "^[0-9]*$",
+        decimal: "^[0-9]+.?[0-9]*$",
+        "float": "^[0-9]+.?[0-9]*$",
+        "double": "^[0-9]+.?[0-9]*$"
+    },
+    _validateSaveVal: function() {
+        return !0;
+    },
     updateVal: function() {
-        this.model.trigger("edited", this.options.key, this.saveVal(), this.valChanged()), 
-        !this.isDisabled && this.valChanged() && (this.model.set(this.options.key, this.saveVal()), 
-        this.options.onSave && this.options.onSave(this.options.key, this.saveVal()), this.$el.attr("data-val", this.saveVal()), 
-        this.editorTagName && "textarea" == this.editorTagName && this.$input.val(this.saveVal()));
+        var a = this.saveVal();
+        this._validateSaveVal(a) && (this.model.trigger("edited", this.options.key, a, this.valChanged()), 
+        !this.isDisabled && this.valChanged() && (this.model.set(this.options.key, a), this.options.onSave && this.options.onSave(this.options.key, a), 
+        this.$el.attr("data-val", a), this.editorTagName && "textarea" == this.editorTagName && this.$input.val(a)));
     },
     setWidth: function() {
         this.options.w && this.$inner.width(this.options.w);
@@ -338,6 +349,23 @@ ModelEditors.Base = Backbone.View.extend({
         return (this.options.autoresize || "auto" === this.options.h) && this.autoResize ? (this.autoResize(), 
         !0) : void 0;
     },
+    _validateSaveVal: function(a) {
+        var b = this.options.validate;
+        if (!b || !a) return !0;
+        if ("string" == typeof b && (b = {
+            pattern: b
+        }), b = _.extend({
+            msg: "<u>[val]</u> is not valid."
+        }, b), "string" == typeof b.pattern && this._validatePatterns[b.pattern] && (b.pattern = this._validatePatterns[b.pattern]), 
+        b.pattern instanceof RegExp || (b.pattern = new RegExp(b.pattern)), !b.pattern.test(a)) {
+            this.$input.val(this.origVal);
+            var c = "string" == typeof b.msg ? b.msg.replace("[val]", a) : !1;
+            return c && setTimeout(function() {
+                Modal.alert(c, "");
+            }, 40), !1;
+        }
+        return !0;
+    },
     setVal: function() {
         var a = this.val();
         this.$input[0].setAttribute("value", a), a ? this.$el.addClass("has-value") : this.$el.removeClass("has-value");
@@ -369,14 +397,17 @@ ModelEditors.Base = Backbone.View.extend({
         this.$inner.append('<span class="suffix">' + this.options.suffix + "</span>"));
     },
     setupBtns: function() {
-        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="button flat hover-green save icon-only icon-ok"></a>\r\n							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
+        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="button flat hover-green save icon-only icon-ok"></a>							<a class="button flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
     },
     setupMention: function() {
-        return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.error("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.error("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
+        return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.warn("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.warn("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
     },
     setupMarkdownPreview: function() {
-        this.options.markdownPreview && "textarea" == this.editorTagName && (this.$preview = $('<div class="markdown-preview standard-text"></div>').appendTo(this.$inner), 
-        this.$inner.prepend('<a class="markdown-preview-btn" title="Toggle markdown preview"></a>'));
+        if (this.options.markdownPreview && "textarea" == this.editorTagName) {
+            if ("undefined" == typeof marked) return void console.warn("ModelEditor: `markdownPreview` option cannot be used as the `marked` library was not found.");
+            this.$preview = $('<div class="markdown-preview standard-text"></div>').appendTo(this.$inner), 
+            this.$inner.prepend('<a class="markdown-preview-btn" title="Toggle markdown preview"></a>');
+        }
     },
     edit: function(a) {
         this.isDisabled || (a === !1 ? this.$el.removeClass("editing") : this.$el.addClass("editing"));
@@ -731,7 +762,7 @@ ModelEditors.Base = Backbone.View.extend({
     },
     createInput: function() {
         var a = $('<div class="multiselect wrap"></div>').appendTo(this.$inner);
-        this.options.infoBar === !0 && (a.append('<div class="bar">\r\n							<span class="info"></span>\r\n							<a class="select-none">None</a>\r\n							<a class="select-all">All</a>\r\n						</div>'), 
+        this.options.infoBar === !0 && (a.append('<div class="bar">							<span class="info"></span>							<a class="select-none">None</a>							<a class="select-all">All</a>						</div>'), 
         this.$(".bar a.select-all").click(this.onSelectAll.bind(this)), this.$(".bar a.select-none").click(this.onDeselectAll.bind(this)));
         var b = $("<ul></ul>").appendTo(a).attr(this.editorAttributes);
         return b;

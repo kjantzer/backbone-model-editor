@@ -44,6 +44,14 @@ ModelEditors.input = ModelEditors.Base.extend({
 			updateAfterDelay: false,// update instead of waiting for "blur" event
 			markdownPreview: false,
 			attachments: false		// bool/{};  allow for drag-and-drop attachment upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
+			
+			// optional validate param
+			// validate: 'number', // string preset or regex (see `_validatePatterns` in Base.js)
+			/*validate: {
+				pattern: 'number', // string preset or regex
+				msg: '[val] is not a valid value. Please input numbers only.' // [val] will be replaced with inputed value; set to `false` for no msg
+			}*/
+			
 		}, this.options, opts)
 
 
@@ -174,6 +182,50 @@ ModelEditors.input = ModelEditors.Base.extend({
 		//el.style.overflow = 'hidden';
 	},*/
 	
+	_validateSaveVal: function(val){
+		
+		var v = this.options.validate;
+		
+		// no validate options or empty val, so everything is valid
+		if( !v || !val )
+			return true;
+		
+		if( typeof v === 'string' )
+			v = {pattern: v};
+		
+		// default validate options
+		v = _.extend({
+			msg: '<u>[val]</u> is not valid.'
+		}, v)
+		
+		// lookup validate pattern presets
+		if( typeof v.pattern == 'string' && this._validatePatterns[v.pattern])
+			v.pattern = this._validatePatterns[v.pattern];
+		
+		// convert pattern to regex
+		if( !(v.pattern instanceof RegExp) )
+			v.pattern = new RegExp(v.pattern)
+		
+		// validate the save value
+		if( !v.pattern.test(val) ){
+			
+			// didn't pass, so reset back to orig value
+			this.$input.val( this.origVal );
+			
+			// create message to alert user
+			var msg = typeof v.msg == 'string' ? v.msg.replace('[val]', val) : false;
+			
+			// if msg to display, display it.
+			// we delay by 40ms, because 'enter' keyboard in Modal closes the alert.
+			if( msg )
+				setTimeout(function(){ Modal.alert(msg, ''); }, 40)
+			
+			return false;
+		}
+		
+		return true;
+	},
+	
 	setVal: function(){
 		var val = this.val();
 		this.$input[0].setAttribute('value', val) // set the value attribute for CSS styling
@@ -262,12 +314,12 @@ ModelEditors.input = ModelEditors.Base.extend({
 		if( !this.options.mention ) return;
 
 		if( !$.fn.mention ){
-			console.error("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js")
+			console.warn("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js")
 			return;
 		}
 
 		if( !$.fn.typeahead ){
-			console.error("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js")
+			console.warn("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js")
 			return;
 		}
 
@@ -277,12 +329,16 @@ ModelEditors.input = ModelEditors.Base.extend({
 	setupMarkdownPreview: function(){
 
 		if( !this.options.markdownPreview || this.editorTagName != 'textarea' ) return;
+		
+		if( typeof marked == 'undefined' ){
+			console.warn('ModelEditor: `markdownPreview` option cannot be used as the `marked` library was not found.')
+			return;
+		}
 
 		this.$preview = $('<div class="markdown-preview standard-text"></div>')
 			.appendTo(this.$inner);
 
 		this.$inner.prepend('<a class="markdown-preview-btn" title="Toggle markdown preview"></a>')
-
 	},
 	
 	edit: function(doEdit){
