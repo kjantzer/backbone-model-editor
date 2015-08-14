@@ -51,6 +51,12 @@ ModelEditors.select = ModelEditors.Base.extend({
 			.attr(this.editorAttributes)
 	},
 	
+	updateValues: function(vals){
+		this.values = vals;
+		this.$input.html('');
+		this.addOptions();
+	},
+	
 	addOptions: function(){
 		
 		if( !this.values ){

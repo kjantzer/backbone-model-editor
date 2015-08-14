@@ -712,6 +712,9 @@ ModelEditors.Base = Backbone.View.extend({
     createInput: function() {
         return $("<select></select>").appendTo(this.$inner).attr(this.editorAttributes);
     },
+    updateValues: function(a) {
+        this.values = a, this.$input.html(""), this.addOptions();
+    },
     addOptions: function() {
         if (!this.values) return void console.error("ModelEditor: you need to add a “values“ attribute");
         var a = _.isFunction(this.values) ? this.values() : this.values;
