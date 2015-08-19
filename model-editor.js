@@ -302,7 +302,9 @@ ModelEditors.Base = Backbone.View.extend({
             mention: !1,
             updateAfterDelay: !1,
             markdownPreview: !1,
-            attachments: !1
+            attachments: !1,
+            validate: null,
+            validateMsg: "<u>[val]</u> is not valid."
         }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = {}), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
         this.origVal = this.val(), this.setPlaceholder(), this.setupPrefix(), this.setupSuffix(), 
@@ -350,16 +352,12 @@ ModelEditors.Base = Backbone.View.extend({
         !0) : void 0;
     },
     _validateSaveVal: function(a) {
+        if (!this.options.validate || !a) return !0;
         var b = this.options.validate;
-        if (!b || !a) return !0;
-        if ("string" == typeof b && (b = {
-            pattern: b
-        }), b = _.extend({
-            msg: "<u>[val]</u> is not valid."
-        }, b), "string" == typeof b.pattern && this._validatePatterns[b.pattern] && (b.pattern = this._validatePatterns[b.pattern]), 
-        b.pattern instanceof RegExp || (b.pattern = new RegExp(b.pattern)), !b.pattern.test(a)) {
+        if ("string" == typeof b && this._validatePatterns[b] && (b = this._validatePatterns[b]), 
+        b instanceof RegExp || (b = new RegExp(b)), !b.test(a)) {
             this.$input.val(this.origVal);
-            var c = "string" == typeof b.msg ? b.msg.replace("[val]", a) : !1;
+            var c = "string" == typeof this.options.validateMsg ? this.options.validateMsg.replace("[val]", a) : !1;
             return c && setTimeout(function() {
                 Modal.alert(c, "");
             }, 40), !1;

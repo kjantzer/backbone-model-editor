@@ -43,14 +43,11 @@ ModelEditors.input = ModelEditors.Base.extend({
 			mention: false,			// preset string or mention plugin data
 			updateAfterDelay: false,// update instead of waiting for "blur" event
 			markdownPreview: false,
-			attachments: false		// bool/{};  allow for drag-and-drop attachment upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
+			attachments: false,		// bool/{};  allow for drag-and-drop attachment upload (requires https://gist.github.com/kjantzer/6b97badbafd7042c730b)
 			
 			// optional validate param
-			// validate: 'number', // string preset or regex (see `_validatePatterns` in Base.js)
-			/*validate: {
-				pattern: 'number', // string preset or regex
-				msg: '[val] is not a valid value. Please input numbers only.' // [val] will be replaced with inputed value; set to `false` for no msg
-			}*/
+			validate: false, // string preset or regex (see `_validatePatterns` in Base.js)
+			validateMsg: '<u>[val]</u> is not valid.' // [val] will be replaced with inputed value; set to `false` for no msg
 			
 		}, this.options, opts)
 
@@ -184,36 +181,28 @@ ModelEditors.input = ModelEditors.Base.extend({
 	
 	_validateSaveVal: function(val){
 		
-		var v = this.options.validate;
-		
 		// no validate options or empty val, so everything is valid
-		if( !v || !val )
+		if( !this.options.validate || !val )
 			return true;
 		
-		if( typeof v === 'string' )
-			v = {pattern: v};
-		
-		// default validate options
-		v = _.extend({
-			msg: '<u>[val]</u> is not valid.'
-		}, v)
+		var pattern = this.options.validate;
 		
 		// lookup validate pattern presets
-		if( typeof v.pattern == 'string' && this._validatePatterns[v.pattern])
-			v.pattern = this._validatePatterns[v.pattern];
+		if( typeof pattern == 'string' && this._validatePatterns[pattern])
+			pattern = this._validatePatterns[pattern];
 		
 		// convert pattern to regex
-		if( !(v.pattern instanceof RegExp) )
-			v.pattern = new RegExp(v.pattern)
+		if( !(pattern instanceof RegExp) )
+			pattern = new RegExp(pattern)
 		
 		// validate the save value
-		if( !v.pattern.test(val) ){
+		if( !pattern.test(val) ){
 			
 			// didn't pass, so reset back to orig value
 			this.$input.val( this.origVal );
 			
 			// create message to alert user
-			var msg = typeof v.msg == 'string' ? v.msg.replace('[val]', val) : false;
+			var msg = typeof this.options.validateMsg == 'string' ? this.options.validateMsg.replace('[val]', val) : false;
 			
 			// if msg to display, display it.
 			// we delay by 40ms, because 'enter' keyboard in Modal closes the alert.
