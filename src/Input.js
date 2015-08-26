@@ -386,15 +386,24 @@ ModelEditors.input = ModelEditors.Base.extend({
 		//var str = '!['+file.name+']('+link+')';
 		var str = resp.data.markdown;
 
-		var val = this.$input.val();
+		var val = this.$input.val(),
+			caratPos = this.$input[0].selectionStart;
 
 		// add new lines if needed
 		if( val && val.match(/.\n$/))
 			val += "\n"
 		else if( val && !val.match(/\n\n$/))
 			val += "\n\n"
+			
+		// put the attachment where the user's carat is
+		var textBefore = val.substring(0, caratPos),
+			textAfter = val.substring(caratPos),
+			val = textBefore + (textBefore?"\n\n":'') + str + textAfter;
 
-		this.$input.val( val + str);
+		this.$input.val( val );
+		
+		// put the carat back in the same position (well, after the new attachment insert)
+		this.$input[0].selectionStart = this.$input[0].selectionEnd = val.length - textAfter.length
 
 		this.updateAfterDelay();
 	}

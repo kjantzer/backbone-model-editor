@@ -303,7 +303,7 @@ ModelEditors.Base = Backbone.View.extend({
             updateAfterDelay: !1,
             markdownPreview: !1,
             attachments: !1,
-            validate: null,
+            validate: !1,
             validateMsg: "<u>[val]</u> is not valid."
         }, this.options, a), void 0 == a.attachments && this.options.markdownPreview && "textarea" == this.editorTagName && (this.options.attachments = {}), 
         this.init(), this.$input = $("<" + this.editorTagName + "></" + this.editorTagName + ">").val(this.val()).attr(this.editorAttributes).appendTo(this.$inner), 
@@ -432,8 +432,10 @@ ModelEditors.Base = Backbone.View.extend({
         }
     },
     attachmentUploadSuccess: function(a) {
-        var b = a.data.markdown, c = this.$input.val();
-        c && c.match(/.\n$/) ? c += "\n" : c && !c.match(/\n\n$/) && (c += "\n\n"), this.$input.val(c + b), 
+        var b = a.data.markdown, c = this.$input.val(), d = this.$input[0].selectionStart;
+        c && c.match(/.\n$/) ? c += "\n" : c && !c.match(/\n\n$/) && (c += "\n\n");
+        var e = c.substring(0, d), f = c.substring(d), c = e + (e ? "\n\n" : "") + b + f;
+        this.$input.val(c), this.$input[0].selectionStart = this.$input[0].selectionEnd = c.length - f.length, 
         this.updateAfterDelay();
     }
 }), ModelEditors.date = ModelEditors.input.extend({
