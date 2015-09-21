@@ -2,6 +2,7 @@
 <head>
 
 <title>Backbone.js Model Editor View</title>
+<meta charset="utf-8"></meta>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -29,7 +30,7 @@
 	
 	_.mixin({
 		cleanWebkitStyles: function(val){
-			return val.replace(/ style="font-size: initial; line-height: initial;"/g, '') // remove inline styles
+			return (val||'').replace(/ style="font-size: initial; line-height: initial;"/g, '') // remove inline styles
 						.replace(/<span>|<\/span>/g, '') // and empty spans
 		},
 		// https://gist.github.com/kjantzer/503e46328ff692bfe38b
@@ -51,18 +52,9 @@
 
 <!-- Model Editor script -->
 <link href="style.css" rel="stylesheet" type="text/css">
+<script src="lib/marked.js"></script>
+<script src="lib/attachments.js"></script>
 <script src="model-editor.min.js"></script>
-
-<style>
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-.model-editor label { font-weight: bold !important;}
-</style>
 
 </head>
 <body>
@@ -89,39 +81,57 @@ body {
 
 
 <div class="masthead" style="position: relative; margin-top: -20px; padding-top: 20px;">
-	<div style="background: #2c3033; height: 80%; position: absolute; top: 0; width: 100%;"></div>
+	<div style="background: #2196F3; height: 70vh; position: absolute; top: 0; width: 100%;"></div>
 	
 	<div class="container">
-		<div class="col-lg-6 col-lg-offset-3">
+		<div class="col-lg-10 col-lg-offset-1">
 		
 		<div style="color: white;">
-		<h1>Model Editor View</h1>
+		<h1 style="color: #80D8FF; font-size: 4em; font-weight: 300;">Model Editor View</h1>
 		<p style="font-weight: 300; line-height: 1.3em; font-size: 1.5em;">Easily edit your backbone models with inputs, textareas, date pickers, and more.</p>
 		<br>
 		</div>
 		
-		<div id="editors" class="clearfix panel" style="padding: 30px;"></div>
+		<div  class="clearfix panel col-lg-8" style="padding: 30px;">
+            <div id="editors"></div>
+        </div>
+        
+        <div class="col-lg-4" style="color: #fff;">
+            <h4>Unsaved Editor Model</h4>
+    		<pre id="output"></pre>
+    		
+    		<h4>Real Model Data</h4>
+    		<pre id="output2"></pre>
+            
+            <div class="clear clearfix">
+                <a class="btn btn-success save" onclick="app.save()">Save</a> 
+                <!-- <a class="btn btn-default reset" onclick="app.reset()">Reset</a> -->
+            </div>
+        </div>
 	
 		</div>
 	</div>
 </div>
 
-<div class="container">
-	<div class="col-lg-6 col-lg-offset-3">
+<div class="container content">
+<div class="col-lg-10 col-lg-offset-1">
 	
-		<br>
-		<h4>Unsaved Editor Model</h4>
-		<pre id="output"></pre>
-		
-		<h4>Real Model Data</h4>
-		<pre id="output2"></pre>
-		
-		<hr>
-		
-		<small>Built by Kevin Jantzer, Blackstone Audio Inc.</small>
-		<br><br>
-	
-	</div>
+        <h2>Overview</h2>
+        
+        <p>Creating a typical app requires various forms with inputs. This plugin makes creating inputs, selects, notes fields and more breeze.</p>
+    
+        <hr>
+        
+        <h2>License</h2>
+        
+        <p>MIT © <a href="http://kevinjantzer.com">Kevin Jantzer</a></p>
+
+
+        <hr>
+
+        <small>Built by <a href="http://kevinjantzer.com">Kevin Jantzer</a>, <a href="http://blackstoneaudio.com">Blackstone Audio Inc.</a></small>
+	       <br><br>
+</div>
 </div>
 
 <script type="text/javascript">
@@ -164,7 +174,7 @@ window.App = Backbone.View.extend({
 		this.editor.editmodel.on('change', this.showOutput, this);
 		this.editor.editmodel.on('reset', this.render, this);
 		
-		this.anotherView = new anotherView();
+		//this.anotherView = new anotherView();
 		
 		this.$output = $('#output');
 		this.$output2 = $('#output2');
@@ -188,12 +198,26 @@ window.App = Backbone.View.extend({
 		this.editor.insert('input', 'phone');
 		this.editor.insert('email', 'email');
 		this.editor.insert('multiselect', 'color', {values: ['Red', 'Blue', 'Green', 'Yellow', 'Orange', 'Purple'], label: 'Favorite Color(s)'});
-		this.editor.insert('textarea', 'notes', {w: 300, h: 100});
-		this.editor.insert('checkbox', 'newsletter');
 		
-		this.editor.insert('empty', 'custom', {view: this.anotherView});
+        this.editor.insert('textarea', 'notes', {w: 300, h: 100, markdownPreview: true, attachments: false});
 		
-		this.$el.append('<div class="clear clearfix"><a class="btn btn-primary save">Save</a> <a class="btn btn-default reset">Reset</a></div>')
+        this.editor.insert('checkbox', 'newsletter');
+		
+        this.editor.defaultOpts({
+            renderTo: this.editor.insert('empty', 'Other Options', {labelInline: 160, helpText: 'Each of these have a `validation` pattern to limit data input.'}),
+            w: 80,
+            placeholder: '0',
+            validate: 'decimal',
+            labelInline: true,
+            clear: false
+        })
+        
+        this.editor.insert('input', 'prefix', {prefix: '$'});
+        this.editor.insert('input', 'suffix', {suffix: '%'});
+        
+		//this.editor.insert('empty', 'custom', {view: this.anotherView});
+		
+		//this.$el.append('<div class="clear clearfix"><a class="btn btn-primary save">Save</a> <a class="btn btn-default reset">Reset</a></div>')
 		
 		this.delegateEvents();
 	},
@@ -204,7 +228,7 @@ window.App = Backbone.View.extend({
 		
 		var str = JSON.stringify(this.model.toJSON());
 		
-		this.$output2.html( JSON.stringify(this.model.toJSON()) );
+		this.$output2.html( JSON.stringify(this.model.toJSON(), null, "  ") );
 	},
 	
 	reset: function(){
@@ -214,7 +238,7 @@ window.App = Backbone.View.extend({
 	},
 	
 	showOutput: function(){
-		this.$output.html( JSON.stringify(this.editor.editmodel.toJSON()) );
+		this.$output.html( JSON.stringify(this.editor.editmodel.toJSON(), null, "  ") );
 	},
 	
 })

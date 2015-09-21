@@ -420,7 +420,7 @@ ModelEditors.Base = Backbone.View.extend({
     },
     toggleMarkdownPreview: function(a) {
         var b = this.newVal() || "Nothing to preview";
-        this.$preview.html(marked(b)), a.srcElement.classList.toggle("active");
+        this.$preview.html(marked(b)), a.currentTarget.classList.toggle("active");
     },
     setupAttachmentUpload: function() {
         if ("textarea" == this.editorTagName && this.options.attachments) {
@@ -1198,40 +1198,5 @@ ModelEditors.Base = Backbone.View.extend({
 }), ModelEditors.selectDealTerritoryChoice = ModelEditors.select.extend({
     use: "lowercase",
     values: [ "-", "Inherit", "Assign" ]
-});
-
-var ModelEditorTokenEditor;
-
-require([ "token-editor" ], function(a) {
-    ModelEditorTokenEditor = a;
-}), ModelEditors.tokentextarea = ModelEditors.Base.extend({
-    events: {},
-    keyEvents: {
-        "27": "cancelBtnAction"
-    },
-    initialize: function(a) {
-        return window.meTokenEditor = this, this.options = _.extend({
-            placeholder: "auto",
-            w: 400,
-            btns: !1,
-            updateAfterDelay: !1
-        }, this.options, a), this.init(), ModelEditorTokenEditor ? (this.tokenEditor = new ModelEditorTokenEditor({
-            value: this.val(),
-            items: this.options.autoComplete
-        }), this.$inner.append(this.tokenEditor.el), this.origVal = this.val(), this.setWidth(), 
-        this.render(), void this.delegateEvents()) : void this.$inner.html("<p>Cannot initialize. <b>Token Editor</b> plugin needed.</p>");
-    },
-    render: function() {
-        this.tokenEditor && this.tokenEditor.render();
-    },
-    newVal: function() {
-        return this.tokenEditor.toJSON();
-    },
-    setAutoCompleteItems: function(a) {
-        this.tokenEditor && this.tokenEditor.setAutoCompleteItems(a);
-    },
-    setWidth: function() {
-        this.options.w && this.$inner.width(this.options.w);
-    }
 });
 //# sourceMappingURL=model-editor.js.map
