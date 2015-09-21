@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 					'src/RTE.js',
 					'src/Checkbox.js',
 					'src/Select.js',
-					'src/TokenEditor.js'
+					//'src/TokenEditor.js'
 				],
 				dest: 'model-editor.js',
 				options: {
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
 					'src/RTE.js',
 					'src/Checkbox.js',
 					'src/Select.js',
-					'src/TokenEditor.js'
+					//'src/TokenEditor.js'
 				],
 				dest: 'model-editor.min.js',
 				options: {
@@ -55,6 +55,13 @@ module.exports = function(grunt) {
 		},
 		
 		watch: {
+			less: {
+				files: ['src/**/*.less', 'style.less'],
+				tasks: ['less'],
+				options: {
+					nospawn: true
+				}
+			},
 			js: {
 				files: ['src/**/*.js'],
 				tasks: ['uglify'],
@@ -66,5 +73,6 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('default', ['less', 'uglify']);
-	grunt.registerTask('dev', ['watch']);
+	grunt.registerTask('dev', ['watch:js']);
+	grunt.registerTask('demo', ['watch']);
 };
