@@ -238,7 +238,7 @@ select {
 
 		&.has-prefix,
 		&.has-suffix {
-			.display-flex();
+			.display-inline-flex();
 			
 			> input {
 				min-width: 0;
@@ -259,6 +259,7 @@ select {
 			background: #eee;
 			border-right: none;
 			flex-shrink: 0; // let the input shrink
+			line-height: 1.4em;
 		}
 
 		&.has-prefix > input {
@@ -285,6 +286,7 @@ select {
 			background: #eee;
 			border-left: none;
 			flex-shrink: 0; // let the input shrink
+			line-height: 1.4em;
 		}
 
 		&.has-suffix > input {
