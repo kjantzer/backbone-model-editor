@@ -3,6 +3,8 @@ Backbone Model Editor
 
 Easily edit your backbone models with inputs, textareas, and more. Rich text editor available with [Redactor](http://redactorjs.com) plugin
 
+![](https://img.shields.io/npm/v/backbone-model-editor.svg)
+
 ![preview](http://i.imgur.com/AwTBAXC.png)
 ***
 
