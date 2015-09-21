@@ -358,7 +358,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 
 		this.$preview.html( marked(val) ); 
 		
-		e.srcElement.classList.toggle('active');
+		e.currentTarget.classList.toggle('active');
 	},
 
 	setupAttachmentUpload: function(){
