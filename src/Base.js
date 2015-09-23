@@ -190,10 +190,12 @@ ModelEditors.Base = Backbone.View.extend({
 	_validatePatterns: {
 		'date': '^[0-1]*[0-9]\/[0-3]*[0-9]\/[0-9]{4}$',
 		'integer': '^[0-9]*$',
-		'number': '^[0-9]*$',
+		'number': '^[0-9]+\.?[0-9]*$',
 		'decimal': '^[0-9]+\.?[0-9]*$',
 		'float': '^[0-9]+\.?[0-9]*$',
-		'double': '^[0-9]+\.?[0-9]*$'
+		'double': '^[0-9]+\.?[0-9]*$',
+		'email': '^(.+\@.+\..+)?$', // yes, this is very loose
+		'year': '^$|^[1-2]{1}[0-9]{3}$'
 	},
 	
 	// no validate for the Base class. See Input.js for an implementation
