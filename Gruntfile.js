@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 				],
 				dest: 'model-editor.min.js',
 				options: {
-					banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("dd-mm-yyyy, HH:MM:ss") %> */\n',
+					banner: '/*! <%= pkg.name %> v<%= pkg.version %> */\n',
 					sourceMap: true
 				}
 			}
