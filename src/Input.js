@@ -21,8 +21,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		'keyup input': 'onKeyUp',
 		'keydown input': 'onKeyDown',
 		'keypress input': 'onKeyPress',
-		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction',
+		'click .btn.save': 'saveBtnAction',
+		'click .btn.cancel': 'cancelBtnAction',
 		'click .markdown-preview-btn': 'toggleMarkdownPreview'
 	},
 	
@@ -207,7 +207,7 @@ ModelEditors.input = ModelEditors.Base.extend({
 			// if msg to display, display it.
 			// we delay by 40ms, because 'enter' keyboard in Modal closes the alert.
 			if( msg )
-				setTimeout(function(){ Modal.alert(msg, ''); }, 40)
+				setTimeout(function(){ window.Modal ? Modal.alert(msg, '') : alert(msg); }, 40)
 			
 			return false;
 		}
@@ -293,8 +293,8 @@ ModelEditors.input = ModelEditors.Base.extend({
 		this.$el.addClass('has-btns');
 		
 		this.$inner.append('<div class="btns">\
-							<a class="button flat hover-green save icon-only icon-ok"></a>\
-							<a class="button flat hover-red cancel icon-only icon-cancel"></a>\
+							<a class="btn flat hover-green save icon-only icon-ok"></a>\
+							<a class="btn flat hover-red cancel icon-only icon-cancel"></a>\
 						</div>');
 	},
 
@@ -419,8 +419,8 @@ ModelEditors.date = ModelEditors.input.extend({
 	events: {
 		'focus input': 'onFocus',
 		'keyup input': 'onKeyUp',
-		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction',
+		'click .btn.save': 'saveBtnAction',
+		'click .btn.cancel': 'cancelBtnAction',
 	},
 	
 	editorClassName: 'input date',
@@ -462,23 +462,28 @@ ModelEditors.date = ModelEditors.input.extend({
 	
 	render: function(){
 		
-		this.$input.datepicker({
-			constrainInput: this.options.constrainInput===false?false:true, // default to true
-			dateFormat: 'm/d/yy',
-			beforeShow: _.bind(function(el, obj){
-				this.$el.addClass('datepickerOpen');
-			},this),
-			onClose: _.bind(function(){
-				this.$el.removeClass('datepickerOpen');
-				this.onBlur();
-			},this)
-		});
-
-		// stop propagation when clicking on the datepicker (so we can use it inside a "dropdown")
-		var el = this.$input.data('datepicker').dpDiv[0];
-		el.removeEventListener('click', this.stopPropagation);
-		el.addEventListener('click', this.stopPropagation, false);
-		
+		if( $.fn.datepicker ){
+			
+			this.$input.datepicker({
+				constrainInput: this.options.constrainInput===false?false:true, // default to true
+				dateFormat: 'm/d/yy',
+				beforeShow: _.bind(function(el, obj){
+					this.$el.addClass('datepickerOpen');
+				},this),
+				onClose: _.bind(function(){
+					this.$el.removeClass('datepickerOpen');
+					this.onBlur();
+				},this)
+			});
+			
+			// stop propagation when clicking on the datepicker (so we can use it inside a "dropdown")
+			var el = this.$input.data('datepicker').dpDiv[0];
+			el.removeEventListener('click', this.stopPropagation);
+			el.addEventListener('click', this.stopPropagation, false);
+			
+		}else{
+			this.$input[0].setAttribute('type', 'date');
+		}
 	},
 
 	stopPropagation: function(e){
@@ -505,7 +510,7 @@ ModelEditors.password = ModelEditors.input.extend({
 	editorClassName: 'input password',
 	
 	editorAttributes: {
-		'type': 'email',
+		'type': 'password',
 		'class': 'form-control'
 	}
 })
@@ -530,8 +535,8 @@ ModelEditors.textarea = ModelEditors.input.extend({
 		'keyup textarea': 'onKeyUp',
 		'keydown textarea': 'onKeyDown',
 		'keypress textarea': 'onKeyPress',
-		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction',
+		'click .btn.save': 'saveBtnAction',
+		'click .btn.cancel': 'cancelBtnAction',
 		'click .markdown-preview-btn': 'toggleMarkdownPreview'
 	},
 	
