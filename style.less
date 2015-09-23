@@ -1,8 +1,32 @@
-// set some default variables
-@red: red;
-@blue: blue;
-@serif: 'Times New Roman';
-@sans-serif: 'Helvetica', 'Arial';
+
+@color: #2196F3;
+@color-highlight: #80D8FF;
+
+@import 'lib/demo-base.less'; // https://gist.github.com/kjantzer/fed29d575814024326cd
+
+// used by model-editor.less
+.arrow-down(@color:#ccc, @w:10px, @h:10px){
+	content: '';
+	width: 0; 
+	height: 0; 
+	border-left: @h solid transparent;
+	border-right: @h solid transparent;
+	border-top: @w solid @color;
+	position: absolute;
+	left: 50%;
+	margin-top: -@h;
+}
+
+@import 'node_modules/basic-buttons/src/basic-buttons.less';
+@font-dir: 'node_modules/basic-buttons/src/fontello/font/';
+
+
+@import 'src/model-editor.less';
+
+// make sure to set these to fit your project
+@red: #f44336;
+@model-editor-select-arrow: 'src/select_down.png';
+@model-editor-markdown: 'src/markdown.png';
 
 .no-selection(){
 	-webkit-touch-callout: none;
@@ -13,77 +37,75 @@
 	user-select: none;
 }
 
-@import 'lib/elements.less'; // http://lesselements.com/
-@import 'lib/kjc-reusable-styles'; // https://gist.github.com/kjantzer/5436097
-@import 'lib/flexbox-mixins.less';
 
-.navbar {
-	display: none;
+header {
+	height: auto;
+    max-height: 680px;
+    padding: 2em 0;
 }
 
-@import 'src/model-editor.less';
-
-
-body {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-.model-editor label { font-weight: bold !important;}
-
-@color: #2196F3;
-@color-highlight: #80D8FF;
-
-.content {
-    font-size: 20px;
-    color: #333;
+#small-demo {
+	.display-flex();
 	
-	h1,h2,h3 {
-		color: @color;
-	}
-	
-	p {
-	    line-height: 1.4em;
+	> div:first-child {
+		margin-right: 1em;
 	}
 }
 
-a, a:link, a:visited {
-	color: inherit;
-	text-decoration: none;
-	border-bottom: dotted 1px #aaa;
+#small-demo .model-editor {
+	margin-bottom: .25em;
+}
+
+#output {
+	width: 587px;
+	background-color: transparent;
+	color: #fff;
+}
+
+
+header{
 	
-	&:hover {
-		color: @color;
+	.model-editor .inner>input[type="text"]:not(.search), .model-editor .inner>input[type="email"], .model-editor .inner>input[type="date"], .model-editor .inner>input[type="number"], .model-editor .inner>input[type="password"], .model-editor .inner>select, .model-editor .inner>textarea, .model-editor .inner>.redactor_box .redactor_editor, .model-editor .inner>div.multiselect, .model-editor .inner>.markdown-preview, .model-editor .inner>.prefix, .model-editor .inner>.suffix
+	{
+		border-color: #fff;
+		background-color: #fff;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
 	}
+	
+	.model-editor .inner>input[type="text"]:not(.search):focus, .model-editor .inner>input[type="email"]:focus, .model-editor .inner>input[type="date"]:focus, .model-editor .inner>input[type="number"]:focus, .model-editor .inner>input[type="password"]:focus, .model-editor .inner>select:focus, .model-editor .inner>textarea:focus, .model-editor .inner>.redactor_box .redactor_editor:focus, .model-editor .inner>div.multiselect:focus, .model-editor .inner>.markdown-preview:focus, .model-editor .inner>.prefix:focus, .model-editor .inner>.suffix:focus
+	{
+		border-color: #fff !important;
+		background-color: #fff !important;
+		-webkit-box-shadow: none;
+		-moz-box-shadow: none;
+		box-shadow: none;
+	}
+	
 }
 
-hr {
-    border: none;
-    height: 4px;
-    background: #eee;
-    margin: 3em 0;
-}
 
-small {
-    font-size: .7em;
-}
-
-code {
-    background-color: #f5f5f5;
-    padding: 3px 5px;
-    border-radius: 3px;
-    font-size: .9em;
-}
-
-pre:not(:empty) {
-    padding: .25em;
-}
-
-pre {
-    -moz-tab-size: 4;
-    -o-tab-size: 4;
-    tab-size: 4;
-    background: #f5f5f5;
+.demo {
+	.display-flex();
+	.flex-wrap(wrap);
+	margin-bottom: 2em;
+	
+	> div {
+		min-width: 360px;
+		width: 50%;
+		box-sizing: border-box;
+	}
+	
+	> div:nth-child(2) {
+		padding-left: 2em;
+	}
+	
+	.demo-results {
+		width: 100%;
+		background-color: transparent;
+		border-bottom: solid 2px #ddd;
+		padding-bottom: .5em;
+		margin-top: -.5em;
+	}
 }

@@ -215,10 +215,12 @@ ModelEditors.Base = Backbone.View.extend({
     _validatePatterns: {
         date: "^[0-1]*[0-9]/[0-3]*[0-9]/[0-9]{4}$",
         integer: "^[0-9]*$",
-        number: "^[0-9]*$",
+        number: "^[0-9]+.?[0-9]*$",
         decimal: "^[0-9]+.?[0-9]*$",
         "float": "^[0-9]+.?[0-9]*$",
-        "double": "^[0-9]+.?[0-9]*$"
+        "double": "^[0-9]+.?[0-9]*$",
+        email: "^(.+@.+..+)?$",
+        year: "^$|^[1-2]{1}[0-9]{3}$"
     },
     _validateSaveVal: function() {
         return !0;
@@ -283,8 +285,8 @@ ModelEditors.Base = Backbone.View.extend({
         "keyup input": "onKeyUp",
         "keydown input": "onKeyDown",
         "keypress input": "onKeyPress",
-        "click .button.save": "saveBtnAction",
-        "click .button.cancel": "cancelBtnAction",
+        "click .btn.save": "saveBtnAction",
+        "click .btn.cancel": "cancelBtnAction",
         "click .markdown-preview-btn": "toggleMarkdownPreview"
     },
     keyEvents: {
@@ -359,7 +361,7 @@ ModelEditors.Base = Backbone.View.extend({
             this.$input.val(this.origVal);
             var c = "string" == typeof this.options.validateMsg ? this.options.validateMsg.replace("[val]", a) : !1;
             return c && setTimeout(function() {
-                Modal.alert(c, "");
+                window.Modal ? Modal.alert(c, "") : alert(c);
             }, 40), !1;
         }
         return !0;
@@ -395,7 +397,7 @@ ModelEditors.Base = Backbone.View.extend({
         this.$inner.append('<span class="suffix">' + this.options.suffix + "</span>"));
     },
     setupBtns: function() {
-        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="button flat hover-green save icon-only icon-ok"></a>							<a class="button flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
+        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="btn flat hover-green save icon-only icon-ok"></a>							<a class="btn flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
     },
     setupMention: function() {
         return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.warn("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.warn("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
@@ -442,8 +444,8 @@ ModelEditors.Base = Backbone.View.extend({
     events: {
         "focus input": "onFocus",
         "keyup input": "onKeyUp",
-        "click .button.save": "saveBtnAction",
-        "click .button.cancel": "cancelBtnAction"
+        "click .btn.save": "saveBtnAction",
+        "click .btn.cancel": "cancelBtnAction"
     },
     editorClassName: "input date",
     val: function() {
@@ -460,18 +462,20 @@ ModelEditors.Base = Backbone.View.extend({
         this.$input.val(a)), a = new XDate(a).toString("yyyy-MM-dd")), a || null;
     },
     render: function() {
-        this.$input.datepicker({
-            constrainInput: this.options.constrainInput === !1 ? !1 : !0,
-            dateFormat: "m/d/yy",
-            beforeShow: _.bind(function() {
-                this.$el.addClass("datepickerOpen");
-            }, this),
-            onClose: _.bind(function() {
-                this.$el.removeClass("datepickerOpen"), this.onBlur();
-            }, this)
-        });
-        var a = this.$input.data("datepicker").dpDiv[0];
-        a.removeEventListener("click", this.stopPropagation), a.addEventListener("click", this.stopPropagation, !1);
+        if ($.fn.datepicker) {
+            this.$input.datepicker({
+                constrainInput: this.options.constrainInput === !1 ? !1 : !0,
+                dateFormat: "m/d/yy",
+                beforeShow: _.bind(function() {
+                    this.$el.addClass("datepickerOpen");
+                }, this),
+                onClose: _.bind(function() {
+                    this.$el.removeClass("datepickerOpen"), this.onBlur();
+                }, this)
+            });
+            var a = this.$input.data("datepicker").dpDiv[0];
+            a.removeEventListener("click", this.stopPropagation), a.addEventListener("click", this.stopPropagation, !1);
+        } else this.$input[0].setAttribute("type", "date");
     },
     stopPropagation: function(a) {
         return a.stopPropagation(), a.cancelBubble = !0, !1;
@@ -485,7 +489,7 @@ ModelEditors.Base = Backbone.View.extend({
 }), ModelEditors.password = ModelEditors.input.extend({
     editorClassName: "input password",
     editorAttributes: {
-        type: "email",
+        type: "password",
         "class": "form-control"
     }
 }), ModelEditors.textarea = ModelEditors.input.extend({
@@ -500,8 +504,8 @@ ModelEditors.Base = Backbone.View.extend({
         "keyup textarea": "onKeyUp",
         "keydown textarea": "onKeyDown",
         "keypress textarea": "onKeyPress",
-        "click .button.save": "saveBtnAction",
-        "click .button.cancel": "cancelBtnAction",
+        "click .btn.save": "saveBtnAction",
+        "click .btn.cancel": "cancelBtnAction",
         "click .markdown-preview-btn": "toggleMarkdownPreview"
     },
     keyEvents: {

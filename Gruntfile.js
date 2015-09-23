@@ -28,7 +28,6 @@ module.exports = function(grunt) {
 					'src/RTE.js',
 					'src/Checkbox.js',
 					'src/Select.js',
-					//'src/TokenEditor.js'
 				],
 				dest: 'model-editor.js',
 				options: {
@@ -44,7 +43,6 @@ module.exports = function(grunt) {
 					'src/RTE.js',
 					'src/Checkbox.js',
 					'src/Select.js',
-					//'src/TokenEditor.js'
 				],
 				dest: 'model-editor.min.js',
 				options: {

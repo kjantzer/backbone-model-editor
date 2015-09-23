@@ -1,11 +1,16 @@
 Backbone Model Editor
 ============================
 
-Easily edit your backbone models with inputs, textareas, and more. Rich text editor available with [Redactor](http://redactorjs.com) plugin
+>Easily edit your backbone models with inputs, textareas, date pickers, and more.
 
 ![](https://img.shields.io/npm/v/backbone-model-editor.svg)
 
-![preview](http://i.imgur.com/AwTBAXC.png)
+![preview](http://i.imgur.com/9W3Hm1T.png)
+
+Creating a typical app requires various forms with inputs. This plugin makes creating inputs, selects, notes fields and others simple.
+
+Rich text editor available with [Redactor](http://redactorjs.com) plugin
+
 ***
 
 ### Example use
@@ -22,6 +27,7 @@ Easily edit your backbone models with inputs, textareas, and more. Rich text edi
     
     this.editor.insert('input', 'model_key');
     this.editor.insert('input', 'model_key', {w:250});
+    this.editor.insert('input', 'model_key', {validate: 'Number'});
 
 Then when you want to save the changes, call:
     

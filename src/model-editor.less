@@ -2,6 +2,10 @@
 	.field has a .backbone class because we dont' want to override existing .field classnames
 */
 
+
+@model-editor-select-arrow: '/common/resources/img/select_down.png';
+@model-editor-markdown: '/common/js/core/components/ModelEditor/src/markdown.png';
+
 textarea {
 	margin: 0;
 	resize: none;
@@ -10,21 +14,22 @@ textarea {
 select {
 	max-width: 100%; // responsive support
 	position: relative;
-	font-size: 1em;
+	font-size: 1rem;
 	padding: 5px 27px 5px 9px;
 	margin: 0;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
+	outline: none;
 	//.gradient(#f9f9f9, #eee, #f9f9f9);
 	.box-shadow(inset 0px 1px 0px #fff);
 	.rounded(3px);
 	border: solid 1px #ccc;
 	color: #555;
 	text-shadow: #fff 0 1px 0;
-	background: url('/common/resources/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
-	background: url('/common/resources/img/select_down.png'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
-	background: url('/common/resources/img/select_down.png'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+	background: url('@{model-editor-select-arrow}'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
+	background: url('@{model-editor-select-arrow}'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
+	background: url('@{model-editor-select-arrow}'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
 	background-position: right center;
 	background-repeat: no-repeat;
 	.transition(120ms);
@@ -87,6 +92,7 @@ select {
 		> input[type="date"],
 		> input[type="number"],
 		> input[type="password"],
+		> select,
 		> textarea,
 		> .redactor_box .redactor_editor,
 		> div.multiselect,
@@ -98,6 +104,7 @@ select {
 			max-width: 100%; // responsive support
 			background: #F9F9F9;
 			border: 1px solid #CCC;
+			outline: none;
 			.box-shadow(inset 1px 1px 1px rgba(0,0,0,0.1));
 			.rounded(3px);
 			font-family: Calibri, 'Lucida Grande';
@@ -125,31 +132,37 @@ select {
 		}
 		
 		select {
-			max-width: 100%; // responsive support
-			position: relative;
-			font-size: 1em;
-			padding: 5px 27px 5px 9px;
-			margin: 0;
-			-webkit-appearance: none;
-			-moz-appearance: none;
-			appearance: none;
-			text-overflow: ''; 
-			//.gradient(#f9f9f9, #eee, #f9f9f9);
-			.box-shadow(inset 0px 1px 0px #fff);
-			.rounded(3px);
-			border: solid 1px #ccc;
-			color: #555;
-			text-shadow: #fff 0 1px 0;
-			background: url('/common/resources/img/select_down.png'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
-			background: url('/common/resources/img/select_down.png'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
-			background: url('/common/resources/img/select_down.png'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+			// max-width: 100%; // responsive support
+			// position: relative;
+			// font-size: 1rem;
+			// padding: 5px 27px 5px 9px;
+			// margin: 0;
+			// -webkit-appearance: none;
+			// -moz-appearance: none;
+			// appearance: none;
+			// outline: none;
+			// text-overflow: ''; 
+			// //.gradient(#f9f9f9, #eee, #f9f9f9);
+			// .box-shadow(inset 0px 1px 0px #fff);
+			// .rounded(3px);
+			// border: solid 1px #ccc;
+			// color: #555;
+			// text-shadow: #fff 0 1px 0;
+			// background: url('@{model-editor-select-arrow}'), -webkit-gradient(linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #F9F9F9));
+			// background: url('@{model-editor-select-arrow}'), -ms-linear-gradient(bottom, #EEE, #F9F9F9);
+			// background: url('@{model-editor-select-arrow}'), -moz-linear-gradient(center bottom, #EEE 0%, #F9F9F9 100%);
+			background: url('@{model-editor-select-arrow}'), #f9f9f9;
+			background: url('@{model-editor-select-arrow}'), #F9F9F9;
+			background: url('@{model-editor-select-arrow}'), #f9f9f9;
 			background-position: right center;
 			background-repeat: no-repeat;
-			.transition(120ms);
+			//.transition(120ms);
+			
+			.box-shadow(none);
 			
 			&:hover:not(:disabled),
 			&:focus:not(:disabled) {
-				.box-shadow(#ccc 0 0 7px);
+				//.box-shadow(#ccc 0 0 7px);
 			}
 			
 			&:disabled {
@@ -209,7 +222,7 @@ select {
 
 						&:after {
 							content: '\2713';
-							font-family: "kjc-icon-font";
+							font-family: 'basic-buttons-font';
 							font-style: normal;
 							font-weight: normal;
 							speak: none;
@@ -306,7 +319,9 @@ select {
 			top: .25em;
 			width: 16px;
 			height: 16px;
-			background: url('/common/js/core/components/ModelEditor/src/markdown.png');
+			text-decoration: none;
+			border: none;
+			background: url('@{model-editor-markdown}');
 			background-size: 100%;
 			background-repeat: no-repeat;
 			background-position: 0 50%;
@@ -333,6 +348,38 @@ select {
 			overflow: auto; 
 			background: #fff;
 			.box-shadow(none);
+			font-size: 1rem;
+			
+			*  {
+				color: #222;
+				line-height: 1.2em;
+			}
+			
+			>*:first-child {
+				margin-top: 0;
+			}
+			
+			h1, h2, h3, h4, h5, h6 {
+				font-weight: bold;
+			}
+			
+			h1 { font-size: 1.6em; border-bottom: solid 1px #ddd}
+			h2 { font-size: 1.4em; }
+			h3 { font-size: 1.3em; }
+			h4 { font-size: 1.1em; }
+			
+			hr {
+				border: none;
+				height: 1px;
+				background: #ccc;
+				margin: 1.5em 0;
+			}
+			
+			a, a:link {
+				border: none;
+				text-decoration: underline;
+				color: blue;
+			}
 		}
 
 		.markdown-preview-btn.active + input,
@@ -393,6 +440,9 @@ select {
 	> label .help-text {
 		font-weight: normal;
 		word-break: normal;
+		font-size: .85rem;
+		line-height: 1rem;
+		color: #999;
 	}	
 
 	&.inline-label {
@@ -518,14 +568,17 @@ select {
 			width: 20px;
 			height: 100%;
 			visibility: hidden;
+			
+			.display-flex();
+			.flex-direction(column);
 		}
 		
-		.button.save,
-		.button.cancel {
+		.btn.save,
+		.btn.cancel {
 			padding: 1px 2px;
 			margin: 0px;
 			font-size: .8em;
-			position: absolute;
+			position: relative;
 			top: 0px;
 			right: 0px;
 			opacity: 0;
@@ -538,24 +591,31 @@ select {
 			&:not(:hover) {
 				border-color: #aaa;
 			}
+			
+			&:before {
+				margin: 0;
+				position: absolute;
+				top: 50%;
+				-webkit-transform: translateY(-50%);
+			}
 		}
 		
-		.button.save {
+		.btn.save {
 			.border-radius(3px, 0, 0, 0);
 			border-bottom: none;
 		}
 		
-		.button.cancel {
+		.btn.cancel {
 			.border-radius(0, 3px, 0, 0);
-			//border-bottom: none;
+			border-bottom: none;
 			top: auto;
 			bottom: 0px;
 		}
 		
 		&.editing {
 			.btns,
-			.button.save,
-			.button.cancel {
+			.btn.save,
+			.btn.cancel {
 				visibility: visible;
 				opacity: 1;
 			}
@@ -701,9 +761,9 @@ select {
 			font-size: 14px;
 			padding: 6px;
 			background: none;
-			//background: url('/common/resources/img/select_down.png'), transparent;
-			//background: url('/common/resources/img/select_down.png'), transparent;
-			//background: url('/common/resources/img/select_down.png'), transparent;
+			//background: url('@{model-editor-select-arrow}'), transparent;
+			//background: url('@{model-editor-select-arrow}'), transparent;
+			//background: url('@{model-editor-select-arrow}'), transparent;
 			//background-position: right center;
 			//background-repeat: no-repeat;
 			
@@ -764,7 +824,7 @@ select {
 		&.checkbox {
 		
 			label {
-				margin-top: 2px;
+				margin-top: 0px;
 			}
 		
 			.checkbox {
@@ -772,7 +832,7 @@ select {
 				height: 18px;
 				
 				&:before {
-					font-size: 1em;
+					font-size: 1rem;
 				}
 			}
 			
@@ -820,9 +880,9 @@ select {
 	
 	
 	// an "icon only" button following a "model editor"
-	& + .button[class^="icon-"].icon-only,
-	& + .button[class*=" icon-"].icon-only,
-	& + .button {
+	& + .btn[class^="icon-"].icon-only,
+	& + .btn[class*=" icon-"].icon-only,
+	& + .btn {
 		padding: 7px 8px 6px 8px;
 		margin: 22px 0 0 15px;
 	}
@@ -853,6 +913,7 @@ select {
 	  width: 27px;
 	  height: 27px;
 	  cursor: pointer;
+	  outline: none;
 	  //.gradient(#eee, #ddd, #eee);
 	  border: solid 1px #ccc;
 	  text-shadow: #fff 0 1px 0;
@@ -864,6 +925,14 @@ select {
 	  //border-bottom-color: #aaa;
 	  vertical-align: middle;
 	  //margin-top: -3px;
+	  
+	  // disable selection (particularly when clicking rapidly)
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	  
 	  //.transition(120ms);
 	}
