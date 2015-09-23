@@ -5,7 +5,7 @@ Backbone Model Editor
 
 ![](https://img.shields.io/npm/v/backbone-model-editor.svg)
 
-![preview](http://i.imgur.com/9W3Hm1T.png)
+[![preview](http://i.imgur.com/KDSwslc.png)](http://kjantzer.github.io/backbone-model-editor/)
 
 Creating a typical app requires various forms with inputs. This plugin makes creating inputs, selects, notes fields and others simple.
 
