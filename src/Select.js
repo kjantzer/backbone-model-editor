@@ -432,7 +432,8 @@ ModelEditors.selectBookLanguage = ModelEditors.select.extend({
 		'Dutch',
 		'Turkish',
 		'Polish',
-		'Cantonese'
+		'Cantonese',
+		'Mandarin'
 	]
 })
 
