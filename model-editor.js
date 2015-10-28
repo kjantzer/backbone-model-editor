@@ -1013,9 +1013,9 @@ ModelEditors.Base = Backbone.View.extend({
     values: function() {
         return lookup.selects.contractTermLengthType.asSelect();
     }
-}), ModelEditors.selectContractDealTermType = ModelEditors.select.extend({
+}), ModelEditors.selectProductionDeadlineFrom = ModelEditors.select.extend({
     values: function() {
-        return lookup.selects.contractDealTermType.asSelect();
+        return lookup.selects.contractProductionDeadlineFrom.asSelect();
     }
 }), ModelEditors.selectContractRoyaltyPaymentTerm = ModelEditors.select.extend({
     values: function() {
