@@ -16,8 +16,8 @@ ModelEditors.rte = ModelEditors.textarea.extend({
 		'focus .redactor_editor': 'onFocus',
 		'focus .redactor_box > textarea': 'onFocus',
 		'keyup .redactor_editor': 'onKeyUp',
-		'click .button.save': 'saveBtnAction',
-		'click .button.cancel': 'cancelBtnAction'
+		'click .btn.save': 'saveBtnAction',
+		'click .btn.cancel': 'cancelBtnAction'
 	},
 
 	render: function(){
