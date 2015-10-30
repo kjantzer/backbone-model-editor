@@ -22,6 +22,9 @@ var ModelEditor = Backbone.View.extend({
     autoSave: function(a) {
         this.editmodel.off("change", this.save, this), a !== !1 && this.editmodel.on("change", this.save, this);
     },
+    setEditorAttr: function(a, b) {
+        this.editmodel.set(a, b), this.rememberChanges(a, b, !0);
+    },
     rememberChanges: function(a, b, c) {
         var d = this.model._unsavedChanges || {};
         c ? d[a] = b : this.options.autoSave && delete d[a], this.model._unsavedChanges = _.size(d) > 0 ? d : null;

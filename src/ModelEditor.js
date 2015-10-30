@@ -99,6 +99,11 @@ var ModelEditor = Backbone.View.extend({
 		
 	},
 	
+	setEditorAttr: function(key, val){
+		this.editmodel.set(key, val);
+		this.rememberChanges(key, val, true);
+	},
+	
 	rememberChanges: function(key, val, isChanged){
 		
 		var unsavedChanges = this.model._unsavedChanges || {};
