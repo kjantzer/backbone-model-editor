@@ -416,25 +416,26 @@ ModelEditors.selectBookEdition = ModelEditors.select.extend({
 
 ModelEditors.selectBookLanguage = ModelEditors.select.extend({
 	values: [
-		'English',
-		'French',
-		'German',
-		'Jamaican',
-		'Marathi',
-		'Spanish',
-		'Italian',
-		'Arabic',
-		'Chinese',
-		'Japanese',
-		'Russian',
-		'Greek',
-		'Portuguese',
-		'Dutch',
-		'Turkish',
-		'Polish',
-		'Cantonese',
-		'Mandarin',
-		'Hungarian'
+		"Arabic",
+		"Cantonese",
+		"Chinese",
+		"Danish",
+		"Dutch",
+		"English",
+		"French",
+		"German",
+		"Greek",
+		"Hungarian",
+		"Italian",
+		"Jamaican",
+		"Japanese",
+		"Mandarin",
+		"Marathi",
+		"Polish",
+		"Portuguese",
+		"Russian",
+		"Spanish",
+		"Turkish"
 	]
 })
 

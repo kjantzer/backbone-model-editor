@@ -902,7 +902,7 @@ ModelEditors.Base = Backbone.View.extend({
         return lookup.selects.bookBookEdition.asSelect();
     }
 }), ModelEditors.selectBookLanguage = ModelEditors.select.extend({
-    values: [ "English", "French", "German", "Jamaican", "Marathi", "Spanish", "Italian", "Arabic", "Chinese", "Japanese", "Russian", "Greek", "Portuguese", "Dutch", "Turkish", "Polish", "Cantonese", "Mandarin", "Hungarian" ]
+    values: [ "Arabic", "Cantonese", "Chinese", "Danish", "Dutch", "English", "French", "German", "Greek", "Hungarian", "Italian", "Jamaican", "Japanese", "Mandarin", "Marathi", "Polish", "Portuguese", "Russian", "Spanish", "Turkish" ]
 }), ModelEditors.bookState = ModelEditors.select.extend({
     values: [ "-", "On Sale", "In Process", "Re-request", "Re-release", "Cancelled" ]
 }), ModelEditors.acquisitionState = ModelEditors.select.extend({
