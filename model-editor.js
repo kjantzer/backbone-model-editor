@@ -400,7 +400,7 @@ ModelEditors.Base = Backbone.View.extend({
         this.$inner.append('<span class="suffix">' + this.options.suffix + "</span>"));
     },
     setupBtns: function() {
-        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">\r\n							<a class="btn flat hover-green save icon-only icon-ok"></a>\r\n							<a class="btn flat hover-red cancel icon-only icon-cancel"></a>\r\n						</div>'));
+        this.options.btns && (this.$el.addClass("has-btns"), this.$inner.append('<div class="btns">							<a class="btn flat hover-green save icon-only icon-ok"></a>							<a class="btn flat hover-red cancel icon-only icon-cancel"></a>						</div>'));
     },
     setupMention: function() {
         return this.options.mention ? $.fn.mention ? $.fn.typeahead ? void this.$input.mention(this.options.mention) : void console.warn("ModelEditor: `mention` option cannot be used as the `typeahead` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js/blob/master/bootstrap-typeahead.js") : void console.warn("ModelEditor: `mention` option cannot be used as the `mention` plugin was not found.\nhttps://github.com/jakiestfu/Mention.js") : void 0;
@@ -772,7 +772,7 @@ ModelEditors.Base = Backbone.View.extend({
     },
     createInput: function() {
         var a = $('<div class="multiselect wrap"></div>').appendTo(this.$inner);
-        this.options.infoBar === !0 && (a.append('<div class="bar">\r\n							<span class="info"></span>\r\n							<a class="select-none">None</a>\r\n							<a class="select-all">All</a>\r\n						</div>'), 
+        this.options.infoBar === !0 && (a.append('<div class="bar">							<span class="info"></span>							<a class="select-none">None</a>							<a class="select-all">All</a>						</div>'), 
         this.$(".bar a.select-all").click(this.onSelectAll.bind(this)), this.$(".bar a.select-none").click(this.onDeselectAll.bind(this)));
         var b = $("<ul></ul>").appendTo(a).attr(this.editorAttributes);
         return b;
