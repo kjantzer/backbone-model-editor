@@ -74,11 +74,9 @@
     $.getJSON('https://gist.githubusercontent.com/kjantzer/9abbb6cc17d1b6699221/raw', function(menu){
         var $menu = $('#menu');
         $.each(menu, function(indx, m){
-            console.log(m);
-            $menu.append('<li>\
-                <a href="http://kjantzer.github.io/'+m.key+'">'+m.label+'</a>\
-                <div class="description">'+(m.description||'')+'</div>\
-                </li>')
+            $menu.append('<li><a href="http://kjantzer.github.io/'+m.key+'">'+m.label+
+                '<div class="description">'+(m.description||'')+'</div>'+
+                '</a></li>')
         })
     })
     </script>
